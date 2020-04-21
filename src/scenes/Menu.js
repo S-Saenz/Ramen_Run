@@ -49,7 +49,7 @@ class Menu extends Phaser.Scene {
 
         this.add.text(centerX, 60,"RAMEN RUN", menuConfig).setOrigin(0.5);
 
-        /* =============================== add buttons ===============================
+        // =============================== add buttons ===============================
         let buttonConfig = {
           fontFamily: 'Georgia',
           fontStyle: 'bold',
@@ -65,61 +65,35 @@ class Menu extends Phaser.Scene {
           },
           fixedWidth: 150
       }
-      this.easyButton = this.add.text(200, 250, 'Easy', buttonConfig);
-      this.hardButton = this.add.text(400, 250, 'Difficult', buttonConfig);
+      this.playButton = this.add.text(200, 250, 'PlayButton', buttonConfig);
       
-====================================== set interactive ===========================================
+      //=============================== set interactive ===========================================
 
-      this.easyButton.setInteractive();
-      this.hardButton.setInteractive();
+      this.playButton.setInteractive();
 
-      ================================ functionality =================================
+      //================================ functionality =================================
 
-      this.easyButton.on('pointerdown', () => { 
+      this.playButton.on('pointerdown', () => { 
           // easy mode
-          game.settings = {
-            spaceshipSpeed: 3,
-            gameTimer: 20000    
-          }
-          this.sound.play('leaves');
           this.scene.start("playScene");
       });
 
-      this.easyButton.on('pointerover', () => { 
-          this.easyButton.setStyle({ fill: '#fff2d8'});
+      this.playButton.on('pointerover', () => { 
+          this.playButton.setStyle({ fill: '#fff2d8'});
       });
-      this.easyButton.on('pointerout', () => { 
-          this.easyButton.setStyle({ fill: '#161515'});
+      this.playButton.on('pointerout', () => { 
+          this.playButton.setStyle({ fill: '#161515'});
       });
       
-      ========== repeat for other button ==========
 
-      this.hardButton.on('pointerdown', () => { 
-          
-          // hard mode
-          game.settings = {
-            spaceshipSpeed: 4,
-            gameTimer: 10000    
-          }
-          this.sound.play('leaves');
-          this.scene.start("playScene");
-      });
-
-      this.hardButton.on('pointerover', () => { 
-          this.hardButton.setStyle({ fill: '#fff2d8'});
-      });
-      this.hardButton.on('pointerout', () => { 
-          this.hardButton.setStyle({ fill: '#161515'});
-      });
-
-      ======================== more text =================================
+      //======================== more text =================================
         menuConfig.color = '#161515';
         menuConfig.backgroundColor = 'transparent';
         menuConfig.padding.bottom = 0;
         menuConfig.padding.top = 0;
         this.add.text(centerX, 130, 'Use <--> to move & (F) to Fire', menuConfig).setOrigin(0.5);
         this.add.text(centerX, 135 + textSpacer,"Select difficulty:", menuConfig).setOrigin(0.5);
-        */
+        
         
     }
     
