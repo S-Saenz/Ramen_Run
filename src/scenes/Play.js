@@ -14,10 +14,10 @@ class Play extends Phaser.Scene {
 
     create(){
         // place tile sprite
-        this.bg = this.add.tileSprite(0, 0, 750, 384, 'bg').setOrigin(0, 0);
+        this.bg = this.add.tileSprite(0, 0, 555, 360, 'bg').setOrigin(0, 0);
         this.score = this.add.tileSprite(0, 0, 50, 50, 'score').setOrigin(0, 0);
         //add cart
-        //this.cart = new Cart(this, game.config.width/2,game.config.height-20, 'cart')/*.setScale(0.5, 0.5).setOrigin(0, 0)*/;
+        this.cart = new Cart(this, game.config.width-20,game.config.height-20, 'cart')/*.setScale(0.5, 0.5).setOrigin(0, 0)*/;
         // define keys
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
@@ -47,7 +47,7 @@ class Play extends Phaser.Scene {
                 bottom: 5,
             },
         }
-        this.cash = this.add.text(550, 54, "cash:" + this.cash , scoreConfig);
+        this.cash = this.add.text(550, 54, "cash:" + this.cash , uiConfig);
         
         // game over flag
         this.gameOver = false;
@@ -62,7 +62,7 @@ class Play extends Phaser.Scene {
         
     }
     update(){
-        this.bg.tilePositionX -= 0.3;
+        this.bg.tilePositionX += 1;
         // check collisions
         /*
         if(this.checkCollision(this.p1Rocket, this.ship02)) {
