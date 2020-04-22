@@ -15,6 +15,7 @@ class Play extends Phaser.Scene {
         this.load.image('ingredient1', '././assets/broth1.png');
         this.load.image('ingredient2', '././assets/broth1.png');
         this.load.image('ingredient3', '././assets/broth1.png');
+        this.load.image('noodle', '././assets/noodle.png');
 
         // load spritesheet
         //this.load.spritesheet('death', './assets/death_anim.png', {frameWidth: 1, frameHeight: 1000, startFrame: 0, endFrame: 7});
@@ -111,6 +112,12 @@ class Play extends Phaser.Scene {
         if(this.checkCatch(this.cart, this.ingredient3)) {
             console.log("got it");  
         }
+
+        if(this.ingredient1.x == game.config.width){
+            this.num = Phaser.Math.Between(0,1);
+            this.ingredient1.setTexture('noodle');
+        }
+
         /*
         if (this.checkCollision(this.p1Rocket, this.ship01)) {
             this.p1Rocket.reset();
