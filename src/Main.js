@@ -10,5 +10,6 @@ let game = new Phaser.Game(config);
 game.cash;
 game.score;
 game.settings = { 
+    panSpeed = 3
 }
 let keyUP, keyDOWN;

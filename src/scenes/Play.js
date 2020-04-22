@@ -12,6 +12,7 @@ class Play extends Phaser.Scene {
 
         //load sprites
         this.load.image('cart', '././assets/cartFull.png');
+        this.load.image('broth1', '././assets/broth1.png');
 
         // load spritesheet
         //this.load.spritesheet('death', './assets/death_anim.png', {frameWidth: 1, frameHeight: 1000, startFrame: 0, endFrame: 7});
@@ -22,11 +23,12 @@ class Play extends Phaser.Scene {
         this.bg = this.add.tileSprite(0, 0, 555, 360, 'bg').setOrigin(0, 0);
         this.score = this.add.tileSprite(0, 0, 50, 50, 'score').setOrigin(0, 0);
         //add cart
-        this.cart = new Cart(this, 0,game.config.height-200, 'cart').setScale(0.25, 0.25).setOrigin(0, 0);
+        this.cart = new Cart(this, -10,game.config.height-200, 'cart').setScale(0.5, 0.5).setOrigin(0, 0);
         // define keys
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         // add objs
+        this.broth1 = new Broth(this, game.config.width + 192, 20, 'broth1', 0, 30).setOrigin(0,0);
 
         // animation config
         /*this.anims.create({
@@ -86,6 +88,7 @@ class Play extends Phaser.Scene {
             this.ship02.update();
         } */
         this.cart.update();
+        this.broth.update();
         
     }
 

@@ -1,4 +1,4 @@
-class Cart extends Phaser.GameObjects.Sprite{
+class Human extends Phaser.GameObjects.Sprite{
     constructor(scene,x,y,texture,frame) {
     }
 
