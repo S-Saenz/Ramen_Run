@@ -12,10 +12,22 @@ class Play extends Phaser.Scene {
 
         //load sprites
         this.load.image('cart', '././assets/cartFull.png');
+
+        this.load.image('topping1', '././assets/topping1.png');
+        this.load.image('topping2', '././assets/topping2.png');
+        this.load.image('topping3', '././assets/topping3.png');
+
+        this.load.image('broth1', '././assets/broth1.png');
+        this.load.image('broth2', '././assets/broth2.png');
+        this.load.image('broth3', '././assets/broth3.png');
+
+        this.load.image('noodle1', '././assets/noodle1.png');
+        this.load.image('noodle2', '././assets/noodle2.png');
+        this.load.image('noodle3', '././assets/noodle3.png');
+
         this.load.image('ingredient1', '././assets/broth1.png');
         this.load.image('ingredient2', '././assets/broth1.png');
         this.load.image('ingredient3', '././assets/broth1.png');
-        this.load.image('noodle', '././assets/noodle.png');
 
         // load spritesheet
         //this.load.spritesheet('death', './assets/death_anim.png', {frameWidth: 1, frameHeight: 1000, startFrame: 0, endFrame: 7});
@@ -26,11 +38,11 @@ class Play extends Phaser.Scene {
         this.bg = this.add.tileSprite(0, 0, 555, 360, 'bg').setOrigin(0, 0);
         this.score = this.add.tileSprite(0, 0, 50, 50, 'score').setOrigin(0, 0);
         // add objs
-        this.ingredient1 = new Ingredient(this, game.config.width + 192, 0, 'ingredient1', 0, 30).setOrigin(0,0);
+        this.ingredient1 = new Ingredient(this, game.config.width + 192, game.config.height-200, 'ingredient1', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
         this.ingredient1.pos = 2;
-        this.ingredient2 = new Ingredient(this, game.config.width + 300, 20, 'ingredient2', 0, 30).setOrigin(0,0);
+        this.ingredient2 = new Ingredient(this, game.config.width + 300, game.config.height-150, 'ingredient2', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
         this.ingredient2.pos = 1;
-        this.ingredient3 = new Ingredient(this, game.config.width, 30, 'ingredient3', 0, 30).setOrigin(0,0);
+        this.ingredient3 = new Ingredient(this, game.config.width, game.config.height-100, 'ingredient3', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
         this.ingredient3.pos = 0;
         //add cart
         this.cart = new Cart(this, -10,game.config.height-200, 'cart').setScale(0.5, 0.5).setOrigin(0, 0);
@@ -66,12 +78,20 @@ class Play extends Phaser.Scene {
         
         // game over flag
         this.gameOver = false;
-        // 60-second play clock
+        // 60-second play clockv
         this.clock = this.time.delayedCall(10000, () => {
             game.settings.brothChance = 0.1;
+            game.settings.noodleChance = 0.8;
+            game.settings.toppingChance = 0.1; 
+        }, null, this);
+        this.clock = this.time.delayedCall(20000, () => {
             game.settings.brothChance = 0.1;
-            game.settings.brothChance = 0.1;
-            console.log('change to noodles'); 
+            game.settings.noodleChance = 0.1;
+            game.settings.toppingChance = 0.8;
+        }, null, this);
+
+        this.clock = this.time.delayedCall(30000, () => {
+            this.scene.start("marketScene");
         }, null, this);
         /*
         this.timer = this.time.addEvent({
@@ -104,18 +124,20 @@ class Play extends Phaser.Scene {
         // check collisions
         
         if(this.checkCatch(this.cart, this.ingredient1)) {
-            console.log("got it");  
         }
         if(this.checkCatch(this.cart, this.ingredient2)) {
-            console.log("got it");  
         }
         if(this.checkCatch(this.cart, this.ingredient3)) {
-            console.log("got it");  
         }
 
         if(this.ingredient1.x == game.config.width){
-            this.num = Phaser.Math.Between(0,1);
-            this.ingredient1.setTexture('noodle');
+            this.changeTexture(this.ingredient1);
+        }
+        if(this.ingredient2.x == game.config.width){
+            this.changeTexture(this.ingredient2);
+        }
+        if(this.ingredient3.x == game.config.width){
+            this.changeTexture(this.ingredient3);
         }
 
         /*
@@ -141,6 +163,21 @@ class Play extends Phaser.Scene {
 
     }
 
+
+    changeTexture(ingredient){
+        //generate random real number from 0 to 1
+        this.num = (Phaser.Math.Between(0,10))/10;
+
+
+        if(this.num <= game.settings.brothChance){
+            ingredient.setTexture('broth'+Phaser.Math.Between(1,3));
+        } else if(this.num <= game.settings.brothChance + game.settings.noodleChance){
+            ingredient.setTexture('noodle'+Phaser.Math.Between(1,3));
+        } else if (this.num >= 1-game.settings.toppingChance){
+            ingredient.setTexture('topping'+Phaser.Math.Between(1,3));
+        }
+        
+    }
 
     checkCatch(cart, obj) {
         // simple AABB checking

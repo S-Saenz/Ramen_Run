@@ -9,10 +9,14 @@ let game = new Phaser.Game(config);
 // define game settings
 game.cash;
 game.score;
+
 game.settings = { 
     panSpeed: 3,
     brothChance: .8,
     noodleChance: .1,
-    toppingChance: .1
+    toppingChance: .1,
+    recipeBroth: 'broth1',
+    recipeNoodle: 'noodle1',
+    recipeTopping: 'topping1'
 }
 let keyUP, keyDOWN;

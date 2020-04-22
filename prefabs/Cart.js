@@ -20,7 +20,6 @@ class Cart extends Phaser.GameObjects.Sprite{
             if(keyUP.isUp && keyDOWN.isUp){
                 this.pos += this.posAdd;
                 this.posAdd = 0;
-                console.log(this.pos);
             }
         }
     }
