@@ -9,6 +9,7 @@ let game = new Phaser.Game(config);
 // define game settings
 game.cash;
 game.score;
+game.cartHealth;
 //set up progress meters for each ingredient
 game.brothProg = 0;
 game.noodleProg = 0;
@@ -19,7 +20,9 @@ game.maxProg = 3;
 game.mistakes = 0;
 game.extras = 0;
 
-game.settings = { 
+game.settings = {
+    maxHealth: 50,
+    timer: 1000, 
     panSpeed: 4,
     brothChance: .8,
     noodleChance: .1,
@@ -28,4 +31,5 @@ game.settings = {
     recipeNoodle: 'noodle1',
     recipeTopping: 'topping1'
 }
+game.cartHealth = game.settings.maxHealth;
 let keyUP, keyDOWN;

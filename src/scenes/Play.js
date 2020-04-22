@@ -87,27 +87,21 @@ class Play extends Phaser.Scene {
         // game over flag
         this.gameOver = false;
         // 60-second play clockv
-        this.clock = this.time.delayedCall(15000, () => {
+        /*this.clock = this.time.delayedCall(game.settings.timer, () => {
             game.settings.brothChance = 0.1;
             game.settings.noodleChance = 0.8;
             game.settings.toppingChance = 0.1; 
-        }, null, this);
-        this.clock = this.time.delayedCall(30000, () => {
-            game.settings.brothChance = 0.1;
-            game.settings.noodleChance = 0.1;
-            game.settings.toppingChance = 0.8;
-        }, null, this);
+        }, null, this);*/
+        
+        this.ingredientPhase = 0;
 
-        this.clock = this.time.delayedCall(45000, () => {
-            this.scene.start("marketScene");
-        }, null, this);
-        /*
         this.timer = this.time.addEvent({
-            delay: 3000,
-            callback: this.ingredient1.reset,
-            callbackScope: this.ingredient1,
+            delay: game.settings.timer,
+            callback: this.changeIngredientChances,
+            callbackScope: this,
             loop: true
         });
+        /*
         this.timer = this.time.addEvent({
             delay: 3000,
             callback: this.ingredient1.reset,
@@ -167,6 +161,29 @@ class Play extends Phaser.Scene {
         
     }
 
+    changeIngredientChances(){
+        if(this.ingredientPhase == 0){
+            game.settings.brothChance = 0.8;
+            game.settings.noodleChance = 0.1;
+            game.settings.toppingChance = 0.1;
+        } else if(this.ingredientPhase == 1){
+            game.settings.brothChance = 0.1;
+            game.settings.noodleChance = 0.8;
+            game.settings.toppingChance = 0.1;
+        } else if(this.ingredientPhase == 2){
+            game.settings.brothChance = 0.1;
+            game.settings.noodleChance = 0.1;
+            game.settings.toppingChance = 0.8;
+        } else{
+            this.ingredient1.alpha = 0;
+            this.ingredient2.alpha = 0;
+            this.ingredient3.alpha = 0;
+            this.ingredientPhase = 0;
+        }
+        this.ingredientPhase++;
+
+    }
+
     spawnIngredient(){
         console.log('spawn');
 
@@ -201,7 +218,7 @@ class Play extends Phaser.Scene {
                 } else {
                     this.meterCompleted = this.add.sprite(100, 0, 555, 360, 'meterCompleted').setOrigin(0, 0);
                     this.meter.width = 20;
-
+                    game.extras++;
                 }
             }
             else if(obj.texture.key == game.settings.recipeNoodle && game.brothProg == game.maxProg){
@@ -229,6 +246,8 @@ class Play extends Phaser.Scene {
                     this.meter.width = 20;
                 }
 
+            }else{
+                game.mistakes++;
             }
             return true;
         } else {
