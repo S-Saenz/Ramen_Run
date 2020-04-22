@@ -22,13 +22,13 @@ class Play extends Phaser.Scene {
         // place tile sprite
         this.bg = this.add.tileSprite(0, 0, 555, 360, 'bg').setOrigin(0, 0);
         this.score = this.add.tileSprite(0, 0, 50, 50, 'score').setOrigin(0, 0);
+        // add objs
+        this.ingredient1 = new Ingredient(this, game.config.width + 192, 20, 'ingredient1', 0, 30).setOrigin(0,0);
         //add cart
         this.cart = new Cart(this, -10,game.config.height-200, 'cart').setScale(0.5, 0.5).setOrigin(0, 0);
         // define keys
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
-        // add objs
-        this.ingredient1 = new Ingredient(this, game.config.width + 192, 20, 'ingredient1', 0, 30).setOrigin(0,0);
 
         // animation config
         /*this.anims.create({
@@ -62,12 +62,19 @@ class Play extends Phaser.Scene {
         this.clock = this.time.delayedCall(10000, () => {
             console.log('change to noodles'); 
         }, null, this);
+
+        this.itemSpawnTimer = this.time.addEvent({
+            delay: 900,
+            callback: this.ingredient1.reset(),
+            loop: true
+        });
         
     }
 
     start(){
         
     }
+
     update(){
         this.bg.tilePositionX += 1;
         // check collisions
@@ -92,7 +99,9 @@ class Play extends Phaser.Scene {
         
     }
 
-    /*makeRandomObj(){
+    spawnIngredient(ing){
+        console.log('spawn');
+        console.log(this.ingredient1.visible);
 
     }
 
@@ -105,7 +114,7 @@ class Play extends Phaser.Scene {
             return false;
         }
     }
-*/
+
     /*
     onDestroyed(obj) {
         obj.alpha = 0;                         // temporarily hide obj

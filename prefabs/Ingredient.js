@@ -7,14 +7,14 @@ class Ingredient extends Phaser.GameObjects.Sprite{
     }
     update(){
         //move ship left
-        this.x -= game.settings.panSpeed;
         // warp around
-        if(this.x <= 0-this.width){
-            this.destroy();
+        if(this.x >= -10){
+            this.x -= game.settings.panSpeed;
         }
     }
 
     reset(){
+        console.log('reset');
         this.x = game.config.width;
     }    
 }
