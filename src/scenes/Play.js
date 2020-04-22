@@ -25,11 +25,11 @@ class Play extends Phaser.Scene {
         this.bg = this.add.tileSprite(0, 0, 555, 360, 'bg').setOrigin(0, 0);
         this.score = this.add.tileSprite(0, 0, 50, 50, 'score').setOrigin(0, 0);
         // add objs
-        this.ingredient1 = new Ingredient(this, game.config.width + 192, 20, 'ingredient1', 0, 30).setOrigin(0,0);
+        this.ingredient1 = new Ingredient(this, game.config.width + 192, 0, 'ingredient1', 0, 30).setOrigin(0,0);
         this.ingredient1.pos = 2;
-        this.ingredient2 = new Ingredient(this, game.config.width + 192, 100, 'ingredient2', 0, 30).setOrigin(0,0);
+        this.ingredient2 = new Ingredient(this, game.config.width + 300, 20, 'ingredient2', 0, 30).setOrigin(0,0);
         this.ingredient2.pos = 1;
-        this.ingredient3 = new Ingredient(this, game.config.width + 192, 200, 'ingredient3', 0, 30).setOrigin(0,0);
+        this.ingredient3 = new Ingredient(this, game.config.width, 30, 'ingredient3', 0, 30).setOrigin(0,0);
         //add cart
         this.cart = new Cart(this, -10,game.config.height-200, 'cart').setScale(0.5, 0.5).setOrigin(0, 0);
         // define keys
@@ -71,7 +71,7 @@ class Play extends Phaser.Scene {
 
         this.timer = this.time.addEvent({
             delay: 3000,
-            callback: this.ingredient1.reset,
+            callback: this.ingredient1.reset(),
             loop: true
         });
         
