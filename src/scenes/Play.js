@@ -30,6 +30,7 @@ class Play extends Phaser.Scene {
         this.ingredient2 = new Ingredient(this, game.config.width + 300, 20, 'ingredient2', 0, 30).setOrigin(0,0);
         this.ingredient2.pos = 1;
         this.ingredient3 = new Ingredient(this, game.config.width, 30, 'ingredient3', 0, 30).setOrigin(0,0);
+        this.ingredient3.pos = 0;
         //add cart
         this.cart = new Cart(this, -10,game.config.height-200, 'cart').setScale(0.5, 0.5).setOrigin(0, 0);
         // define keys
@@ -66,14 +67,30 @@ class Play extends Phaser.Scene {
         this.gameOver = false;
         // 60-second play clock
         this.clock = this.time.delayedCall(10000, () => {
+            game.settings.brothChance = 0.1;
+            game.settings.brothChance = 0.1;
+            game.settings.brothChance = 0.1;
             console.log('change to noodles'); 
         }, null, this);
-
+        /*
         this.timer = this.time.addEvent({
             delay: 3000,
-            callback: this.ingredient1.reset(),
+            callback: this.ingredient1.reset,
+            callbackScope: this.ingredient1,
             loop: true
         });
+        this.timer = this.time.addEvent({
+            delay: 3000,
+            callback: this.ingredient1.reset,
+            callbackScope: this.ingredient2,
+            loop: true
+        });
+        this.timer = this.time.addEvent({
+            delay: 3000,
+            callback: this.ingredient1.reset,
+            callbackScope: this.ingredient3,
+            loop: true
+        });*/
         
     }
 
@@ -86,6 +103,12 @@ class Play extends Phaser.Scene {
         // check collisions
         
         if(this.checkCatch(this.cart, this.ingredient1)) {
+            console.log("got it");  
+        }
+        if(this.checkCatch(this.cart, this.ingredient2)) {
+            console.log("got it");  
+        }
+        if(this.checkCatch(this.cart, this.ingredient3)) {
             console.log("got it");  
         }
         /*
@@ -101,6 +124,8 @@ class Play extends Phaser.Scene {
         } */
         this.cart.update();
         this.ingredient1.update();
+        this.ingredient2.update();
+        this.ingredient3.update();
         
     }
 

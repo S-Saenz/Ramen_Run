@@ -10,6 +10,9 @@ let game = new Phaser.Game(config);
 game.cash;
 game.score;
 game.settings = { 
-    panSpeed: 3
+    panSpeed: 3,
+    brothChance: .8,
+    noodleChance: .1,
+    toppingChance: .1
 }
 let keyUP, keyDOWN;

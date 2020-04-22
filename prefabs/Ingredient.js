@@ -6,16 +6,17 @@ class Ingredient extends Phaser.GameObjects.Sprite{
         this.pos = 0;
         //track firing status
     }
+
     update(){
         //move ship left
         // warp around
-        if(this.x >= -10){
+        if(this.x >= -100){
             this.x -= game.settings.panSpeed;
+        } else {
+            this.x = game.config.width;
         }
     }
 
     reset(){
-        this.x = game.config.width;
-        console.log('reset');
     }    
 }
