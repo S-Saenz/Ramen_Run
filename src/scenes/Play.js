@@ -12,6 +12,7 @@ class Play extends Phaser.Scene {
 
         //load sprites
         this.load.image('cart', '././assets/cartFull.png');
+        this.load.image('avatar', '././assets/avatar.png');
 
         this.load.image('topping1', '././assets/topping1.png');
         this.load.image('topping2', '././assets/topping2.png');
@@ -29,6 +30,11 @@ class Play extends Phaser.Scene {
         this.load.image('ingredient2', '././assets/broth1.png');
         this.load.image('ingredient3', '././assets/broth1.png');
 
+        //load ui
+        this.load.image('meter', '././assets/bar.png');
+        this.load.image('meterCompleted', '././assets/barCompleted.png');
+
+
         // load spritesheet
         //this.load.spritesheet('death', './assets/death_anim.png', {frameWidth: 1, frameHeight: 1000, startFrame: 0, endFrame: 7});
     }
@@ -36,7 +42,9 @@ class Play extends Phaser.Scene {
     create(){
         // place tile sprite
         this.bg = this.add.tileSprite(0, 0, 555, 360, 'bg').setOrigin(0, 0);
+        this.meter = this.add.tileSprite(0, 0, 20, 5, 'meter').setOrigin(0, 0);
         this.score = this.add.tileSprite(0, 0, 50, 50, 'score').setOrigin(0, 0);
+        this.cartVechicle = this.add.tileSprite(-10,game.config.height-200, 600, 330, 'cart').setScale(0.5, 0.5).setOrigin(0, 0);
         // add objs
         this.ingredient1 = new Ingredient(this, game.config.width + 192, game.config.height-200, 'ingredient1', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
         this.ingredient1.pos = 2;
@@ -45,7 +53,7 @@ class Play extends Phaser.Scene {
         this.ingredient3 = new Ingredient(this, game.config.width, game.config.height-100, 'ingredient3', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
         this.ingredient3.pos = 0;
         //add cart
-        this.cart = new Cart(this, -10,game.config.height-200, 'cart').setScale(0.5, 0.5).setOrigin(0, 0);
+        this.cart = new Cart(this, 150,game.config.height-200, 'avatar').setScale(0.5, 0.5).setOrigin(0, 0);
         // define keys
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
@@ -79,18 +87,18 @@ class Play extends Phaser.Scene {
         // game over flag
         this.gameOver = false;
         // 60-second play clockv
-        this.clock = this.time.delayedCall(10000, () => {
+        this.clock = this.time.delayedCall(15000, () => {
             game.settings.brothChance = 0.1;
             game.settings.noodleChance = 0.8;
             game.settings.toppingChance = 0.1; 
         }, null, this);
-        this.clock = this.time.delayedCall(20000, () => {
+        this.clock = this.time.delayedCall(30000, () => {
             game.settings.brothChance = 0.1;
             game.settings.noodleChance = 0.1;
             game.settings.toppingChance = 0.8;
         }, null, this);
 
-        this.clock = this.time.delayedCall(30000, () => {
+        this.clock = this.time.delayedCall(45000, () => {
             this.scene.start("marketScene");
         }, null, this);
         /*
@@ -122,6 +130,7 @@ class Play extends Phaser.Scene {
     update(){
         this.bg.tilePositionX += 1;
         // check collisions
+
         
         if(this.checkCatch(this.cart, this.ingredient1)) {
         }
@@ -182,7 +191,46 @@ class Play extends Phaser.Scene {
     checkCatch(cart, obj) {
         // simple AABB checking
         if (cart.pos == obj.pos && obj.x <= cart.width && obj.x >= cart.width-20 ) {
-                return true;
+            if(obj.texture.key == game.settings.recipeBroth){
+                if(game.brothProg < game.maxProg){
+                    if(obj.alpha !=0){
+                        game.brothProg++;
+                        this.meter.width += 50;
+                        obj.alpha = 0;
+                    }
+                } else {
+                    this.meterCompleted = this.add.sprite(100, 0, 555, 360, 'meterCompleted').setOrigin(0, 0);
+                    this.meter.width = 20;
+
+                }
+            }
+            else if(obj.texture.key == game.settings.recipeNoodle && game.brothProg == game.maxProg){
+                if(game.noodleProg < game.maxProg){
+                    if(obj.alpha !=0){
+                        game.noodleProg++;
+                        this.meter.width += 50;
+                        obj.alpha = 0;
+                    }
+                } else {
+                    this.meterCompleted = this.add.sprite(100, 0, 555, 360, 'meterCompleted').setOrigin(0, 0);
+                    this.meter.width = 20;
+
+                }
+            }
+            else if(obj.texture.key == game.settings.recipeTopping && game.brothProg == game.maxProg && game.noodleProg == game.maxProg){
+                if(game.toppingProg < game.maxProg){
+                    if(obj.alpha !=0){
+                        game.toppingProg++;
+                        this.meter.width += 50;
+                        obj.alpha = 0;
+                    }
+                } else {
+                    this.meterCompleted = this.add.sprite(100, 0, 555, 360, 'meterCompleted').setOrigin(0, 0);
+                    this.meter.width = 20;
+                }
+
+            }
+            return true;
         } else {
             return false;
         }

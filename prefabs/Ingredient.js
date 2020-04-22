@@ -14,6 +14,7 @@ class Ingredient extends Phaser.GameObjects.Sprite{
             this.x -= game.settings.panSpeed;
         } else {
             this.x = game.config.width;
+            this.alpha = 1;
         }
     }
 
