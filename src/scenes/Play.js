@@ -27,9 +27,9 @@ class Play extends Phaser.Scene {
         // add objs
         this.ingredient1 = new Ingredient(this, game.config.width + 192, 20, 'ingredient1', 0, 30).setOrigin(0,0);
         this.ingredient1.pos = 2;
-        this.ingredient2 = new Ingredient(this, game.config.width + 192, 100, 'ingredient1', 0, 30).setOrigin(0,0);
+        this.ingredient2 = new Ingredient(this, game.config.width + 192, 100, 'ingredient2', 0, 30).setOrigin(0,0);
         this.ingredient2.pos = 1;
-        this.ingredient3 = new Ingredient(this, game.config.width + 192, 200, 'ingredient1', 0, 30).setOrigin(0,0);
+        this.ingredient3 = new Ingredient(this, game.config.width + 192, 200, 'ingredient3', 0, 30).setOrigin(0,0);
         //add cart
         this.cart = new Cart(this, -10,game.config.height-200, 'cart').setScale(0.5, 0.5).setOrigin(0, 0);
         // define keys
