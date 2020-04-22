@@ -63,9 +63,9 @@ class Play extends Phaser.Scene {
             console.log('change to noodles'); 
         }, null, this);
 
-        this.itemSpawnTimer = this.time.addEvent({
-            delay: 900,
-            callback: this.ingredient1.reset(),
+        var timer = this.time.addEvent({
+            delay: 3000,
+            callback: this.ingredient1.reset,
             loop: true
         });
         
@@ -99,9 +99,8 @@ class Play extends Phaser.Scene {
         
     }
 
-    spawnIngredient(ing){
+    spawnIngredient(){
         console.log('spawn');
-        console.log(this.ingredient1.visible);
 
     }
 

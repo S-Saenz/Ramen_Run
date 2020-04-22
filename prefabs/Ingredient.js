@@ -15,6 +15,6 @@ class Ingredient extends Phaser.GameObjects.Sprite{
 
     reset(){
         console.log('reset');
-        this.x = game.config.width;
+        this.x = 200;
     }    
 }
