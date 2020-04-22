@@ -13,6 +13,8 @@ class Play extends Phaser.Scene {
         //load sprites
         this.load.image('cart', '././assets/cartFull.png');
         this.load.image('ingredient1', '././assets/broth1.png');
+        this.load.image('ingredient2', '././assets/broth1.png');
+        this.load.image('ingredient3', '././assets/broth1.png');
 
         // load spritesheet
         //this.load.spritesheet('death', './assets/death_anim.png', {frameWidth: 1, frameHeight: 1000, startFrame: 0, endFrame: 7});
@@ -24,6 +26,10 @@ class Play extends Phaser.Scene {
         this.score = this.add.tileSprite(0, 0, 50, 50, 'score').setOrigin(0, 0);
         // add objs
         this.ingredient1 = new Ingredient(this, game.config.width + 192, 20, 'ingredient1', 0, 30).setOrigin(0,0);
+        this.ingredient1.pos = 2;
+        this.ingredient2 = new Ingredient(this, game.config.width + 192, 100, 'ingredient1', 0, 30).setOrigin(0,0);
+        this.ingredient2.pos = 1;
+        this.ingredient3 = new Ingredient(this, game.config.width + 192, 200, 'ingredient1', 0, 30).setOrigin(0,0);
         //add cart
         this.cart = new Cart(this, -10,game.config.height-200, 'cart').setScale(0.5, 0.5).setOrigin(0, 0);
         // define keys
@@ -63,7 +69,7 @@ class Play extends Phaser.Scene {
             console.log('change to noodles'); 
         }, null, this);
 
-        var timer = this.time.addEvent({
+        this.timer = this.time.addEvent({
             delay: 3000,
             callback: this.ingredient1.reset,
             loop: true
@@ -78,12 +84,11 @@ class Play extends Phaser.Scene {
     update(){
         this.bg.tilePositionX += 1;
         // check collisions
-        /*
-        if(this.checkCollision(this.p1Rocket, this.ship02)) {
-            this.p1Rocket.reset();
-            this.p1Rocket.visible = false;
-            this.shipExplode(this.ship02);   
+        
+        if(this.checkCatch(this.cart, this.ingredient1)) {
+            console.log("got it");  
         }
+        /*
         if (this.checkCollision(this.p1Rocket, this.ship01)) {
             this.p1Rocket.reset();
             this.p1Rocket.visible = false;
@@ -107,7 +112,7 @@ class Play extends Phaser.Scene {
 
     checkCatch(cart, obj) {
         // simple AABB checking
-        if (cart.pos == obj.pos) {
+        if (cart.pos == obj.pos && obj.x <= cart.width && obj.x >= cart.width-20 ) {
                 return true;
         } else {
             return false;

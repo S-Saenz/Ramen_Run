@@ -3,6 +3,7 @@ class Ingredient extends Phaser.GameObjects.Sprite{
         super(scene,x,y,texture,frame);
         //add object to existing scene
         scene.add.existing(this);
+        this.pos = 0;
         //track firing status
     }
     update(){
