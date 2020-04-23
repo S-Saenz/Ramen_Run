@@ -8,8 +8,7 @@ class Ingredient extends Phaser.GameObjects.Sprite{
     }
 
     update(){
-        //move ship left
-        // warp around
+        // move left and warp around
         if(this.x >= -100){
             this.x -= game.settings.panSpeed;
         } else {

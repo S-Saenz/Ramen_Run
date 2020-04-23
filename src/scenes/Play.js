@@ -12,7 +12,9 @@ class Play extends Phaser.Scene {
 
         //load sprites
         this.load.image('cart', '././assets/cartFull.png');
-        this.load.image('avatar', '././assets/avatar.png');
+        this.load.image('avatar', '././assets/hand.png');
+        this.load.image('human', '././assets/human.png');
+        
 
         this.load.image('topping1', '././assets/topping1.png');
         this.load.image('topping2', '././assets/topping2.png');
@@ -52,6 +54,8 @@ class Play extends Phaser.Scene {
         this.ingredient2.pos = 1;
         this.ingredient3 = new Ingredient(this, game.config.width, game.config.height-100, 'ingredient3', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
         this.ingredient3.pos = 0;
+        //add human
+        this.human = new Human(this, game.config.width, game.config.height-200, 'human', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
         //add cart
         this.cart = new Cart(this, 150,game.config.height-200, 'avatar').setScale(0.5, 0.5).setOrigin(0, 0);
         // define keys
