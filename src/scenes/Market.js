@@ -73,6 +73,13 @@ class Market extends Phaser.Scene {
     }
     
     update() {
+        game.cartHealth = game.settings.maxHealth;
+        game.brothProg = 0;
+        game.noodleProg = 0;
+        game.toppingProg = 0;
+        game.settings.recipeBroth = Phaser.Math.RND.pick(game.broths);
+        game.settings.recipeNoodle = Phaser.Math.RND.pick(game.noodles);
+        game.settings.recipeTopping = Phaser.Math.RND.pick(game.toppings);
         
     }
 }

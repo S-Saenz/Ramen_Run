@@ -8,7 +8,7 @@ class Human extends Phaser.GameObjects.Sprite{
     update(){
         // move left and warp around
         if(this.x >= -100){
-            this.x -= game.settings.panSpeed;
+            this.x -= game.settings.panSpeed+1;
         } else {
             this.x = game.config.width;
             this.alpha = 1;

@@ -10,6 +10,10 @@ let game = new Phaser.Game(config);
 game.cash;
 game.score;
 game.cartHealth;
+game.broths = ['broth1','broth2','broth3'];
+game.noodles = ['noodle1','noodle2','noodle3'];
+game.toppings = ['topping1','topping2','topping3'];
+
 //set up progress meters for each ingredient
 game.brothProg = 0;
 game.noodleProg = 0;
@@ -22,7 +26,7 @@ game.extras = 0;
 
 game.settings = {
     maxHealth: 50,
-    timer: 1000, 
+    timer: 10000, 
     panSpeed: 4,
     brothChance: .8,
     noodleChance: .1,

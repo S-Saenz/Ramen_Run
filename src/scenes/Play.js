@@ -11,6 +11,9 @@ class Play extends Phaser.Scene {
         this.load.image('score', '././assets/stars.png');
 
         //load sprites
+        this.load.image('cartFull', '././assets/cartFull.png');
+        this.load.image('cartMed', '././assets/cartMed.png');
+        this.load.image('cartLow', '././assets/cartLow.png');
         this.load.image('cart', '././assets/cartFull.png');
         this.load.image('avatar', '././assets/hand.png');
         this.load.image('human', '././assets/human.png');
@@ -55,7 +58,7 @@ class Play extends Phaser.Scene {
         this.ingredient3 = new Ingredient(this, game.config.width, game.config.height-100, 'ingredient3', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
         this.ingredient3.pos = 0;
         //add human
-        this.human = new Human(this, game.config.width, game.config.height-200, 'human', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
+        this.human = new Human(this, game.config.width, game.config.height-150, 'human', 0, 30).setScale(0.25, 0.25).setOrigin(0,0);
         //add cart
         this.cart = new Cart(this, 150,game.config.height-200, 'avatar').setScale(0.5, 0.5).setOrigin(0, 0);
         // define keys
@@ -136,7 +139,7 @@ class Play extends Phaser.Scene {
         }
         if(this.checkCatch(this.cart, this.ingredient3)) {
         }
-
+        this.checkHit(this.cart,this.human);
         if(this.ingredient1.x == game.config.width){
             this.changeTexture(this.ingredient1);
         }
@@ -162,29 +165,33 @@ class Play extends Phaser.Scene {
         this.ingredient1.update();
         this.ingredient2.update();
         this.ingredient3.update();
+        this.human.update();
         
     }
 
     changeIngredientChances(){
         if(this.ingredientPhase == 0){
+            this.getNewOrder();
             game.settings.brothChance = 0.8;
             game.settings.noodleChance = 0.1;
             game.settings.toppingChance = 0.1;
+            this.ingredientPhase++;
         } else if(this.ingredientPhase == 1){
             game.settings.brothChance = 0.1;
             game.settings.noodleChance = 0.8;
             game.settings.toppingChance = 0.1;
+            this.ingredientPhase++;
         } else if(this.ingredientPhase == 2){
             game.settings.brothChance = 0.1;
             game.settings.noodleChance = 0.1;
             game.settings.toppingChance = 0.8;
+            this.ingredientPhase++;
         } else{
             this.ingredient1.alpha = 0;
             this.ingredient2.alpha = 0;
             this.ingredient3.alpha = 0;
             this.ingredientPhase = 0;
         }
-        this.ingredientPhase++;
 
     }
 
@@ -207,6 +214,30 @@ class Play extends Phaser.Scene {
             ingredient.setTexture('topping'+Phaser.Math.Between(1,3));
         }
         
+    }
+
+
+    checkHit(cart,human){
+        if (cart.pos != 1 && human.x <= this.cartVechicle.width){
+            if(human.alpha !=0){
+                game.cartHealth--;
+            }
+            human.alpha = 0;
+            //alter cart based on health
+            if(game.cartHealth<=0){
+                //send to market of car is broken
+                this.scene.start("marketScene");
+            }else if(game.cartHealth < game.settings.maxHealth/2){
+                this.cartVechicle.setTexture('cartLow');
+            }else if(game.cartHealth < game.settings.maxHealth){
+                this.cartVechicle.setTexture('cartMed');
+            } else if(this.cartVechicle.texture.key != 'cartFull'){
+                //restore to full if necesary
+                this.cartVechicle.setTexture('cartFull');
+            }
+        } else{
+            human.alpha = 0;
+        }
     }
 
     checkCatch(cart, obj) {
@@ -257,6 +288,16 @@ class Play extends Phaser.Scene {
         } else {
             return false;
         }
+    }
+
+    getNewOrder(){
+        game.brothProg = 0;
+        game.noodleProg = 0;
+        game.toppingProg = 0;
+        game.settings.recipeBroth = Phaser.Math.RND.pick(game.broths);
+        game.settings.recipeNoodle = Phaser.Math.RND.pick(game.noodles);
+        game.settings.recipeTopping = Phaser.Math.RND.pick(game.toppings);
+        console.log('Order Recieved: ' + game.settings.recipeBroth + ' with ' + game.settings.recipeNoodle + ' and ' + game.settings.recipeTopping);
     }
 
     /*
