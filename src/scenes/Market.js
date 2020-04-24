@@ -10,10 +10,10 @@ class Market extends Phaser.Scene {
         let menuConfig = {
             fontFamily: 'Georgia',
             fontStyle: 'bold',
-            fontSize: '60px',
+            fontSize: '40px',
             backgroundColor: '#ae1f1f',
             color: '#cabbaa',
-            align: 'right',
+            align: 'center',
             padding: {
                 right: 10,
                 left: 10,
@@ -28,7 +28,7 @@ class Market extends Phaser.Scene {
         let centerY = game.config.height/2;
         let textSpacer = 64;
 
-        this.add.text(centerX, 60,"MARKET", menuConfig).setOrigin(0.5);
+        this.add.text(centerX, 0,"MARKET", menuConfig).setOrigin(0.5);
 
         // =============================== add buttons ===============================
         let buttonConfig = {
@@ -44,10 +44,23 @@ class Market extends Phaser.Scene {
               top: 5,
               bottom: 5,
           },
-          fixedWidth: 150
+          fixedWidth: 200
       }
-      this.playButton = this.add.text(200, 250, 'PlayButton', buttonConfig);
       
+      this.playButton = this.add.text(550, 0, 'PlayButton', buttonConfig);
+      //cosmetic buttons
+      var buttonX = 50;
+      var cosPad =20;
+      this.cos1Button = this.add.text(buttonX, centerY, 'cosmetic 1', buttonConfig);
+      this.cos2Button = this.add.text(cosPad+buttonX+(buttonConfig.fixedWidth), centerY, 'cosmetic 2', buttonConfig);
+      this.cos3Button = this.add.text(cosPad*2+buttonX+(buttonConfig.fixedWidth*2), centerY, 'cosmetic 3', buttonConfig);
+      //power up buttons
+      buttonConfig.fixedWidth = 600;
+      this.powerButton = this.add.text(80, centerY+60, 'power', buttonConfig);
+      this.violentButton = this.add.text(80, centerY+110, 'violence', buttonConfig);
+
+
+
       //=============================== set interactive ===========================================
 
       this.playButton.setInteractive();

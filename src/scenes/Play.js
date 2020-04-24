@@ -58,7 +58,7 @@ class Play extends Phaser.Scene {
         this.ingredient3 = new Ingredient(this, game.config.width, game.config.height-100, 'ingredient3', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
         this.ingredient3.pos = 0;
         //add human
-        this.human = new Human(this, game.config.width, game.config.height-150, 'human', 0, 30).setScale(0.25, 0.25).setOrigin(0,0);
+        this.human = new Human(this, game.config.width, game.config.height-250, 'human', 0, 30).setScale(0.25, 0.25).setOrigin(0,0);
         //add cart
         this.cart = new Cart(this, 150,game.config.height-200, 'avatar').setScale(0.5, 0.5).setOrigin(0, 0);
         // define keys
@@ -74,6 +74,8 @@ class Play extends Phaser.Scene {
         // score & cash
         this.score = 0;
         this.cash = 0;
+        //used to determine when ingredients and humans are caught
+        this.catchZone = 150;
         
         // ui display
         let uiConfig = {
@@ -218,7 +220,7 @@ class Play extends Phaser.Scene {
 
 
     checkHit(cart,human){
-        if (cart.pos != 1 && human.x <= this.cartVechicle.width){
+        if (cart.pos != 1 && human.x <= this.catchZone){
             if(human.alpha !=0){
                 game.cartHealth--;
             }
@@ -235,14 +237,14 @@ class Play extends Phaser.Scene {
                 //restore to full if necesary
                 this.cartVechicle.setTexture('cartFull');
             }
-        } else{
+        } else if(human.x <= this.catchZone){
             human.alpha = 0;
         }
     }
 
     checkCatch(cart, obj) {
         // simple AABB checking
-        if (cart.pos == obj.pos && obj.x <= cart.width && obj.x >= cart.width-20 ) {
+        if (cart.pos == obj.pos && obj.x <= this.catchZone && obj.x >= this.catchZone-50 ) {
             if(obj.texture.key == game.settings.recipeBroth){
                 if(game.brothProg < game.maxProg){
                     if(obj.alpha !=0){
@@ -251,7 +253,7 @@ class Play extends Phaser.Scene {
                         obj.alpha = 0;
                     }
                 } else {
-                    this.meterCompleted = this.add.sprite(100, 0, 555, 360, 'meterCompleted').setOrigin(0, 0);
+                    this.popUpImage('meterCompleted',100,100);
                     this.meter.width = 20;
                     game.extras++;
                 }
@@ -264,7 +266,6 @@ class Play extends Phaser.Scene {
                         obj.alpha = 0;
                     }
                 } else {
-                    this.meterCompleted = this.add.sprite(100, 0, 555, 360, 'meterCompleted').setOrigin(0, 0);
                     this.meter.width = 20;
 
                 }
@@ -277,7 +278,6 @@ class Play extends Phaser.Scene {
                         obj.alpha = 0;
                     }
                 } else {
-                    this.meterCompleted = this.add.sprite(100, 0, 555, 360, 'meterCompleted').setOrigin(0, 0);
                     this.meter.width = 20;
                 }
 
@@ -300,6 +300,26 @@ class Play extends Phaser.Scene {
         console.log('Order Recieved: ' + game.settings.recipeBroth + ' with ' + game.settings.recipeNoodle + ' and ' + game.settings.recipeTopping);
     }
 
+    popUpImage(img,x,y){
+        var image = this.add.image(x, y, img).setOrigin(0, 0);
+        this.clock = this.time.delayedCall(500, () => {
+            console.log('destroy image');
+            image.destroy();
+        }, null, this);
+    }
+
+    calcCash(){
+        var totalProg = game.brothProg + game.noodleProg + game.toppingProg;
+        var payment = 5;
+        if(totalProg < 3){
+            payment = 2;
+        } else if(game.extras>0){
+            payment++;
+        }
+        if(game.extras>3){
+            payment + 2;
+        }
+    }
     /*
     onDestroyed(obj) {
         obj.alpha = 0;                         // temporarily hide obj

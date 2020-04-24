@@ -25,7 +25,7 @@ game.mistakes = 0;
 game.extras = 0;
 
 game.settings = {
-    maxHealth: 50,
+    maxHealth: 1,
     timer: 10000, 
     panSpeed: 4,
     brothChance: .8,
@@ -36,4 +36,13 @@ game.settings = {
     recipeTopping: 'topping1'
 }
 game.cartHealth = game.settings.maxHealth;
+
+game.marketGoods = {
+    cosmetics: ['cos1','cos2','cos3','cos4','cos5'],
+    cosAq: [],
+    power: ['power1','power2','power3','power4'],
+    powAq: 0,
+    violent: ['violent1','violent2','violent3','violent4'],
+    violAq: 0
+}
 let keyUP, keyDOWN;
