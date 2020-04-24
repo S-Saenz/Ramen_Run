@@ -49,7 +49,7 @@ class Play extends Phaser.Scene {
         this.bg = this.add.tileSprite(0, 0, 555, 360, 'bg').setOrigin(0, 0);
         this.meter = this.add.tileSprite(0, 0, 20, 5, 'meter').setOrigin(0, 0);
         this.score = this.add.tileSprite(0, 0, 50, 50, 'score').setOrigin(0, 0);
-        this.cartVechicle = this.add.tileSprite(-10,game.config.height-200, 600, 330, 'cart').setScale(0.5, 0.5).setOrigin(0, 0);
+        this.cartVechicle = this.add.tileSprite(-10,game.config.height-200, 1600, 950, 'cart').setScale(0.2, 0.2).setOrigin(0, 0);
         // add objs
         this.ingredient1 = new Ingredient(this, game.config.width + 192, game.config.height-200, 'ingredient1', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
         this.ingredient1.pos = 2;
