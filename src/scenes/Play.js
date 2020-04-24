@@ -58,9 +58,9 @@ class Play extends Phaser.Scene {
         this.ingredient3 = new Ingredient(this, game.config.width, game.config.height-100, 'ingredient3', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
         this.ingredient3.pos = 0;
         //add human
-        this.human = new Human(this, game.config.width, game.config.height-250, 'human', 0, 30).setScale(0.25, 0.25).setOrigin(0,0);
+        this.human = new Human(this, game.config.width, game.config.height-150, 'human', 0, 30).setScale(0.25, 0.25).setOrigin(0,0);
         //add cart
-        this.cart = new Cart(this, 150,game.config.height-200, 'avatar').setScale(0.5, 0.5).setOrigin(0, 0);
+        this.cart = new Cart(this, 150,game.config.height-150, 'avatar').setScale(0.5, 0.5).setOrigin(0, 0);
         // define keys
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
@@ -71,9 +71,6 @@ class Play extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('death', { start: 0, end: 9, first: 0}),
             frameRate: 30
         });*/
-        // score & cash
-        this.score = 0;
-        this.cash = 0;
         //used to determine when ingredients and humans are caught
         this.catchZone = 150;
         
@@ -91,7 +88,9 @@ class Play extends Phaser.Scene {
                 bottom: 5,
             },
         }
-        this.cash = this.add.text(550, 54, "cash:" + this.cash , uiConfig);
+        this.cashUI = this.add.text(550, 54, 'cash: $'+ game.cash + '.00', uiConfig);
+        this.instructionUI = this.add.text(100, 70, 'catch broth!', uiConfig);
+        this.ingedientUI = this.add.image(x, y, game.settings.recipeBroth).setOrigin(0, 0);
         
         // game over flag
         this.gameOver = false;
@@ -192,6 +191,9 @@ class Play extends Phaser.Scene {
             this.ingredient1.alpha = 0;
             this.ingredient2.alpha = 0;
             this.ingredient3.alpha = 0;
+            this.popUpTxt(200,20, '$'+this.calcCash()+'.00');
+            this.cashUI.text = 'cash: $'+ game.cash + '.00';
+
             this.ingredientPhase = 0;
         }
 
@@ -253,6 +255,8 @@ class Play extends Phaser.Scene {
                         obj.alpha = 0;
                     }
                 } else {
+                    this.ingredientUI.setTexture(game.settings.recipeNoodle);
+                    this.instructionUI.text = 'catch noodles!';
                     this.popUpImage('meterCompleted',100,100);
                     this.meter.width = 20;
                     game.extras++;
@@ -266,7 +270,11 @@ class Play extends Phaser.Scene {
                         obj.alpha = 0;
                     }
                 } else {
+                    this.ingredientUI.setTexture(game.settings.recipeTopping);
+                    this.instructionUI.text = 'catch toppings!';
+                    this.popUpImage('meterCompleted',100,100);
                     this.meter.width = 20;
+                    game.extras++;
 
                 }
             }
@@ -278,7 +286,11 @@ class Play extends Phaser.Scene {
                         obj.alpha = 0;
                     }
                 } else {
+                    this.ingredientUI.alpha = 0;
+                    this.instructionUI.text = 'deliver the ramen!';
+                    this.popUpImage('meterCompleted',100,100);
                     this.meter.width = 20;
+                    game.extras++;
                 }
 
             }else{
@@ -303,8 +315,14 @@ class Play extends Phaser.Scene {
     popUpImage(img,x,y){
         var image = this.add.image(x, y, img).setOrigin(0, 0);
         this.clock = this.time.delayedCall(500, () => {
-            console.log('destroy image');
             image.destroy();
+        }, null, this);
+    }
+
+    popUpTxt(txt,x,y){
+        var txt = this.add.text(x, y, txt).setOrigin(0, 0);
+        this.clock = this.time.delayedCall(500, () => {
+            txt.destroy();
         }, null, this);
     }
 
@@ -312,6 +330,8 @@ class Play extends Phaser.Scene {
         var totalProg = game.brothProg + game.noodleProg + game.toppingProg;
         var payment = 5;
         if(totalProg < 3){
+            payment = 0;
+        } else if(totalProg < 5){
             payment = 2;
         } else if(game.extras>0){
             payment++;
@@ -319,6 +339,8 @@ class Play extends Phaser.Scene {
         if(game.extras>3){
             payment + 2;
         }
+        game.cash += payment;
+        return payment;
     }
     /*
     onDestroyed(obj) {

@@ -26,7 +26,6 @@ class Market extends Phaser.Scene {
         //show menu text
         let centerX = game.config.width/2;
         let centerY = game.config.height/2;
-        let textSpacer = 64;
 
         this.add.text(centerX, 0,"MARKET", menuConfig).setOrigin(0.5);
 
