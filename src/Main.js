@@ -38,11 +38,14 @@ game.settings = {
 game.cartHealth = game.settings.maxHealth;
 
 game.marketGoods = {
+    //cosmetics HAVE to be ordered by price, 0 being cheapest and 4 being most expensive!!!
     cosmetics: ['goth','rep','cyber','regal','wave'],
     cosEq: 'none',
     power: ['power1','power2','power3','power4'],
+    powPrices:[10,20,30,40,50],
     powAq: 0,
     violent: ['violent1','violent2','violent3','violent4'],
+    violentPrices:[10,20,30,40,50],
     violAq: 0
 }
 let keyUP, keyDOWN;

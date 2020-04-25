@@ -79,19 +79,32 @@ class Market extends Phaser.Scene {
         });
 
         this.cos1Button.on('pointerdown', () => {
+            this.buttonFade(this.cos1Button);
             game.marketGoods.cosEq = randCosArr[0];
-            this.cos1Button.disableInteractive();
-            this.cos1Button.setStyle({backgroundColor: '#FACADE'});
-            this.cos1Button.text.addColor('#FF4421',0);
         });
 
         this.cos2Button.on('pointerdown', () => {
+            this.buttonFade(this.cos2Button);
             game.marketGoods.cosEq = randCosArr[1];
 
         });
 
         this.cos3Button.on('pointerdown', () => {
+            this.buttonFade(this.cos3Button);
             game.marketGoods.cosEq += randCosArr[2];
+
+        });
+
+
+        this.powerButton.on('pointerdown', () => {
+            this.buttonFade(this.powerButton);
+            game.marketGoods.powAq++;
+            game.cash -= game.marketGoods.powAq;
+        });
+
+
+        this.violentButton.on('pointerdown', () => {
+            this.buttonFade(this.violentButton);
 
         });
 
@@ -151,6 +164,18 @@ class Market extends Phaser.Scene {
             
         
     }
+    
+    update() {
+        game.cartHealth = game.settings.maxHealth;
+        game.brothProg = 0;
+        game.noodleProg = 0;
+        game.toppingProg = 0;
+        game.settings.recipeBroth = Phaser.Math.RND.pick(game.broths);
+        game.settings.recipeNoodle = Phaser.Math.RND.pick(game.noodles);
+        game.settings.recipeTopping = Phaser.Math.RND.pick(game.toppings);
+        
+    }
+    
 
     chooseThreeDiff(){
         var arrCopy = Array.from(game.marketGoods.cosmetics);
@@ -163,16 +188,16 @@ class Market extends Phaser.Scene {
         var retArr = [opt1,opt2,opt3];
         return retArr;
     }
-    
-    update() {
-        game.cartHealth = game.settings.maxHealth;
-        game.brothProg = 0;
-        game.noodleProg = 0;
-        game.toppingProg = 0;
-        game.settings.recipeBroth = Phaser.Math.RND.pick(game.broths);
-        game.settings.recipeNoodle = Phaser.Math.RND.pick(game.noodles);
-        game.settings.recipeTopping = Phaser.Math.RND.pick(game.toppings);
-        
+
+    resetAllCos(){
+        if(!this.cos1Button.input.enabled){
+            game.marketGoods.cosmetics.findIndex(this.cos1Button.text);
+        }
+    }
+
+    buttonFade(button){
+        button.disableInteractive();
+        button.setStyle({backgroundColor: '#FACADE', fill: '#FF4421'});
     }
 }
         
