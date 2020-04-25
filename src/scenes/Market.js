@@ -44,37 +44,50 @@ class Market extends Phaser.Scene {
               bottom: 5,
           },
           fixedWidth: 200
-      }
-      
-      this.playButton = this.add.text(550, 0, 'Continue', buttonConfig);
-      //cosmetic buttons
-      var buttonX = 50;
-      var cosPad =20;
-      this.cos1Button = this.add.text(buttonX, centerY, 'cosmetic 1', buttonConfig);
-      this.cos2Button = this.add.text(cosPad+buttonX+(buttonConfig.fixedWidth), centerY, 'cosmetic 2', buttonConfig);
-      this.cos3Button = this.add.text(cosPad*2+buttonX+(buttonConfig.fixedWidth*2), centerY, 'cosmetic 3', buttonConfig);
-      //power up buttons
-      buttonConfig.fixedWidth = 600;
-      this.powerButton = this.add.text(80, centerY+60, 'power', buttonConfig);
-      this.violentButton = this.add.text(80, centerY+110, 'violence', buttonConfig);
+        }
+        
+        this.playButton = this.add.text(550, 0, 'Continue', buttonConfig);
+        //cosmetic buttons
+
+        var buttonX = 50;
+        var cosPad =20;
+        this.cos1Button = this.add.text(buttonX, centerY, 'cosmetic 1', buttonConfig);
+        this.cos2Button = this.add.text(cosPad+buttonX+(buttonConfig.fixedWidth), centerY, 'cosmetic 2', buttonConfig);
+        this.cos3Button = this.add.text(cosPad*2+buttonX+(buttonConfig.fixedWidth*2), centerY, 'cosmetic 3', buttonConfig);
+        //power up buttons
+        buttonConfig.fixedWidth = 600;
+        this.powerButton = this.add.text(80, centerY+60, 'power', buttonConfig);
+        this.violentButton = this.add.text(80, centerY+110, 'violence', buttonConfig);
 
 
 
-      //=============================== set interactive ===========================================
+        //=============================== set interactive ===========================================
 
-      this.playButton.setInteractive();
-      this.cos1Button.setInteractive();
-      this.cos2Button.setInteractive();
-      this.cos3Button.setInteractive();
-      this.powerButton.setInteractive();
-      this.violentButton.setInteractive();
+        this.playButton.setInteractive();
+        this.cos1Button.setInteractive();
+        this.cos2Button.setInteractive();
+        this.cos3Button.setInteractive();
+        this.powerButton.setInteractive();
+        this.violentButton.setInteractive();
 
-      //================================ functionality =================================
+        //================================ functionality =================================
 
-      this.playButton.on('pointerdown', () => { 
-          // easy mode
-          this.scene.start("playScene");
-      });
+        this.playButton.on('pointerdown', () => { 
+            // easy mode
+            this.scene.start("playScene");
+        });
+
+        this.cos1Button.on('pointerdown', () => {
+            game.marketGoods.cosAq += 'cos1';
+        });
+
+        this.cos2Button.on('pointerdown', () => {
+
+        });
+
+        this.cos3Button.on('pointerdown', () => {
+
+        });
 
 
       //================================ on hover ================================
@@ -85,7 +98,7 @@ class Market extends Phaser.Scene {
             this.playButton.setStyle({ fill: '#161515'});
         });
 
-    //================================ cosmetic buttons ================================ 
+            //======================= cosmetic buttons =====================
 
         this.cos1Button.on('pointerover', () => { 
             this.cos1Button.setStyle({ fill: '#fff2d8'});
@@ -112,7 +125,7 @@ class Market extends Phaser.Scene {
 
 
 
-
+            // ======================= power and violent buttons =======================
 
 
         this.powerButton.on('pointerover', () => { 
@@ -128,10 +141,16 @@ class Market extends Phaser.Scene {
         });
         this.violentButton.on('pointerout', () => { 
             this.violentButton.setStyle({ fill: '#161515'});
-        });
-            
+        });    
             
         
+    }
+
+    chooseThreeDiff(){
+        var arrCopy = game.marketGoods.cosmetics;
+        RemoveAt(arrCopy,1);
+        console.log('arrCopy: ' + arrCopy);
+        console.log('original cosmetics array: ' + game.marketGoods.cosmetics);
     }
     
     update() {

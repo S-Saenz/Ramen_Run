@@ -38,8 +38,8 @@ game.settings = {
 game.cartHealth = game.settings.maxHealth;
 
 game.marketGoods = {
-    cosmetics: ['cos1','cos2','cos3','cos4','cos5'],
-    cosAq: [],
+    cosmetics: ['goth','rep','cyber','regal','wave'],
+    cosEq: 'none',
     power: ['power1','power2','power3','power4'],
     powAq: 0,
     violent: ['violent1','violent2','violent3','violent4'],
