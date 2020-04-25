@@ -47,13 +47,14 @@ class Market extends Phaser.Scene {
         }
         
         this.playButton = this.add.text(550, 0, 'Continue', buttonConfig);
-        //cosmetic buttons
+        //================ cosmetic buttons ================
 
+        var randCosArr = this.chooseThreeDiff();
         var buttonX = 50;
         var cosPad =20;
-        this.cos1Button = this.add.text(buttonX, centerY, 'cosmetic 1', buttonConfig);
-        this.cos2Button = this.add.text(cosPad+buttonX+(buttonConfig.fixedWidth), centerY, 'cosmetic 2', buttonConfig);
-        this.cos3Button = this.add.text(cosPad*2+buttonX+(buttonConfig.fixedWidth*2), centerY, 'cosmetic 3', buttonConfig);
+        this.cos1Button = this.add.text(buttonX, centerY, randCosArr[0], buttonConfig);
+        this.cos2Button = this.add.text(cosPad+buttonX+(buttonConfig.fixedWidth), centerY, randCosArr[1], buttonConfig);
+        this.cos3Button = this.add.text(cosPad*2+buttonX+(buttonConfig.fixedWidth*2), centerY, randCosArr[2], buttonConfig);
         //power up buttons
         buttonConfig.fixedWidth = 600;
         this.powerButton = this.add.text(80, centerY+60, 'power', buttonConfig);
@@ -78,14 +79,19 @@ class Market extends Phaser.Scene {
         });
 
         this.cos1Button.on('pointerdown', () => {
-            game.marketGoods.cosAq += 'cos1';
+            game.marketGoods.cosEq = randCosArr[0];
+            this.cos1Button.disableInteractive();
+            this.cos1Button.setStyle({backgroundColor: '#FACADE'});
+            this.cos1Button.text.addColor('#FF4421',0);
         });
 
         this.cos2Button.on('pointerdown', () => {
+            game.marketGoods.cosEq = randCosArr[1];
 
         });
 
         this.cos3Button.on('pointerdown', () => {
+            game.marketGoods.cosEq += randCosArr[2];
 
         });
 
@@ -147,10 +153,15 @@ class Market extends Phaser.Scene {
     }
 
     chooseThreeDiff(){
-        var arrCopy = game.marketGoods.cosmetics;
-        RemoveAt(arrCopy,1);
-        console.log('arrCopy: ' + arrCopy);
-        console.log('original cosmetics array: ' + game.marketGoods.cosmetics);
+        var arrCopy = Array.from(game.marketGoods.cosmetics);
+        if(game.marketGoods.cosEq != 'none'){
+            Phaser.Utils.Array.Remove(arrCopy,game.marketGoods.cosEq);
+        }
+        var opt1 = Phaser.Utils.Array.RemoveAt(arrCopy,Phaser.Math.Between(0,arrCopy.length-1));
+        var opt2 = Phaser.Utils.Array.RemoveAt(arrCopy,Phaser.Math.Between(0,arrCopy.length-1));
+        var opt3 = Phaser.Utils.Array.RemoveAt(arrCopy,Phaser.Math.Between(0,arrCopy.length-1));
+        var retArr = [opt1,opt2,opt3];
+        return retArr;
     }
     
     update() {
