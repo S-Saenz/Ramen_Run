@@ -46,7 +46,7 @@ class Market extends Phaser.Scene {
           fixedWidth: 200
       }
       
-      this.playButton = this.add.text(550, 0, 'PlayButton', buttonConfig);
+      this.playButton = this.add.text(550, 0, 'Continue', buttonConfig);
       //cosmetic buttons
       var buttonX = 50;
       var cosPad =20;
@@ -63,6 +63,11 @@ class Market extends Phaser.Scene {
       //=============================== set interactive ===========================================
 
       this.playButton.setInteractive();
+      this.cos1Button.setInteractive();
+      this.cos2Button.setInteractive();
+      this.cos3Button.setInteractive();
+      this.powerButton.setInteractive();
+      this.violentButton.setInteractive();
 
       //================================ functionality =================================
 
@@ -71,16 +76,61 @@ class Market extends Phaser.Scene {
           this.scene.start("playScene");
       });
 
-      this.playButton.on('pointerover', () => { 
-          this.playButton.setStyle({ fill: '#fff2d8'});
-      });
-      this.playButton.on('pointerout', () => { 
-          this.playButton.setStyle({ fill: '#161515'});
-      });
-      
 
-        
-        
+      //================================ on hover ================================
+        this.playButton.on('pointerover', () => { 
+            this.playButton.setStyle({ fill: '#fff2d8'});
+        });
+        this.playButton.on('pointerout', () => { 
+            this.playButton.setStyle({ fill: '#161515'});
+        });
+
+    //================================ cosmetic buttons ================================ 
+
+        this.cos1Button.on('pointerover', () => { 
+            this.cos1Button.setStyle({ fill: '#fff2d8'});
+        });
+        this.cos1Button.on('pointerout', () => { 
+            this.cos1Button.setStyle({ fill: '#161515'});
+        });
+
+
+        this.cos2Button.on('pointerover', () => { 
+            this.cos2Button.setStyle({ fill: '#fff2d8'});
+        });
+        this.cos2Button.on('pointerout', () => { 
+            this.cos2Button.setStyle({ fill: '#161515'});
+        });
+
+
+        this.cos3Button.on('pointerover', () => { 
+            this.cos3Button.setStyle({ fill: '#fff2d8'});
+        });
+        this.cos3Button.on('pointerout', () => { 
+            this.cos3Button.setStyle({ fill: '#161515'});
+        });
+
+
+
+
+
+
+        this.powerButton.on('pointerover', () => { 
+            this.powerButton.setStyle({ fill: '#fff2d8'});
+        });
+
+        this.powerButton.on('pointerout', () => { 
+            this.powerButton.setStyle({ fill: '#161515'});
+        });
+
+        this.violentButton.on('pointerover', () => { 
+            this.violentButton.setStyle({ fill: '#fff2d8'});
+        });
+        this.violentButton.on('pointerout', () => { 
+            this.violentButton.setStyle({ fill: '#161515'});
+        });
+            
+            
         
     }
     

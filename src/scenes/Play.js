@@ -47,8 +47,8 @@ class Play extends Phaser.Scene {
     create(){
         // place tile sprite
         this.bg = this.add.tileSprite(0, 0, 555, 360, 'bg').setOrigin(0, 0);
-        this.meter = this.add.tileSprite(0, 0, 20, 5, 'meter').setOrigin(0, 0);
-        this.score = this.add.tileSprite(0, 0, 50, 50, 'score').setOrigin(0, 0);
+        this.meter = this.add.tileSprite(160, 0, 20, 5, 'meter').setOrigin(0, 0);
+        //this.score = this.add.image(0, 0, 'score').setOrigin(0, 0);
         this.cartVechicle = this.add.tileSprite(-10,game.config.height-200, 1600, 950, 'cart').setScale(0.2, 0.2).setOrigin(0, 0);
         // add objs
         this.ingredient1 = new Ingredient(this, game.config.width + 192, game.config.height-200, 'ingredient1', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
@@ -90,7 +90,8 @@ class Play extends Phaser.Scene {
         }
         this.cashUI = this.add.text(550, 54, 'cash: $'+ game.cash + '.00', uiConfig);
         this.instructionUI = this.add.text(100, 70, 'catch broth!', uiConfig);
-        this.ingedientUI = this.add.image(x, y, game.settings.recipeBroth).setOrigin(0, 0);
+        this.ingredientUI = this.add.image(200, 10, game.settings.recipeBroth).setScale(0.5, 0.5).setOrigin(0, 0);
+        this.progUITxt = this.add.text(0, 0, 'Progress:', uiConfig);
         
         // game over flag
         this.gameOver = false;
@@ -173,6 +174,9 @@ class Play extends Phaser.Scene {
     changeIngredientChances(){
         if(this.ingredientPhase == 0){
             this.getNewOrder();
+            this.ingredientUI.setTexture(game.settings.recipeBroth);
+            this.instructionUI.text = 'catch broth!';
+            this.meter.width = 20;
             game.settings.brothChance = 0.8;
             game.settings.noodleChance = 0.1;
             game.settings.toppingChance = 0.1;
@@ -226,6 +230,7 @@ class Play extends Phaser.Scene {
             if(human.alpha !=0){
                 game.cartHealth--;
             }
+            this.cameras.main.shake(20,0.005);
             human.alpha = 0;
             //alter cart based on health
             if(game.cartHealth<=0){
