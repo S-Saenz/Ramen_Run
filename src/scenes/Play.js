@@ -277,6 +277,8 @@ class Play extends Phaser.Scene {
                 } else {
                     this.ingredientUI.setTexture(game.settings.recipeTopping);
                     this.instructionUI.text = 'catch toppings!';
+                    
+                    this.popUpImg = new PopUp(this, 150,game.config.height-150, 'meterCompleted').setScale(0.5, 0.5).setOrigin(0, 0);
                     this.popUpImage('meterCompleted',100,100);
                     this.meter.width = 20;
                     game.extras++;
