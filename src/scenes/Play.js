@@ -51,6 +51,7 @@ class Play extends Phaser.Scene {
         //this.score = this.add.image(0, 0, 'score').setOrigin(0, 0);
         this.cartVechicle = this.add.tileSprite(-10,game.config.height-200, 1600, 950, 'cart').setScale(0.2, 0.2).setOrigin(0, 0);
         // add objs
+        this.popUpImg = new PopUp(this, 100,100, 'meterCompleted').setScale(0.5, 0.5).setOrigin(0, 0);
         this.ingredient1 = new Ingredient(this, game.config.width + 192, game.config.height-200, 'ingredient1', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
         this.ingredient1.pos = 2;
         this.ingredient2 = new Ingredient(this, game.config.width + 300, game.config.height-150, 'ingredient2', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
@@ -278,7 +279,6 @@ class Play extends Phaser.Scene {
                     this.ingredientUI.setTexture(game.settings.recipeTopping);
                     this.instructionUI.text = 'catch toppings!';
                     
-                    this.popUpImg = new PopUp(this, 150,game.config.height-150, 'meterCompleted').setScale(0.5, 0.5).setOrigin(0, 0);
                     this.popUpImage('meterCompleted',100,100);
                     this.meter.width = 20;
                     game.extras++;
