@@ -27,7 +27,8 @@ class Market extends Phaser.Scene {
         let centerX = game.config.width/2;
         let centerY = game.config.height/2;
 
-        this.add.text(centerX, 0,"MARKET", menuConfig).setOrigin(0.5);
+        this.add.text(centerX, 0,"MARKET", menuConfig).setOrigin(0.5,0);
+        this.cashUI = this.add.text(0, 0, 'cash: $'+ game.cash + '.00', menuConfig);
 
         // =============================== add buttons ===============================
         let buttonConfig = {
@@ -48,7 +49,7 @@ class Market extends Phaser.Scene {
         
         this.playButton = this.add.text(550, 0, 'Continue', buttonConfig);
         //================ cosmetic buttons ================
-
+        var cosArr = game.marketGoods.cosmetics;
         var randCosArr = this.chooseThreeDiff();
         var buttonX = 50;
         var cosPad =20;
@@ -78,36 +79,46 @@ class Market extends Phaser.Scene {
             this.scene.start("playScene");
         });
 
-        this.cos1Button.on('pointerdown', () => {
-            this.buttonFade(this.cos1Button);
-            game.marketGoods.cosEq = randCosArr[0];
-        });
+        if(game.cash >= cosArr.indexOf(randCosArr[0])){
+            this.cos1Button.on('pointerdown', () => {
+                this.buttonFade(this.cos1Button);
+                game.marketGoods.cosEq = randCosArr[0];
+                game.cash -= cosArr.indexOf(this.cos3Button.text);
+            });
+        }
 
-        this.cos2Button.on('pointerdown', () => {
-            this.buttonFade(this.cos2Button);
-            game.marketGoods.cosEq = randCosArr[1];
+        if(game.cash >= cosArr.indexOf(randCosArr[1])){
+            this.cos2Button.on('pointerdown', () => {
+                this.buttonFade(this.cos2Button);
+                game.marketGoods.cosEq = randCosArr[1];
+                game.cash -= cosArr.indexOf(this.cos3Button.text);
 
-        });
+            });
+        }
 
-        this.cos3Button.on('pointerdown', () => {
-            this.buttonFade(this.cos3Button);
-            game.marketGoods.cosEq += randCosArr[2];
+        if(game.cash >= cosArr.indexOf(this.cos3Button.text)){
+            this.cos3Button.on('pointerdown', () => {
+                this.buttonFade(this.cos3Button);
+                game.marketGoods.cosEq = randCosArr[2];
+                game.cash -= cosArr.indexOf(this.cos3Button.text);
 
-        });
+            });
+        }
 
+        if(game.cash >= game.marketGoods.powPrices[game.marketGoods.powAq+1]){
+            this.powerButton.on('pointerdown', () => {
+                this.buttonFade(this.powerButton);
+                game.marketGoods.powAq++;
+                game.cash -= game.marketGoods.powAq;
+            });
+        }
 
-        this.powerButton.on('pointerdown', () => {
-            this.buttonFade(this.powerButton);
-            game.marketGoods.powAq++;
-            game.cash -= game.marketGoods.powAq;
-        });
+        if(game.cash >= game.marketGoods.violentPrices[game.marketGoods.violentAq+1]){
+            this.violentButton.on('pointerdown', () => {
+                this.buttonFade(this.violentButton);
 
-
-        this.violentButton.on('pointerdown', () => {
-            this.buttonFade(this.violentButton);
-
-        });
-
+            });
+        }
 
       //================================ on hover ================================
         this.playButton.on('pointerover', () => { 
@@ -191,7 +202,7 @@ class Market extends Phaser.Scene {
 
     resetAllCos(){
         if(!this.cos1Button.input.enabled){
-            game.marketGoods.cosmetics.findIndex(this.cos1Button.text);
+            game.marketGoods.cosmetics.indexOf(this.cos1Button.text);
         }
     }
 
