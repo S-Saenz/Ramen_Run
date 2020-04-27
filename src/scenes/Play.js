@@ -104,14 +104,14 @@ class Play extends Phaser.Scene {
         }, null, this);*/
         
         this.ingredientPhase = 0;
-
-        this.timer = this.time.addEvent({
+        this.changeIngredientChances();
+        /*this.timer = this.time.addEvent({
             delay: game.settings.timer,
             callback: this.changeIngredientChances,
             callbackScope: this,
             loop: true
         });
-        /*
+        
         this.timer = this.time.addEvent({
             delay: 3000,
             callback: this.ingredient1.reset,
@@ -174,7 +174,6 @@ class Play extends Phaser.Scene {
     }
 
     changeIngredientChances(){
-        console.log('timer start');
         if(this.ingredientPhase == 0){
             this.startPhase0();
         } else if(this.ingredientPhase == 1){
@@ -182,11 +181,6 @@ class Play extends Phaser.Scene {
         } else if(this.ingredientPhase == 2){
             this.startPhase2();
         } else{
-            this.ingredient1.alpha = 0;
-            this.ingredient2.alpha = 0;
-            this.ingredient3.alpha = 0;
-            this.popUpTxt(200,20, '$'+this.calcCash()+'.00');
-            this.cashUI.text = 'cash: $'+ game.cash + '.00';
 
             this.ingredientPhase = 0;
         }
@@ -201,7 +195,10 @@ class Play extends Phaser.Scene {
         game.settings.brothChance = 0.8;
         game.settings.noodleChance = 0.1;
         game.settings.toppingChance = 0.1;
-        this.timer.reset();
+        this.ingredientPhase++;
+        this.clock = this.time.delayedCall(game.settings.timer, () => {
+            this.startPhase1();
+        }, null, this);
     }
 
     startPhase1(){
@@ -209,6 +206,9 @@ class Play extends Phaser.Scene {
         game.settings.noodleChance = 0.8;
         game.settings.toppingChance = 0.1;
         this.ingredientPhase++;
+        this.clock = this.time.delayedCall(game.settings.timer, () => {
+            this.startPhase2();
+        }, null, this);
     }
 
     startPhase2(){
@@ -216,7 +216,21 @@ class Play extends Phaser.Scene {
         game.settings.noodleChance = 0.1;
         game.settings.toppingChance = 0.8;
         this.ingredientPhase++;
+        this.clock = this.time.delayedCall(game.settings.timer, () => {
+            this.startPhase3();
+        }, null, this);
 
+    }
+
+    startPhase3(){
+        this.ingredient1.alpha = 0;
+        this.ingredient2.alpha = 0;
+        this.ingredient3.alpha = 0;
+        this.popUpTxt(200,20, '$'+this.calcCash()+'.00');
+        this.cashUI.text = 'cash: $'+ game.cash + '.00';
+        this.clock = this.time.delayedCall(game.settings.timer/3, () => {
+            this.startPhase0();
+        }, null, this);
     }
 
 
