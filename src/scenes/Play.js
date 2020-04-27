@@ -54,7 +54,6 @@ class Play extends Phaser.Scene {
         //this.score = this.add.image(0, 0, 'score').setOrigin(0, 0);
         this.cartVechicle = this.add.tileSprite(-80,game.config.height-200, 1600, 950, 'cart').setScale(0.5, 0.5).setOrigin(0, 0.5);
         // add objs
-        this.chef = this.add.image(0,0,'chefMid');
         this.popUpImg = new PopUp(this, 100,100, 'meterCompleted').setScale(0.5, 0.5).setOrigin(0, 0);
         this.ingredient1 = new Ingredient(this, game.config.width + 192, game.config.height-200, 'ingredient1', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
         this.ingredient1.pos = 2;
@@ -97,6 +96,7 @@ class Play extends Phaser.Scene {
         this.instructionUI = this.add.text(100, 70, 'catch broth!', uiConfig);
         this.ingredientUI = this.add.image(200, 10, game.settings.recipeBroth).setScale(0.5, 0.5).setOrigin(0, 0);
         this.progUITxt = this.add.text(0, 0, 'Progress:', uiConfig);
+        this.chef = this.add.image(300,300,'chefMid');
         
         // game over flag
         this.gameOver = false;
@@ -170,11 +170,11 @@ class Play extends Phaser.Scene {
         }
 
         if(this.chefPos == 0){
-            this.chef.changeTexture('chefLow');
+            this.chef.setTexture('chefLow');
         }else if(this.chefPos == 1){
-            this.chef.changeTexture('chefMid');
+            this.chef.setTexture('chefMid');
         } else {
-            this.chef.changeTexture('chefLow');
+            this.chef.setTexture('chefLow');
         }
 
 
