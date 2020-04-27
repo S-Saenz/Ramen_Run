@@ -54,7 +54,7 @@ class Play extends Phaser.Scene {
         this.bg = this.add.tileSprite(0, 0, 3000, 1400, 'bg').setScale(0.5,0.5).setOrigin(0, 0);
         this.meter = this.add.tileSprite(160, 0, 20, 5, 'meter').setOrigin(0, 0);
         //this.score = this.add.image(0, 0, 'score').setOrigin(0, 0);
-        this.cartVechicle = this.add.tileSprite(-80,game.config.height-200, 1600, 950, 'cart').setScale(0.5, 0.5).setOrigin(0, 0.5);
+        this.cartVechicle = this.add.image(-80,game.config.height-200, 'cart').setScale(0.5, 0.5).setOrigin(0, 0.5);
         // add objs
         this.popUpImg = new PopUp(this, 100,100, 'meterCompleted').setScale(0.5, 0.5).setOrigin(0, 0);
         this.ingredient1 = new Ingredient(this, game.config.width + 192, game.config.height-400, 'ingredient1', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
@@ -78,7 +78,7 @@ class Play extends Phaser.Scene {
             frameRate: 30
         });*/
         //used to determine when ingredients and humans are caught
-        this.catchZone = 150;
+        this.catchZone = 550;
         
         // ui display
         let uiConfig = {
@@ -98,7 +98,8 @@ class Play extends Phaser.Scene {
         this.instructionUI = this.add.text(100, 70, 'catch broth!', uiConfig);
         this.ingredientUI = this.add.image(200, 10, game.settings.recipeBroth).setScale(0.5, 0.5).setOrigin(0, 0);
         this.progUITxt = this.add.text(0, 0, 'Progress:', uiConfig);
-        this.chef = this.add.image(300,300,'chefMid');
+        this.chef = this.add.image((this.cartVechicle.width/3)+50,485,'chefMid').setScale(0.5, 0.5);
+        this.calculatedCash = false;
         
         // game over flag
         this.gameOver = false;
@@ -108,7 +109,8 @@ class Play extends Phaser.Scene {
             game.settings.noodleChance = 0.8;
             game.settings.toppingChance = 0.1; 
         }, null, this);*/
-        this.chefPos = 0;
+        this.chefPos = 1;
+        this.posAdd = 0;
         this.ingredientPhase = 0;
         this.changeIngredientChances();
         /*this.timer = this.time.addEvent({
@@ -173,10 +175,19 @@ class Play extends Phaser.Scene {
 
         if(this.chefPos == 0){
             this.chef.setTexture('chefLow');
+            this.chef.y = 480;
+            this.chef.x = 460;
+            this.cartVechicle.setDepth(0);
+            this.chef.setDepth(1);
         }else if(this.chefPos == 1){
             this.chef.setTexture('chefMid');
+            this.chef.y = 415;
+            this.chef.x = 488;
+            this.cartVechicle.setDepth(2);
         } else {
-            this.chef.setTexture('chefLow');
+            this.chef.y = 383;
+            this.chef.x = 500;
+            this.chef.setTexture('chefHigh');
         }
 
 
@@ -217,8 +228,11 @@ class Play extends Phaser.Scene {
     }
 
     startPhase0(){
+        this.calculatedCash = false;
+        this.ingredientUI.alpha = 1;
         this.getNewOrder();
         this.ingredientUI.setTexture(game.settings.recipeBroth);
+        console.log('set texture to new broth');
         this.instructionUI.text = 'catch broth!';
         this.meter.width = 20;
         game.settings.brothChance = 0.8;
@@ -255,7 +269,10 @@ class Play extends Phaser.Scene {
         this.ingredient1.alpha = 0;
         this.ingredient2.alpha = 0;
         this.ingredient3.alpha = 0;
-        this.popUpTxt(200,20, '$'+this.calcCash()+'.00');
+        this.payment = this.calcCash();
+        if(this.payment>0){
+            this.popUpTxt(200,20, '$'+this.payment+'.00');
+        }
         this.cashUI.text = 'cash: $'+ game.cash + '.00';
         this.clock = this.time.delayedCall(game.settings.timer/3, () => {
             this.startPhase0();
@@ -286,7 +303,7 @@ class Play extends Phaser.Scene {
 
 
     checkHit(cart,human){
-        if (cart.pos != 1 && human.x <= this.catchZone){
+        if (cart.pos != 0 && human.x <= this.catchZone){
             if(human.alpha !=0){
                 game.cartHealth--;
                 this.cameras.main.shake(20,0.005);
@@ -320,13 +337,18 @@ class Play extends Phaser.Scene {
                         obj.alpha = 0;
                     }
                 } else {
-                    this.ingredientUI.setTexture(game.settings.recipeNoodle);
-                    this.clock.remove();
-                    this.startPhase1();
-                    this.instructionUI.text = 'catch noodles!';
-                    this.popUpImg = new PopUp(this, 100,100, 'meterCompleted').setScale(0.5, 0.5).setOrigin(0, 0);
-                    this.meter.width = 20;
-                    game.extras++;
+                    obj.alpha = 0;
+                    if(this.ingredientPhase>0){
+                        this.ingredientUI.setTexture(game.settings.recipeNoodle);
+                        this.clock.remove();
+                        this.startPhase1();
+                        this.instructionUI.text = 'catch noodles!';
+                        this.popUpImg = new PopUp(this, 100,100, 'meterCompleted').setScale(0.5, 0.5).setOrigin(0, 0);
+                        this.meter.width = 20;
+                    }
+                    if(obj.alpa != 0){
+                        game.extras++;
+                    }
                 }
             }
             else if(obj.texture.key == game.settings.recipeNoodle && game.brothProg == game.maxProg){
@@ -337,14 +359,19 @@ class Play extends Phaser.Scene {
                         obj.alpha = 0;
                     }
                 } else {
-                    this.ingredientUI.setTexture(game.settings.recipeTopping);
-                    this.instructionUI.text = 'catch toppings!';
-                    this.clock.remove();
-                    this.startPhase2();
-                    
-                    this.popUpImage('meterCompleted',100,100);
-                    this.meter.width = 20;
-                    game.extras++;
+                    obj.alpha = 0;
+                    if(this.ingredientPhase>1){
+                        this.ingredientUI.setTexture(game.settings.recipeTopping);
+                        this.instructionUI.text = 'catch toppings!';
+                        this.clock.remove();
+                        this.startPhase2();
+                        
+                        this.popUpImage('meterCompleted',100,100);
+                        this.meter.width = 20;
+                    }
+                    if(obj.alpa != 0){
+                        game.extras++;
+                    }
 
                 }
             }
@@ -356,13 +383,19 @@ class Play extends Phaser.Scene {
                         obj.alpha = 0;
                     }
                 } else {
-                    this.ingredientUI.alpha = 0;
-                    this.clock.remove();
-                    this.startPhase3();
-                    this.instructionUI.text = 'deliver the ramen!';
-                    this.popUpImage('meterCompleted',100,100);
-                    this.meter.width = 20;
-                    game.extras++;
+                    obj.alpha = 0;
+                    
+                    if(this.ingredientPhase>2){
+                        this.ingredientUI.alpha = 0;
+                        this.clock.remove();
+                        this.startPhase3();
+                        this.instructionUI.text = 'deliver the ramen!';
+                        this.popUpImage('meterCompleted',100,100);
+                        this.meter.width = 20;
+                    }
+                    if(obj.alpa != 0){
+                        game.extras++;
+                    }
                 }
 
             }else{
@@ -399,20 +432,25 @@ class Play extends Phaser.Scene {
     }
 
     calcCash(){
-        var totalProg = game.brothProg + game.noodleProg + game.toppingProg;
-        var payment = 5;
-        if(totalProg < 3){
-            payment = 0;
-        } else if(totalProg < 5){
-            payment = 2;
-        } else if(game.extras>0){
-            payment++;
+        if(!this.calculatedCash){
+            console.log('calculation cash: ' + game.cash);
+            var totalProg = game.brothProg + game.noodleProg + game.toppingProg;
+            var payment = 5;
+            if(totalProg < 3){
+                payment = 0;
+            } else if(totalProg < 5){
+                payment = 2;
+            } else if(game.extras>0){
+                payment++;
+            }
+            if(game.extras>3){
+                payment + 2;
+            }
+            game.cash += payment;
+            this.calculatedCash = true;
+            return payment;
         }
-        if(game.extras>3){
-            payment + 2;
-        }
-        game.cash += payment;
-        return payment;
+        return 0;
     }
     /*
     onDestroyed(obj) {
