@@ -1,7 +1,7 @@
 let config = {
     type: Phaser.AUTO,
-    width: 750,
-    height: 384,
+    width: 1500,
+    height: 700,
     backgroundColor: '#cabbaa',
     scene: [ Menu, Play , Market ]
 }
@@ -26,7 +26,7 @@ game.extras = 0;
 
 game.settings = {
     maxHealth: 100,
-    timer: 10000, 
+    timer: 50000, 
     panSpeed: 4,
     brothChance: .8,
     noodleChance: .1,
