@@ -17,9 +17,11 @@ class Play extends Phaser.Scene {
         this.load.image('cart', '././assets/cartFull.png');
         this.load.image('avatar', '././assets/hand.png');
         this.load.image('human', '././assets/human.png');
+
+        //the player images
         this.load.image('chefHigh', '././assets/chefHigh.png');
         this.load.image('chefMid', '././assets/chefMid.png');
-        this.load.image('ChefLow', '././assets/chefLow.png');
+        this.load.image('chefLow', '././assets/chefLow.png');
         
 
         this.load.image('topping1', '././assets/topping1.png');
@@ -49,20 +51,20 @@ class Play extends Phaser.Scene {
 
     create(){
         // place tile sprite
-        this.bg = this.add.tileSprite(0, 0, 555, 360, 'bg').setOrigin(0, 0);
+        this.bg = this.add.tileSprite(0, 0, 3000, 1400, 'bg').setScale(0.5,0.5).setOrigin(0, 0);
         this.meter = this.add.tileSprite(160, 0, 20, 5, 'meter').setOrigin(0, 0);
         //this.score = this.add.image(0, 0, 'score').setOrigin(0, 0);
         this.cartVechicle = this.add.tileSprite(-80,game.config.height-200, 1600, 950, 'cart').setScale(0.5, 0.5).setOrigin(0, 0.5);
         // add objs
         this.popUpImg = new PopUp(this, 100,100, 'meterCompleted').setScale(0.5, 0.5).setOrigin(0, 0);
-        this.ingredient1 = new Ingredient(this, game.config.width + 192, game.config.height-200, 'ingredient1', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
+        this.ingredient1 = new Ingredient(this, game.config.width + 192, game.config.height-400, 'ingredient1', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
         this.ingredient1.pos = 2;
-        this.ingredient2 = new Ingredient(this, game.config.width + 300, game.config.height-150, 'ingredient2', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
+        this.ingredient2 = new Ingredient(this, game.config.width + 300, game.config.height-280, 'ingredient2', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
         this.ingredient2.pos = 1;
-        this.ingredient3 = new Ingredient(this, game.config.width, game.config.height-100, 'ingredient3', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
+        this.ingredient3 = new Ingredient(this, game.config.width, game.config.height-150, 'ingredient3', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
         this.ingredient3.pos = 0;
         //add human
-        this.human = new Human(this, game.config.width, game.config.height-150, 'human', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
+        this.human = new Human(this, game.config.width, game.config.height-110, 'human', 0, 30).setScale(0.5, 0.5).setOrigin(0,0.5);
         //add cart
         this.cart = new Cart(this, 150,game.config.height-150, 'avatar').setScale(0.5, 0.5).setOrigin(0, 0);
         // define keys
@@ -136,7 +138,7 @@ class Play extends Phaser.Scene {
     }
 
     update(){
-        this.bg.tilePositionX += 1;
+        this.bg.tilePositionX += 7;
         // check collisions
 
         
