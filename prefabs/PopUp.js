@@ -9,12 +9,10 @@ class PopUp extends Phaser.GameObjects.Sprite{
     }
 
     update(){
-        //up & down movement
-        this.y++;
-        if(this.yMoved < 200){
-            this.y += 100;
-            this.yMoved++;
-            console.log(this.y);
+        //up movement
+        if(this.yMoved < 50){
+            this.y-=3;
+            this.yMoved+=3;
         } else{
             this.destroy();
         }

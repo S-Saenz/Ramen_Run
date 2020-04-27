@@ -169,29 +169,18 @@ class Play extends Phaser.Scene {
         this.ingredient2.update();
         this.ingredient3.update();
         this.human.update();
+        this.popUpImg.update();
         
     }
 
     changeIngredientChances(){
+        console.log('timer start');
         if(this.ingredientPhase == 0){
-            this.getNewOrder();
-            this.ingredientUI.setTexture(game.settings.recipeBroth);
-            this.instructionUI.text = 'catch broth!';
-            this.meter.width = 20;
-            game.settings.brothChance = 0.8;
-            game.settings.noodleChance = 0.1;
-            game.settings.toppingChance = 0.1;
-            this.ingredientPhase++;
+            this.startPhase0();
         } else if(this.ingredientPhase == 1){
-            game.settings.brothChance = 0.1;
-            game.settings.noodleChance = 0.8;
-            game.settings.toppingChance = 0.1;
-            this.ingredientPhase++;
+            this.startPhase1();
         } else if(this.ingredientPhase == 2){
-            game.settings.brothChance = 0.1;
-            game.settings.noodleChance = 0.1;
-            game.settings.toppingChance = 0.8;
-            this.ingredientPhase++;
+            this.startPhase2();
         } else{
             this.ingredient1.alpha = 0;
             this.ingredient2.alpha = 0;
@@ -203,6 +192,33 @@ class Play extends Phaser.Scene {
         }
 
     }
+
+    startPhase0(){
+        this.getNewOrder();
+        this.ingredientUI.setTexture(game.settings.recipeBroth);
+        this.instructionUI.text = 'catch broth!';
+        this.meter.width = 20;
+        game.settings.brothChance = 0.8;
+        game.settings.noodleChance = 0.1;
+        game.settings.toppingChance = 0.1;
+        this.timer.reset();
+    }
+
+    startPhase1(){
+        game.settings.brothChance = 0.1;
+        game.settings.noodleChance = 0.8;
+        game.settings.toppingChance = 0.1;
+        this.ingredientPhase++;
+    }
+
+    startPhase2(){
+        game.settings.brothChance = 0.1;
+        game.settings.noodleChance = 0.1;
+        game.settings.toppingChance = 0.8;
+        this.ingredientPhase++;
+
+    }
+
 
     spawnIngredient(){
         console.log('spawn');
@@ -230,8 +246,8 @@ class Play extends Phaser.Scene {
         if (cart.pos != 1 && human.x <= this.catchZone){
             if(human.alpha !=0){
                 game.cartHealth--;
+                this.cameras.main.shake(20,0.005);
             }
-            this.cameras.main.shake(20,0.005);
             human.alpha = 0;
             //alter cart based on health
             if(game.cartHealth<=0){
@@ -263,7 +279,7 @@ class Play extends Phaser.Scene {
                 } else {
                     this.ingredientUI.setTexture(game.settings.recipeNoodle);
                     this.instructionUI.text = 'catch noodles!';
-                    this.popUpImage('meterCompleted',100,100);
+                    this.popUpImg = new PopUp(this, 100,100, 'meterCompleted').setScale(0.5, 0.5).setOrigin(0, 0);
                     this.meter.width = 20;
                     game.extras++;
                 }
