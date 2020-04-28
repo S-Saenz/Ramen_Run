@@ -17,6 +17,7 @@ class Play extends Phaser.Scene {
         this.load.image('cart', '././assets/cartFull.png');
         this.load.image('avatar', '././assets/hand.png');
         this.load.image('human', '././assets/human.png');
+        this.load.image('blood','././assets/blood.png');
 
         //the player images
         this.load.image('chefHigh', '././assets/chefHigh.png');
@@ -143,6 +144,8 @@ class Play extends Phaser.Scene {
             callbackScope: this.ingredient3,
             loop: true
         });*/
+        //====================== particle emmiter =========================
+        this.particles = this.add.particles('blood');
         
     }
 
@@ -328,6 +331,23 @@ class Play extends Phaser.Scene {
     checkHit(cart,human){
         if (cart.pos != 0 && human.x <= this.catchZone){
             if(human.alpha !=0){
+                //particle emmiter    
+                var bloodyMess = this.particles.createEmitter({
+                    x: this.catchZone,
+                    y: game.config.height-140,
+                    lifespan: 2000,
+                    speed: { min: 700, max: 2000 },
+                    angle: 330,
+                    gravityY: 300,
+                    rotate: { min: 0, max: 180 },
+                    scale: { start: 0.4, end: 5 },
+                    quantity: 4,
+
+                });
+                this.time.delayedCall(100, () => {
+                    bloodyMess.stop();
+                }, null, this);
+
                 game.cartHealth--;
                 this.cameras.main.shake(20,0.005);
             }

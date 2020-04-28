@@ -49,7 +49,7 @@ class Market extends Phaser.Scene {
         
         this.playButton = this.add.text(550, 0, 'Continue', buttonConfig);
         //================ cosmetic buttons ================
-        var cosArr = game.marketGoods.cosmetics;
+        this.cosArr = game.marketGoods.cosmetics;
         var randCosArr = this.chooseThreeDiff();
         var buttonX = 50;
         var cosPad =20;
@@ -79,28 +79,31 @@ class Market extends Phaser.Scene {
             this.scene.start("playScene");
         });
 
-        if(game.cash >= cosArr.indexOf(randCosArr[0])){
+        if(game.cash >=this.cosArr.indexOf(randCosArr[0])){
             this.cos1Button.on('pointerdown', () => {
+                this.resetAllCos();
                 this.buttonFade(this.cos1Button);
                 game.marketGoods.cosEq = randCosArr[0];
-                game.cash -= cosArr.indexOf(this.cos3Button.text);
+                game.cash -=this.cosArr.indexOf(this.cos3Button.text);
             });
         }
 
-        if(game.cash >= cosArr.indexOf(randCosArr[1])){
+        if(game.cash >=this.cosArr.indexOf(randCosArr[1])){
             this.cos2Button.on('pointerdown', () => {
+                this.resetAllCos();
                 this.buttonFade(this.cos2Button);
                 game.marketGoods.cosEq = randCosArr[1];
-                game.cash -= cosArr.indexOf(this.cos3Button.text);
+                game.cash -=this.cosArr.indexOf(this.cos3Button.text);
 
             });
         }
 
-        if(game.cash >= cosArr.indexOf(this.cos3Button.text)){
+        if(game.cash >=this.cosArr.indexOf(this.cos3Button.text)){
             this.cos3Button.on('pointerdown', () => {
+                this.resetAllCos();
                 this.buttonFade(this.cos3Button);
                 game.marketGoods.cosEq = randCosArr[2];
-                game.cash -= cosArr.indexOf(this.cos3Button.text);
+                game.cash -=this.cosArr.indexOf(this.cos3Button.text);
 
             });
         }
@@ -177,6 +180,7 @@ class Market extends Phaser.Scene {
     }
     
     update() {
+        this.cashUI.text = ('cash: $'+ game.cash + '.00');
         game.cartHealth = game.settings.maxHealth;
         game.brothProg = 0;
         game.noodleProg = 0;
@@ -202,13 +206,29 @@ class Market extends Phaser.Scene {
 
     resetAllCos(){
         if(!this.cos1Button.input.enabled){
-            game.marketGoods.cosmetics.indexOf(this.cos1Button.text);
+            game.cash +=this.cosArr.indexOf(this.cos3Button.text);
+            this.cos1Button.setInteractive;
+            this.cos1Button.setStyle({ backgroundColor: '#ae1f1f'});
+            game.marketGoods.cosEq = 'none';
+        }
+        if(!this.cos2Button.input.enabled){
+            game.cash +=this.cosArr.indexOf(this.cos3Button.text);
+            this.cos2Button.setInteractive;
+            this.cos2Button.setStyle({ backgroundColor: '#ae1f1f'});
+            game.marketGoods.cosEq = 'none';
+        }
+        if(!this.cos3Button.input.enabled){
+            game.cash +=this.cosArr.indexOf(this.cos3Button.text);
+            this.cos3Button.setInteractive;
+            this.cos3Button.setStyle({ backgroundColor: '#ae1f1f'});
+            game.marketGoods.cosEq = 'none';
         }
     }
 
     buttonFade(button){
         button.disableInteractive();
-        button.setStyle({backgroundColor: '#FACADE', fill: '#FF4421'});
+        button.setStyle({fill: '#FF4421'});
+        button.setStyle({backgroundColor: '#FACADE'});
     }
 }
         
