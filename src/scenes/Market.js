@@ -56,6 +56,7 @@ class Market extends Phaser.Scene {
         this.cos1Button = this.add.text(buttonX, centerY, randCosArr[0], buttonConfig);
         this.cos2Button = this.add.text(cosPad+buttonX+(buttonConfig.fixedWidth), centerY, randCosArr[1], buttonConfig);
         this.cos3Button = this.add.text(cosPad*2+buttonX+(buttonConfig.fixedWidth*2), centerY, randCosArr[2], buttonConfig);
+        this.cosButtons = [this.cos1Button,this.cos2Button,this.cos3Button];
         //power up buttons
         buttonConfig.fixedWidth = 600;
         this.powerButton = this.add.text(80, centerY+60, 'power', buttonConfig);
@@ -205,24 +206,31 @@ class Market extends Phaser.Scene {
     }
 
     resetAllCos(){
-        if(!this.cos1Button.input.enabled){
-            game.cash +=this.cosArr.indexOf(this.cos3Button.text);
-            this.cos1Button.setInteractive;
-            this.cos1Button.setStyle({ backgroundColor: '#ae1f1f'});
-            game.marketGoods.cosEq = 'none';
-        }
-        if(!this.cos2Button.input.enabled){
-            game.cash +=this.cosArr.indexOf(this.cos3Button.text);
-            this.cos2Button.setInteractive;
-            this.cos2Button.setStyle({ backgroundColor: '#ae1f1f'});
-            game.marketGoods.cosEq = 'none';
-        }
-        if(!this.cos3Button.input.enabled){
-            game.cash +=this.cosArr.indexOf(this.cos3Button.text);
-            this.cos3Button.setInteractive;
-            this.cos3Button.setStyle({ backgroundColor: '#ae1f1f'});
-            game.marketGoods.cosEq = 'none';
-        }
+        var num = 0 ;
+        this.cosButtons.forEach(element => {
+            if(!this.cos1Button.input.enabled){
+                game.cash +=this.cosArr.indexOf(element.text);
+                element.setInteractive;
+                element.setStyle({ backgroundColor: '#ae1f1f'});
+                game.marketGoods.cosEq = 'none';
+                
+                if(game.cash >=this.cosArr.indexOf(randCosArr[num])){
+                    this.cos1Button.on('pointerdown', () => {
+                        this.resetAllCos();
+                        this.buttonFade(element);
+                        game.marketGoods.cosEq = randCosArr[num];
+                        game.cash -=this.cosArr.indexOf(this.cos3Button.text);
+                        num++;
+                    });
+                }
+                element.on('pointerover', () => { 
+                    element.setStyle({ fill: '#fff2d8'});
+                });
+                element.on('pointerout', () => { 
+                    element.setStyle({ fill: '#161515'});
+                });
+            }
+        });
     }
 
     buttonFade(button){
