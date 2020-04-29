@@ -20,6 +20,12 @@ class Play extends Phaser.Scene {
         this.load.image('pride', '././assets/cartFull_Pride.png');
         this.load.image('ita', '././assets/cartFull_Pride.png');
 
+        //Damage Sprites
+        this.load.image('noDmg', '././assets/noDmg.png');
+        this.load.image('lowDmg', '././assets/lowDmg.png');
+        this.load.image('medDmg', '././assets/medDmg.png');
+        this.load.image('highDmg', '././assets/highDmg.png');
+
 
         this.load.image('cartMed', '././assets/cartMed.png');
         this.load.image('cartLow', '././assets/cartLow.png');
@@ -66,6 +72,7 @@ class Play extends Phaser.Scene {
         this.meter = this.add.tileSprite(game.config.width/8, 0, 20, 10, 'meter').setOrigin(0, 0);
         //this.score = this.add.image(0, 0, 'score').setOrigin(0, 0);
         this.cartVechicle = this.add.image(-80,game.config.height-200, game.marketGoods.cosEq).setScale(0.5, 0.5).setOrigin(0, 0.5);
+        this.cartDmg = this.add.image(-80,game.config.height-200, 'noDmg').setScale(0.5, 0.5).setOrigin(0, 0.5);
         // add objs
         this.popUpImg = new PopUp(this, 100,100, 'meterCompleted').setScale(0.5, 0.5).setOrigin(0, 0);
         this.ingredient1 = new Ingredient(this, game.config.width * 1.2, game.config.height-400, 'ingredient1', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
@@ -124,7 +131,7 @@ class Play extends Phaser.Scene {
                 bottom: 5,
             },
         }
-        this.cashUI = this.add.text(game.config.width-100, 54, 'cash: $'+ game.cash + '.00', uiConfig).setOrigin(1,1);
+        this.cashUI = this.add.text(game.config.width-100, 54, 'cash: ¥'+ game.cash + '00', uiConfig).setOrigin(1,1);
         this.instructionUI = this.add.text(game.config.width/2, game.config.height/3, 'catch broth!', uiConfig).setOrigin(0.5,0.5);
         this.ingredientUI = this.add.image(game.config.width/2, (game.config.height/3)-100, game.settings.recipeBroth).setOrigin(0.5,0.5);
         this.progUITxt = this.add.text(0, 0, 'Progress:', uiConfig);
@@ -178,9 +185,7 @@ class Play extends Phaser.Scene {
 
         this.ingredients.forEach(element => {
             this.checkCatch(this.cart,element);
-        });{
-
-        }
+        });
         /*
         if(this.checkCatch(this.cart, this.ingredient1)) {
         }
@@ -317,9 +322,9 @@ class Play extends Phaser.Scene {
         this.ingredient3.alpha = 0;
         this.payment = this.calcCash();
         if(this.payment>0){
-            this.popUpTxt(200,20, '$'+this.payment+'.00');
+            this.popUpTxt(200,20, '¥'+this.payment+'00');
         }
-        this.cashUI.text = 'cash: $'+ game.cash + '.00';
+        this.cashUI.text = 'cash: ¥'+ game.cash + '00';
         this.clock = this.time.delayedCall(game.settings.timer/3, () => {
             this.startPhase0();
         }, null, this);
@@ -370,7 +375,7 @@ class Play extends Phaser.Scene {
                 }, null, this);
 
                 game.cartHealth--;
-                this.cameras.main.shake(20,0.005);
+                this.cameras.main.shake(20,0005);
             }
             human.alpha = 0;
             //alter cart based on health
@@ -378,12 +383,12 @@ class Play extends Phaser.Scene {
                 //send to market of car is broken
                 this.scene.start("marketScene");
             }else if(game.cartHealth < game.settings.maxHealth/2){
-                this.cartVechicle.setTexture('cartLow');
+                this.cartDmg.setTexture('lowDmg');
             }else if(game.cartHealth < game.settings.maxHealth){
-                this.cartVechicle.setTexture('cartMed');
-            } else if(this.cartVechicle.texture.key != 'cartFull'){
+                this.cartDmg.setTexture('medDmg');
+            } else if(this.cartDmg.texture.key != 'noDmg'){
                 //restore to full if necesary
-                this.cartVechicle.setTexture('cartFull');
+                this.cartDmg.setTexture('noDmg');
             }
         } else if(human.x <= this.catchZone){
             human.alpha = 0;
