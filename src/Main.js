@@ -7,7 +7,8 @@ let config = {
 }
 let game = new Phaser.Game(config);
 // define game settings
-game.cash = 10;
+game.level = 0;
+game.cash = 100;
 game.score = 0;
 game.cartHealth;
 game.broths = ['broth1','broth2','broth3'];
@@ -25,7 +26,7 @@ game.mistakes = 0;
 game.extras = 0;
 
 game.settings = {
-    maxHealth: 3,
+    maxHealth: 1,
     timer: 10000, 
     panSpeed: 8,
     brothChance: .8,
@@ -39,7 +40,8 @@ game.cartHealth = game.settings.maxHealth;
 
 game.marketGoods = {
     //cosmetics HAVE to be ordered by price, 0 being cheapest and 4 being most expensive!!!
-    cosmetics: ['goth','rep','cyber','regal','wave'],
+    cosmetics: ['goth','pride','cyber','ita','wave'],
+    cosPrices:[10,20,30,40,50],
     cosEq: 'none',
     power: ['power1','power2','power3','power4'],
     powPrices:[10,20,30,40,50],

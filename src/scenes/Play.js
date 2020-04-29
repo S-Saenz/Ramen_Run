@@ -4,6 +4,7 @@ class Play extends Phaser.Scene {
     }
 
     preload() {
+        game.level++;
         //this.load.audio('stag_fly', '././assets/stag_fly.mp3');
 
         //load tilemaps
@@ -11,7 +12,15 @@ class Play extends Phaser.Scene {
         this.load.image('score', '././assets/stars.png');
 
         //load sprites
-        this.load.image('cartFull', '././assets/cartFull.png');
+        //========== cosmetics ==========
+        this.load.image('none', '././assets/cartFull.png');
+        this.load.image('wave', '././assets/cartFull_BlueWave.png');
+        this.load.image('cyber', '././assets/cartFull_Cyber.png');
+        this.load.image('goth', '././assets/cartFull_Goth.png');
+        this.load.image('pride', '././assets/cartFull_Pride.png');
+        this.load.image('ita', '././assets/cartFull_Pride.png');
+
+
         this.load.image('cartMed', '././assets/cartMed.png');
         this.load.image('cartLow', '././assets/cartLow.png');
         this.load.image('cart', '././assets/cartFull.png');
@@ -55,7 +64,7 @@ class Play extends Phaser.Scene {
         this.bg = this.add.tileSprite(0, -60, 3000, 1600, 'bg').setScale(0.5,0.5).setOrigin(0, 0);
         this.meter = this.add.tileSprite(game.config.width/8, 0, 20, 10, 'meter').setOrigin(0, 0);
         //this.score = this.add.image(0, 0, 'score').setOrigin(0, 0);
-        this.cartVechicle = this.add.image(-80,game.config.height-200, 'cart').setScale(0.5, 0.5).setOrigin(0, 0.5);
+        this.cartVechicle = this.add.image(-80,game.config.height-200, game.marketGoods.cosEq).setScale(0.5, 0.5).setOrigin(0, 0.5);
         // add objs
         this.popUpImg = new PopUp(this, 100,100, 'meterCompleted').setScale(0.5, 0.5).setOrigin(0, 0);
         this.ingredient1 = new Ingredient(this, game.config.width * 1.2, game.config.height-400, 'ingredient1', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
@@ -74,8 +83,12 @@ class Play extends Phaser.Scene {
         this.ingredient6.pos = 0;
 
         this.ingredients = [this.ingredient1,this.ingredient2,this.ingredient3,this.ingredient4,this.ingredient5,this.ingredient6];
+        this.ingredients.forEach(element => {
+            this.changeTexture(element);
+        });
         //add human
         this.human = new Human(this, game.config.width, game.config.height-140, 'human', 0, 30).setScale(0.48, 0.48).setOrigin(0,0.5);
+        this.bird = new Human(this, game.config.width, game.config.height-300, 'human', 0, 30).setScale(0.48, 0.48).setOrigin(0,0.5);
         //add cart
         this.cart = new Cart(this, 150,game.config.height-150, 'avatar').setScale(0.5, 0.5).setOrigin(0, 0);
         // define keys
@@ -235,6 +248,7 @@ class Play extends Phaser.Scene {
             element.update();
         });
         this.human.update();
+        this.bird.update();
         this.popUpImg.update();
         
     }
