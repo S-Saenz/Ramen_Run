@@ -25,6 +25,7 @@ class Play extends Phaser.Scene {
         this.load.image('cartLow', '././assets/cartLow.png');
         this.load.image('cart', '././assets/cartFull.png');
         this.load.image('avatar', '././assets/hand.png');
+        this.load.image('bird', '././assets/bird.png');
         this.load.image('human', '././assets/human.png');
         this.load.image('blood','././assets/blood.png');
 
@@ -88,7 +89,11 @@ class Play extends Phaser.Scene {
         });
         //add human
         this.human = new Human(this, game.config.width, game.config.height-140, 'human', 0, 30).setScale(0.48, 0.48).setOrigin(0,0.5);
-        this.bird = new Human(this, game.config.width, game.config.height-300, 'human', 0, 30).setScale(0.48, 0.48).setOrigin(0,0.5);
+        this.human.pos = 0;
+        if(game.level>=2){
+            this.bird = new Bird(this, game.config.width+100, game.config.height-400, 'bird', 0, 30).setScale(0.48, 0.48).setOrigin(0,0.5);
+            this.bird.pos = 0;
+        }
         //add cart
         this.cart = new Cart(this, 150,game.config.height-150, 'avatar').setScale(0.5, 0.5).setOrigin(0, 0);
         // define keys
@@ -184,6 +189,7 @@ class Play extends Phaser.Scene {
         if(this.checkCatch(this.cart, this.ingredient3)) {
         }*/
         this.checkHit(this.cart,this.human);
+        if(game.level>=2){this.checkHit(this.cart,this.bird);}
         this.ingredients.forEach(element => {
             if(element.x == game.config.width){
                 this.changeTexture(element);
@@ -248,7 +254,7 @@ class Play extends Phaser.Scene {
             element.update();
         });
         this.human.update();
-        this.bird.update();
+        if(game.level>=2){this.bird.update();}
         this.popUpImg.update();
         
     }
@@ -343,7 +349,8 @@ class Play extends Phaser.Scene {
 
 
     checkHit(cart,human){
-        if (cart.pos != 0 && human.x <= this.catchZone){
+        console.log(cart.pos + human.pos);
+        if (cart.pos != human.pos && human.x <= this.catchZone){
             if(human.alpha !=0){
                 //particle emmiter    
                 var bloodyMess = this.particles.createEmitter({
