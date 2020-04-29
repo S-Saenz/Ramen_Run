@@ -27,6 +27,7 @@ class Play extends Phaser.Scene {
         this.load.image('highDmg', '././assets/highDmg.png');
 
 
+        this.load.image('merchant', '././assets/merchant.png');
         this.load.image('cartMed', '././assets/cartMed.png');
         this.load.image('cartLow', '././assets/cartLow.png');
         this.load.image('cart', '././assets/cartFull.png');
@@ -73,7 +74,7 @@ class Play extends Phaser.Scene {
         //this.score = this.add.image(0, 0, 'score').setOrigin(0, 0);
         this.cartVechicle = this.add.image(-80,game.config.height-200, game.marketGoods.cosEq).setScale(0.5, 0.5).setOrigin(0, 0.5);
         this.cartDmg = this.add.image(-80,game.config.height-200, 'noDmg').setScale(0.5, 0.5).setOrigin(0, 0.5);
-        // add objs
+        this.cartDmg.setDepth(3);        // add objs
         this.popUpImg = new PopUp(this, 100,100, 'meterCompleted').setScale(0.5, 0.5).setOrigin(0, 0);
         this.ingredient1 = new Ingredient(this, game.config.width * 1.2, game.config.height-400, 'ingredient1', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
         this.ingredient1.pos = 2;
@@ -354,13 +355,13 @@ class Play extends Phaser.Scene {
 
 
     checkHit(cart,human){
-        console.log(cart.pos + human.pos);
         if (cart.pos != human.pos && human.x <= this.catchZone){
+            this.popUpImage(300,100,'merchant');
             if(human.alpha !=0){
                 //particle emmiter    
                 var bloodyMess = this.particles.createEmitter({
                     x: this.catchZone,
-                    y: game.config.height-140,
+                    y: human.y,
                     lifespan: 2000,
                     speed: { min: 700, max: 2000 },
                     angle: 330,
@@ -382,8 +383,10 @@ class Play extends Phaser.Scene {
             if(game.cartHealth<=0){
                 //send to market of car is broken
                 this.scene.start("marketScene");
-            }else if(game.cartHealth < game.settings.maxHealth/2){
+            }else if(game.cartHealth < 2){
                 this.cartDmg.setTexture('highDmg');
+            }else if(game.cartHealth < game.settings.maxHealth/2){
+                this.cartDmg.setTexture('medDmg');
             }else if(game.cartHealth < game.settings.maxHealth){
                 this.cartDmg.setTexture('lowDmg');
             } else if(this.cartDmg.texture.key != 'noDmg'){
@@ -487,10 +490,17 @@ class Play extends Phaser.Scene {
     }
 
     popUpImage(img,x,y){
+        var popUpImag = new PopUp(this, x,y, img).setScale(0.5, 0.5).setOrigin(0, 0);
+        
+        this.clock = this.time.delayedCall(500, () => {
+            popUpImag.destroy();
+        }, null, this);
+        /*
         var image = this.add.image(x, y, img).setOrigin(0, 0);
         this.clock = this.time.delayedCall(500, () => {
             image.destroy();
         }, null, this);
+        */
     }
 
     popUpTxt(txt,x,y){

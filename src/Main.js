@@ -26,7 +26,7 @@ game.mistakes = 0;
 game.extras = 0;
 
 game.settings = {
-    maxHealth: 10,
+    maxHealth: 4,
     timer: 10000, 
     panSpeed: 8,
     brothChance: .8,
