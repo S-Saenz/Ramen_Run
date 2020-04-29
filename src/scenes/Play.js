@@ -375,7 +375,7 @@ class Play extends Phaser.Scene {
                 }, null, this);
 
                 game.cartHealth--;
-                this.cameras.main.shake(20,0005);
+                this.cameras.main.shake(20,.005);
             }
             human.alpha = 0;
             //alter cart based on health
@@ -383,9 +383,9 @@ class Play extends Phaser.Scene {
                 //send to market of car is broken
                 this.scene.start("marketScene");
             }else if(game.cartHealth < game.settings.maxHealth/2){
-                this.cartDmg.setTexture('lowDmg');
+                this.cartDmg.setTexture('highDmg');
             }else if(game.cartHealth < game.settings.maxHealth){
-                this.cartDmg.setTexture('medDmg');
+                this.cartDmg.setTexture('lowDmg');
             } else if(this.cartDmg.texture.key != 'noDmg'){
                 //restore to full if necesary
                 this.cartDmg.setTexture('noDmg');
