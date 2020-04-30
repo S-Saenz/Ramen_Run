@@ -51,7 +51,7 @@ class Market extends Phaser.Scene {
         //================ cosmetic buttons ================
         this.cosArr = game.marketGoods.cosmetics;
         this.randCosArr = this.chooseThreeDiff();
-        var buttonX = 100;
+        var buttonX = 400;
         var cosPad =20;
         this.cos1Button = this.add.text(buttonX, centerY,this.randCosArr[0], buttonConfig);
         this.add.text(buttonX, centerY+5,' price: ' + game.marketGoods.cosPrices[this.cosArr.indexOf(this.randCosArr[0])],buttonConfig);
