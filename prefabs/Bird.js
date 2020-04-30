@@ -11,7 +11,7 @@ class Bird extends Phaser.GameObjects.Sprite{
         if(this.x > -100){
             this.x -= game.settings.panSpeed+1;
         } else {
-            this.x = game.config.width;
+            this.x = game.config.width*2;
             this.alpha = 1;
         }
         

@@ -99,8 +99,8 @@ class Play extends Phaser.Scene {
         this.human = new Human(this, game.config.width, game.config.height-140, 'human', 0, 30).setScale(0.48, 0.48).setOrigin(0,0.5);
         this.human.pos = 0;
         if(game.level>=2){
-            this.bird = new Bird(this, game.config.width+100, game.config.height-400, 'bird', 0, 30).setScale(0.48, 0.48).setOrigin(0,0.5);
-            this.bird.pos = 0;
+            this.bird = new Bird(this, game.config.width*2, game.config.height-400, 'bird', 0, 30).setScale(0.48, 0.48).setOrigin(0,0.5);
+            this.bird.pos = 2;
         }
         //add cart
         this.cart = new Cart(this, 150,game.config.height-150, 'avatar').setScale(0.5, 0.5).setOrigin(0, 0);
@@ -133,7 +133,7 @@ class Play extends Phaser.Scene {
             },
         }
         this.cashUI = this.add.text(game.config.width-100, 54, 'cash: ¥'+ game.cash + '00', uiConfig).setOrigin(1,1);
-        this.instructionUI = this.add.text(game.config.width/2, game.config.height/3, 'catch broth!', uiConfig).setOrigin(0.5,0.5);
+        this.instructionUI = this.add.text(game.config.width/2, game.config.height/3, 'catch ' + game.maxProg + ' broth!' , uiConfig).setOrigin(0.5,0.5);
         this.ingredientUI = this.add.image(game.config.width/2, (game.config.height/3)-100, game.settings.recipeBroth).setOrigin(0.5,0.5);
         this.progUITxt = this.add.text(0, 0, 'Progress:', uiConfig);
         this.chef = this.add.image((this.cartVechicle.width/3)+50,485,'chefMid').setScale(0.5, 0.5);
@@ -195,7 +195,10 @@ class Play extends Phaser.Scene {
         if(this.checkCatch(this.cart, this.ingredient3)) {
         }*/
         this.checkHit(this.cart,this.human);
-        if(game.level>=2){this.checkHit(this.cart,this.bird);}
+        if(game.level>=2){
+            console.log('bird pos : ' + this.bird.pos);
+            this.checkHit(this.cart,this.bird);
+        }
         this.ingredients.forEach(element => {
             if(element.x == game.config.width){
                 this.changeTexture(element);
@@ -285,7 +288,7 @@ class Play extends Phaser.Scene {
         this.getNewOrder();
         this.ingredientUI.setTexture(game.settings.recipeBroth);
         console.log('set texture to new broth');
-        this.instructionUI.text = 'catch broth!';
+        this.instructionUI.text = 'catch ' + game.maxProg + ' broth!';
         this.meter.width = 20;
         game.settings.brothChance = 0.8;
         game.settings.noodleChance = 0.1;
@@ -341,14 +344,24 @@ class Play extends Phaser.Scene {
     changeTexture(ingredient){
         //generate random real number from 0 to 1
         this.num = (Phaser.Math.Between(0,10))/10;
+        var prob = Phaser.Math.Between(0,1);
 
 
         if(this.num <= game.settings.brothChance){
             ingredient.setTexture('broth'+Phaser.Math.Between(1,3));
+            if(prob == 0){
+                ingredient.setTexture(game.settings.recipeBroth);
+            }
         } else if(this.num <= game.settings.brothChance + game.settings.noodleChance){
             ingredient.setTexture('noodle'+Phaser.Math.Between(1,3));
+            if(prob == 0){
+                ingredient.setTexture(game.settings.recipeNoodle);
+            }
         } else if (this.num >= 1-game.settings.toppingChance){
             ingredient.setTexture('topping'+Phaser.Math.Between(1,3));
+            if(prob == 0){
+                ingredient.setTexture(game.settings.recipeTopping);
+            }
         }
         
     }
@@ -403,6 +416,7 @@ class Play extends Phaser.Scene {
         if (cart.pos == obj.pos && obj.x <= this.catchZone && obj.x >= this.catchZone-50 ) {
             if(obj.texture.key == game.settings.recipeBroth){
                 if(game.brothProg < game.maxProg){
+                    this.instructionUI.text = 'catch ' + (game.maxProg-game.brothProg) + ' more broth!';
                     if(obj.alpha !=0){
                         game.brothProg++;
                         this.meter.width += 50;
@@ -425,6 +439,10 @@ class Play extends Phaser.Scene {
             }
             else if(obj.texture.key == game.settings.recipeNoodle && game.brothProg == game.maxProg){
                 if(game.noodleProg < game.maxProg){
+                    this.instructionUI.text = 'catch ' + (game.maxProg-game.noodleProg) + ' more noodles!';
+                    if(game.maxProg-game.noodleProg == 1){
+                        this.instructionUI.text = 'catch 1 more noodle!';
+                    }
                     if(obj.alpha !=0){
                         game.noodleProg++;
                         this.meter.width += 50;
@@ -434,7 +452,7 @@ class Play extends Phaser.Scene {
                     obj.alpha = 0;
                     if(this.ingredientPhase>1){
                         this.ingredientUI.setTexture(game.settings.recipeTopping);
-                        this.instructionUI.text = 'catch toppings!';
+                        this.instructionUI.text = 'catch ' + game.maxProg +'toppings!';
                         this.clock.remove();
                         this.startPhase2();
                         
@@ -449,6 +467,10 @@ class Play extends Phaser.Scene {
             }
             else if(obj.texture.key == game.settings.recipeTopping && game.brothProg == game.maxProg && game.noodleProg == game.maxProg){
                 if(game.toppingProg < game.maxProg){
+                    this.instructionUI.text = 'catch ' + (game.maxProg-game.toppingProg) + ' more toppings!';
+                    if(game.maxProg-game.noodleProg == 1){
+                        this.instructionUI.text = 'catch 1 more topping!';
+                    }
                     if(obj.alpha !=0){
                         game.toppingProg++;
                         this.meter.width += 50;
@@ -461,7 +483,7 @@ class Play extends Phaser.Scene {
                         this.ingredientUI.alpha = 0;
                         this.clock.remove();
                         this.startPhase3();
-                        this.instructionUI.text = 'deliver the ramen!';
+                        this.instructionUI.text = 'wait for the ramen to be delivered';
                         this.popUpImage('meterCompleted',100,100);
                         this.meter.width = 20;
                     }

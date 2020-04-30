@@ -91,8 +91,6 @@ class Menu extends Phaser.Scene {
         menuConfig.backgroundColor = 'transparent';
         menuConfig.padding.bottom = 0;
         menuConfig.padding.top = 0;
-        this.add.text(centerX, 130, 'Use <--> to move & (F) to Fire', menuConfig).setOrigin(0.5);
-        this.add.text(centerX, 135 + textSpacer,"Select difficulty:", menuConfig).setOrigin(0.5);
         
         
     }
