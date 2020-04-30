@@ -5,7 +5,7 @@ class Play extends Phaser.Scene {
 
     preload() {
         game.level++;
-        //this.load.audio('stag_fly', '././assets/stag_fly.mp3');
+        this.load.audio('PlayMusic', '././assets/RR_Play.mp3');
 
         //load tilemaps
         this.load.image('bg', '././assets/Ramen_background.png');
@@ -57,6 +57,11 @@ class Play extends Phaser.Scene {
         //load ui
         this.load.image('meter', '././assets/bar.png');
         this.load.image('meterCompleted', '././assets/barCompleted.png');
+
+        
+        //buttons
+        this.load.image('audioOff', '././assets/audioOff.png');
+        this.load.image('audioOn', '././assets/audioOn.png');
 
 
         // load spritesheet
@@ -168,6 +173,43 @@ class Play extends Phaser.Scene {
         });*/
         //====================== particle emmiter =========================
         this.particles = this.add.particles('blood');
+
+        //========================= music =========================
+        this.playMusic = this.sound.add('PlayMusic');
+
+        var musicConfig = {
+          mute: true,
+          volume: 1,
+          rate: 1,
+          detune: 0,
+          seek: 0,
+          loop: true,
+          delay: 1
+        }
+
+        this.playMusic.play(musicConfig);
+
+        //====================== buttons ======================
+        this.audio = this.add.image(100,game.config.height-100, 'audioOff').setScale(0.25,0.25);
+        
+        this.audio.on('pointerdown', () => { 
+            // easy mode
+            game.settings.audio = !game.settings.audio;
+            this.menuMusic.setMute(!this.menuMusic.mute);
+            if(!this.menuMusic.mute){
+                this.audio.setTexture('audioOff');
+            } else{
+                this.audio.setTexture('audioOn');
+            }
+
+        });
+
+        
+        if(game.settings.audio){
+            this.playMusic.setMute(false);
+            this.audio.setTexture('audioOn');
+        }
+
         
     }
 

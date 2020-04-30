@@ -54,11 +54,11 @@ class Menu extends Phaser.Scene {
         let centerY = game.config.height/2;
         let textSpacer = 64;
 
-        this.logo = this.add.image(centerX, 200, 'logo');
+        this.logo = this.add.image(centerX, 200, 'logo').setOrigin(0.5,0.5);
         //this.add.text(centerX, 60,"RAMEN RUN", menuConfig).setOrigin(0.5);
 
         // =============================== add buttons ===============================
-        let buttonConfig = {
+        /*let buttonConfig = {
           fontFamily: 'Georgia',
           fontStyle: 'bold',
           fontSize: '30px',
@@ -72,8 +72,9 @@ class Menu extends Phaser.Scene {
               bottom: 5,
           },
           fixedWidth: 150
-      }
-      this.playButton = this.add.text(200, 250, 'PlayButton', buttonConfig);
+      }*/
+
+      this.playButton = this.add.image(centerX,centerY+150, 'playButton').setScale(0.75,0.75).setOrigin(0.5,0.5);
       
       //=============================== set interactive ===========================================
 
