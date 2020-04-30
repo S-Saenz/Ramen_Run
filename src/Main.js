@@ -27,7 +27,7 @@ game.extras = 0;
 
 game.settings = {
     audio: false,
-    maxHealth: 1,
+    maxHealth: 5,
     timer: 10000, 
     panSpeed: 8,
     brothChance: .8,

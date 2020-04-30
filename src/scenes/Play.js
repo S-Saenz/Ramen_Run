@@ -5,7 +5,7 @@ class Play extends Phaser.Scene {
 
     preload() {
         game.level++;
-        this.load.audio('PlayMusic', '././assets/RR_Play.mp3');
+        this.load.audio('PlayMusic', '././assets/RR_Play.wav');
 
         //load tilemaps
         this.load.image('bg', '././assets/Ramen_background.png');
@@ -179,7 +179,7 @@ class Play extends Phaser.Scene {
 
         var musicConfig = {
           mute: true,
-          volume: 1,
+          volume: 0.5,
           rate: 1,
           detune: 0,
           seek: 0,
@@ -191,20 +191,23 @@ class Play extends Phaser.Scene {
 
         //====================== buttons ======================
         this.audio = this.add.image(100,game.config.height-100, 'audioOff').setScale(0.25,0.25);
+        this.audio.setDepth(4);
+        this.audio.setInteractive();
         
         this.audio.on('pointerdown', () => { 
             // easy mode
-            game.settings.audio = !game.settings.audio;
-            this.menuMusic.setMute(!this.menuMusic.mute);
-            if(!this.menuMusic.mute){
+            console.log('click for audio');
+            this.playMusic.setMute(!this.playMusic.mute);
+            if(!this.playMusic.mute){
+                game.settings.audio = false;
                 this.audio.setTexture('audioOff');
             } else{
+                game.settings.audio = true;
                 this.audio.setTexture('audioOn');
             }
 
         });
 
-        
         if(game.settings.audio){
             this.playMusic.setMute(false);
             this.audio.setTexture('audioOn');

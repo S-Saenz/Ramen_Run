@@ -12,6 +12,7 @@ class Menu extends Phaser.Scene {
         this.load.image('audioOff', '././assets/audioOff.png');
         this.load.image('audioOn', '././assets/audioOn.png');
         this.load.image('playButton', '././assets/playButton.png');
+        this.load.image('playButtonHover', '././assets/playButtonHover.png');
 
     }
 
@@ -86,24 +87,27 @@ class Menu extends Phaser.Scene {
       this.playButton.on('pointerdown', () => { 
           // easy mode
           this.scene.start("playScene");
+          this.menuMusic.stop();
       });
       this.audio.on('pointerdown', () => { 
           // easy mode
-          game.settings.audio = !game.settings.audio;
           this.menuMusic.setMute(!this.menuMusic.mute);
           if(!this.menuMusic.mute){
+            game.settings.audio = false;
               this.audio.setTexture('audioOff');
           } else{
+            game.settings.audio = true;
             this.audio.setTexture('audioOn');
           }
+          console.log('game audio: '+ game.settings.audio);
 
       });
 
       this.playButton.on('pointerover', () => { 
-          this.playButton.setStyle({ fill: '#fff2d8'});
+          this.playButton.setTexture('playButtonHover');
       });
       this.playButton.on('pointerout', () => { 
-          this.playButton.setStyle({ fill: '#161515'});
+          this.playButton.setTexture('playButton');
       });
       
 
