@@ -9,8 +9,7 @@ class Menu extends Phaser.Scene {
     }
 
     create(){
-        /* add music:
-        this.music = this.sound.add('music');
+        this.menuMusic = this.sound.add('RR_Menu');
 
         var musicConfig = {
           mute: false,
@@ -22,8 +21,7 @@ class Menu extends Phaser.Scene {
           delay: 0
         }
 
-        this.music.play(musicConfig);
-        */
+        this.menuMusic.play(musicConfig);
         //game.stage.backgroundColor = '#cabbaa';
         //menu display
         let menuConfig = {
