@@ -57,6 +57,10 @@ class Play extends Phaser.Scene {
         //load ui
         this.load.image('meter', '././assets/bar.png');
         this.load.image('meterCompleted', '././assets/barCompleted.png');
+        this.load.image('ingredientBox', '././assets/ingredientBox.png');
+        this.load.image('uiBowl', '././assets/uiBowl.png');
+        this.load.image('uiBowlDone', '././assets/uiBowlDone.png');
+        this.load.image('uiBowlFull', '././assets/uiBowlFull.png');
 
         
         //buttons
@@ -118,11 +122,11 @@ class Play extends Phaser.Scene {
         //used to determine when ingredients and humans are caught
         this.catchZone = 550;
         
-        // ui display
+        //========================== ui display =========================
         let uiConfig = {
             fontFamily: 'Georgia',
             fontStyle: 'bold',
-            fontSize: '30px',
+            fontSize: '20px',
             backgroundColor: '#ae1f1f',
             align: 'center',
             color: '#cabbaa',
@@ -133,10 +137,28 @@ class Play extends Phaser.Scene {
                 bottom: 5,
             },
         }
-        this.cashUI = this.add.text(game.config.width-100, 54, 'cash: ¥'+ game.cash + '00', uiConfig).setOrigin(1,1);
-        this.instructionUI = this.add.text(game.config.width/2, game.config.height/3, 'catch ' + game.maxProg + ' broth!' , uiConfig).setOrigin(0.5,0.5);
-        this.ingredientUI = this.add.image(game.config.width/2, (game.config.height/3)-100, game.settings.recipeBroth).setOrigin(0.5,0.5);
+        this.ingredientBox = this.add.image(game.config.width, 0, 'ingredientBox').setOrigin(1,0).setScale(1,0.75);
+        //================== ui bowls ==================
+
+
+        this.bowl1 = this.add.image(game.config.width-190, 20, 'uiBowl').setOrigin(1,0);
+        this.bowl2 = this.add.image(game.config.width-120, 20, 'uiBowl').setOrigin(1,0);
+        this.bowl3 = this.add.image(game.config.width-50, 20, 'uiBowl').setOrigin(1,0);
+
+        this.bowlProg = this.bowl1.width/game.maxProg;
+
+        this.bowlFull1 = this.add.tileSprite(game.config.width-253, 20, 0 ,37, 'uiBowlFull').setOrigin(0,0);
+        this.bowlFull2 = this.add.tileSprite(game.config.width-183, 20, 0, 37, 'uiBowlFull').setOrigin(0,0);
+        this.bowlFull3 = this.add.tileSprite(game.config.width-113, 20, 0, 37, 'uiBowlFull').setOrigin(0,0);
+        //set invisible
+        this.bowlFull1.alpha = 0;
+        this.bowlFull2.alpha = 0;
+        this.bowlFull3.alpha = 0;
+
+        this.instructionUI = this.add.text(game.config.width-130, 220, 'catch ' + game.maxProg + ' broth!' , uiConfig).setOrigin(0.5,0.5);
+        this.ingredientUI = this.add.image(game.config.width-90, 70, game.settings.recipeBroth).setOrigin(1,0).setScale(0.75,0.75);
         this.progUITxt = this.add.text(0, 0, 'Progress:', uiConfig);
+        this.cashUI = this.add.text(100, 54, 'cash: ¥'+ game.cash + '00', uiConfig).setOrigin(1,1);
         this.chef = this.add.image((this.cartVechicle.width/3)+50,485,'chefMid').setScale(0.5, 0.5);
         this.calculatedCash = false;
         
