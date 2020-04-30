@@ -54,10 +54,6 @@ class Play extends Phaser.Scene {
         this.load.image('noodle2', '././assets/noodle2.png');
         this.load.image('noodle3', '././assets/noodle3.png');
 
-        this.load.image('ingredient1', '././assets/broth1.png');
-        this.load.image('ingredient2', '././assets/broth1.png');
-        this.load.image('ingredient3', '././assets/broth1.png');
-
         //load ui
         this.load.image('meter', '././assets/bar.png');
         this.load.image('meterCompleted', '././assets/barCompleted.png');

@@ -26,6 +26,7 @@ game.mistakes = 0;
 game.extras = 0;
 
 game.settings = {
+    audio: false,
     maxHealth: 1,
     timer: 10000, 
     panSpeed: 8,
