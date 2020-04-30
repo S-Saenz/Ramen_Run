@@ -4,7 +4,7 @@ class Menu extends Phaser.Scene {
     }
     preload() {
         // load audio
-        //this.load.audio('music', '././assets/cicada_back.mp3');
+        this.load.audio('MenuMusic', '././assets/RR_Menu.wav');
 
     }
 
