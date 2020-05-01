@@ -175,7 +175,6 @@ class Play extends Phaser.Scene {
             loop: true
         });
 
-        this.startPhase0();
 
         this.timerConfig = {
             delay: game.settings.timer,
@@ -183,6 +182,8 @@ class Play extends Phaser.Scene {
             callbackScope: this,
             loop: true
         }
+
+        this.naturalProg = true;
 
         
 
@@ -363,10 +364,17 @@ class Play extends Phaser.Scene {
 
             this.ingredientPhase = 0;
         }
+        console.log('going to phase:' + this.ingredientPhase);
         this.ingredientPhase++;
+        if(this.timer != null && !this.naturalProg){
+            console.log('The timer is not null: ' + this.timer);
+            this.timer = this.timer.reset(this.timerConfig);
+        }
+        this.naturalProg = true;
     }
 
     startPhase0(){
+        console.log('phase 0');
         //reset bowls 
         this.bowlFull1.alpha = 0;
         this.bowlFull1.width = this.bowlProg;
@@ -396,7 +404,6 @@ class Play extends Phaser.Scene {
     }
 
     startPhase2(){
-        console.log('phase 2');
         game.settings.brothChance = 0.1;
         game.settings.noodleChance = 0.1;
         game.settings.toppingChance = 0.8;
@@ -509,6 +516,7 @@ class Play extends Phaser.Scene {
                 } else {
                     if(this.ingredientPhase>0){
                         this.ingredientUI.setTexture(game.settings.recipeNoodle);
+                        this.naturalProg = false;
                         this.phaseProgress();
                         this.instructionUI.text = 'catch noodles!';
                         this.popUpImg = new PopUp(this, 100,100, 'meterCompleted').setScale(0.5, 0.5).setOrigin(0, 0);
@@ -541,6 +549,7 @@ class Play extends Phaser.Scene {
                         this.ingredientUI.setTexture(game.settings.recipeTopping);
                         this.instructionUI.text = 'catch ' + game.maxProg +'toppings!';
                         console.log('forced progression');
+                        this.naturalProg = false;
                         this.phaseProgress();
                         
                         this.popUpImage('meterCompleted',100,100);
@@ -572,6 +581,7 @@ class Play extends Phaser.Scene {
                     
                     if(this.ingredientPhase>2){
                         this.ingredientUI.alpha = 0;
+                        this.naturalProg = false;
                         this.phaseProgress();
                         this.instructionUI.text = 'wait for the ramen to be delivered';
                         this.popUpImage('meterCompleted',100,100);

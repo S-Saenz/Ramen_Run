@@ -20,7 +20,7 @@ game.brothProg = 0;
 game.noodleProg = 0;
 game.toppingProg = 0;
 //amount the meters are out of, so if maxProg = 3 then you only need to collect three of each ingredient
-game.maxProg = 30;
+game.maxProg = 3;
 //mistakes variable might be useful for determining star rating and/or cash
 game.mistakes = 0;
 game.extras = 0;
@@ -28,7 +28,7 @@ game.extras = 0;
 game.settings = {
     audio: false,
     maxHealth: 5,
-    timer: 100, 
+    timer: 10000, 
     panSpeed: 8,
     brothChance: .8,
     noodleChance: .1,
