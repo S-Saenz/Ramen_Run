@@ -75,7 +75,6 @@ class Play extends Phaser.Scene {
     }
 
     create(){
-        game.settings.maxHealth -= (game.level%3);
         // place tile sprite
         this.bg = this.add.tileSprite(0, -60, 3000, 1600, 'bg').setScale(0.5,0.5).setOrigin(0, 0);
         this.customer = this.add.image(900,220, 'customer').setScale(0.5, 0.5).setOrigin(0, 0.5);
@@ -108,10 +107,12 @@ class Play extends Phaser.Scene {
         if(game.level>=2){
             this.bird = new Bird(this, game.config.width*2, game.config.height-400, 'bird', 0, 30).setScale(0.48, 0.48).setOrigin(0,0.5);
             this.bird.pos = 2;
+            this.bird.dist = 2;
         }
         if(game.level>=4){
-            this.bird2 = new Bird(this, game.config.width*2, game.config.height-400, 'bird', 0, 30).setScale(0.48, 0.48).setOrigin(0,0.5);
+            this.bird2 = new Bird(this, game.config.width*3, game.config.height-400, 'bird', 0, 30).setScale(0.48, 0.48).setOrigin(0,0.5);
             this.bird2.pos = 2;
+            this.bird.dist = 3;
         }
 
         //add cart
@@ -533,7 +534,7 @@ class Play extends Phaser.Scene {
                 //send to market of car is broken
                 this.playMusic.stop();
                 this.scene.start("marketScene");
-            }else if(game.cartHealth < 2){
+            }else if(game.cartHealth < game.settings.maxHealth/3){
                 this.cartDmg.setTexture('highDmg');
             }else if(game.cartHealth < game.settings.maxHealth/2){
                 this.cartDmg.setTexture('medDmg');

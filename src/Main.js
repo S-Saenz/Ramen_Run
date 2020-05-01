@@ -29,7 +29,7 @@ game.settings = {
     repairPrice: 1,
     ramenPrice: 5,
     audio: false,
-    maxHealth: 1,
+    maxHealth: 3,
     timer: 10000, 
     panSpeed: 8,
     brothChance: .8,

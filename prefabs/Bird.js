@@ -4,6 +4,7 @@ class Bird extends Phaser.GameObjects.Sprite{
         //add object to existing scene
         scene.add.existing(this);
         this.pos = 2;
+        this.dist = 1;
     }
 
     update(){
@@ -11,7 +12,7 @@ class Bird extends Phaser.GameObjects.Sprite{
         if(this.x > -100){
             this.x -= game.settings.panSpeed+1;
         } else {
-            this.x = game.config.width*2;
+            this.x = game.config.width*this.dist;
             this.alpha = 1;
         }
         

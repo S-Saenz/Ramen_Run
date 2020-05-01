@@ -6,7 +6,7 @@ class Market extends Phaser.Scene {
     }
 
     create(){
-        console.log();
+        game.settings.maxHealth -= (game.level%3);
         if(game.cash < game.settings.repairPrice){
             this.scene.start("creditsScene");
         }else{
