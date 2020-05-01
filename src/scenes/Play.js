@@ -147,9 +147,9 @@ class Play extends Phaser.Scene {
 
         this.bowlProg = this.bowl1.width/game.maxProg;
 
-        this.bowlFull1 = this.add.tileSprite(game.config.width-253, 20, 0 ,37, 'uiBowlFull').setOrigin(0,0);
-        this.bowlFull2 = this.add.tileSprite(game.config.width-183, 20, 0, 37, 'uiBowlFull').setOrigin(0,0);
-        this.bowlFull3 = this.add.tileSprite(game.config.width-113, 20, 0, 37, 'uiBowlFull').setOrigin(0,0);
+        this.bowlFull1 = this.add.tileSprite(game.config.width-253, 20, this.bowlProg ,37, 'uiBowlFull').setOrigin(0,0);
+        this.bowlFull2 = this.add.tileSprite(game.config.width-183, 20, this.bowlProg, 37, 'uiBowlFull').setOrigin(0,0);
+        this.bowlFull3 = this.add.tileSprite(game.config.width-113, 20, this.bowlProg, 37, 'uiBowlFull').setOrigin(0,0);
         //set invisible
         this.bowlFull1.alpha = 0;
         this.bowlFull2.alpha = 0;
@@ -164,22 +164,41 @@ class Play extends Phaser.Scene {
         
         // game over flag
         this.gameOver = false;
-        // 60-second play clockv
-        /*this.clock = this.time.delayedCall(game.settings.timer, () => {
-            game.settings.brothChance = 0.1;
-            game.settings.noodleChance = 0.8;
-            game.settings.toppingChance = 0.1; 
-        }, null, this);*/
         this.chefPos = 1;
         this.posAdd = 0;
         this.ingredientPhase = 0;
-        this.changeIngredientChances();
-        /*this.timer = this.time.addEvent({
+
+        this.timer = this.time.addEvent({
             delay: game.settings.timer,
-            callback: this.changeIngredientChances,
+            callback: this.phaseProgress(),
             callbackScope: this,
             loop: true
         });
+
+        this.startPhase0();
+
+        this.timerConfig = {
+            delay: game.settings.timer,
+            callback: this.phaseProgress(),
+            callbackScope: this,
+            loop: true
+        }
+
+        
+
+
+
+        /*
+         60-second play timer
+        this.timer = this.time.delayedCall(game.settings.timer, () => {
+            game.settings.brothChance = 0.1;
+            game.settings.noodleChance = 0.8;
+            game.settings.toppingChance = 0.1; 
+        }, null, this);
+        this.timer = this.time.delayedCall(game.settings.timer, () => {
+            this.phaseProgress();
+            console.log('timer has been set');
+        }, null, this);
         
         this.timer = this.time.addEvent({
             delay: 3000,
@@ -331,24 +350,35 @@ class Play extends Phaser.Scene {
         
     }
 
-    changeIngredientChances(){
+    phaseProgress(){
         if(this.ingredientPhase == 0){
             this.startPhase0();
         } else if(this.ingredientPhase == 1){
             this.startPhase1();
         } else if(this.ingredientPhase == 2){
             this.startPhase2();
+        } else if(this.ingredientPhase == 3){
+            this.startPhase3();
         } else{
 
             this.ingredientPhase = 0;
         }
-
+        this.ingredientPhase++;
     }
 
     startPhase0(){
+        //reset bowls 
+        this.bowlFull1.alpha = 0;
+        this.bowlFull1.width = this.bowlProg;
+        this.bowlFull2.alpha = 0;
+        this.bowlFull2.width = this.bowlProg;
+        this.bowlFull3.alpha = 0;
+        this.bowlFull3.width = this.bowlProg;
+
         this.calculatedCash = false;
-        this.ingredientUI.alpha = 1;
+        this.gotOrder = false;
         this.getNewOrder();
+        this.ingredientUI.alpha = 1;
         this.ingredientUI.setTexture(game.settings.recipeBroth);
         console.log('set texture to new broth');
         this.instructionUI.text = 'catch ' + game.maxProg + ' broth!';
@@ -356,30 +386,20 @@ class Play extends Phaser.Scene {
         game.settings.brothChance = 0.8;
         game.settings.noodleChance = 0.1;
         game.settings.toppingChance = 0.1;
-        this.ingredientPhase++;
-        this.clock = this.time.delayedCall(game.settings.timer, () => {
-            this.startPhase1();
-        }, null, this);
     }
 
     startPhase1(){
+        console.log('phase 1');
         game.settings.brothChance = 0.1;
         game.settings.noodleChance = 0.8;
         game.settings.toppingChance = 0.1;
-        this.ingredientPhase++;
-        this.clock = this.time.delayedCall(game.settings.timer, () => {
-            this.startPhase2();
-        }, null, this);
     }
 
     startPhase2(){
+        console.log('phase 2');
         game.settings.brothChance = 0.1;
         game.settings.noodleChance = 0.1;
         game.settings.toppingChance = 0.8;
-        this.ingredientPhase++;
-        this.clock = this.time.delayedCall(game.settings.timer, () => {
-            this.startPhase3();
-        }, null, this);
 
     }
 
@@ -392,9 +412,6 @@ class Play extends Phaser.Scene {
             this.popUpTxt(200,20, '¥'+this.payment+'00');
         }
         this.cashUI.text = 'cash: ¥'+ game.cash + '00';
-        this.clock = this.time.delayedCall(game.settings.timer/3, () => {
-            this.startPhase0();
-        }, null, this);
     }
 
 
@@ -482,15 +499,17 @@ class Play extends Phaser.Scene {
                     this.instructionUI.text = 'catch ' + (game.maxProg-game.brothProg) + ' more broth!';
                     if(obj.alpha !=0){
                         game.brothProg++;
-                        this.meter.width += 50;
+                        if(this.bowlFull1.alpha == 0){
+                            this.bowlFull1.alpha = 1;
+                        }else{
+                            this.bowlFull1.width += this.bowlProg;
+                        }
                         obj.alpha = 0;
                     }
                 } else {
-                    obj.alpha = 0;
                     if(this.ingredientPhase>0){
                         this.ingredientUI.setTexture(game.settings.recipeNoodle);
-                        this.clock.remove();
-                        this.startPhase1();
+                        this.phaseProgress();
                         this.instructionUI.text = 'catch noodles!';
                         this.popUpImg = new PopUp(this, 100,100, 'meterCompleted').setScale(0.5, 0.5).setOrigin(0, 0);
                         this.meter.width = 20;
@@ -498,6 +517,7 @@ class Play extends Phaser.Scene {
                     if(obj.alpa != 0){
                         game.extras++;
                     }
+                    obj.alpha = 0;
                 }
             }
             else if(obj.texture.key == game.settings.recipeNoodle && game.brothProg == game.maxProg){
@@ -508,7 +528,11 @@ class Play extends Phaser.Scene {
                     }
                     if(obj.alpha !=0){
                         game.noodleProg++;
-                        this.meter.width += 50;
+                        if(this.bowlFull2.alpha == 0){
+                            this.bowlFull2.alpha = 1;
+                        }else{
+                            this.bowlFull2.width += this.bowlProg;
+                        }
                         obj.alpha = 0;
                     }
                 } else {
@@ -516,8 +540,8 @@ class Play extends Phaser.Scene {
                     if(this.ingredientPhase>1){
                         this.ingredientUI.setTexture(game.settings.recipeTopping);
                         this.instructionUI.text = 'catch ' + game.maxProg +'toppings!';
-                        this.clock.remove();
-                        this.startPhase2();
+                        console.log('forced progression');
+                        this.phaseProgress();
                         
                         this.popUpImage('meterCompleted',100,100);
                         this.meter.width = 20;
@@ -536,7 +560,11 @@ class Play extends Phaser.Scene {
                     }
                     if(obj.alpha !=0){
                         game.toppingProg++;
-                        this.meter.width += 50;
+                        if(this.bowlFull3.alpha == 0){
+                            this.bowlFull3.alpha = 1;
+                        }else{
+                            this.bowlFull3.width += this.bowlProg;
+                        }
                         obj.alpha = 0;
                     }
                 } else {
@@ -544,8 +572,7 @@ class Play extends Phaser.Scene {
                     
                     if(this.ingredientPhase>2){
                         this.ingredientUI.alpha = 0;
-                        this.clock.remove();
-                        this.startPhase3();
+                        this.phaseProgress();
                         this.instructionUI.text = 'wait for the ramen to be delivered';
                         this.popUpImage('meterCompleted',100,100);
                         this.meter.width = 20;
@@ -565,24 +592,27 @@ class Play extends Phaser.Scene {
     }
 
     getNewOrder(){
-        game.brothProg = 0;
-        game.noodleProg = 0;
-        game.toppingProg = 0;
-        game.settings.recipeBroth = Phaser.Math.RND.pick(game.broths);
-        game.settings.recipeNoodle = Phaser.Math.RND.pick(game.noodles);
-        game.settings.recipeTopping = Phaser.Math.RND.pick(game.toppings);
-        console.log('Order Recieved: ' + game.settings.recipeBroth + ' with ' + game.settings.recipeNoodle + ' and ' + game.settings.recipeTopping);
+        if(!this.gotOrder){
+            game.brothProg = 0;
+            game.noodleProg = 0;
+            game.toppingProg = 0;
+            game.settings.recipeBroth = Phaser.Math.RND.pick(game.broths);
+            game.settings.recipeNoodle = Phaser.Math.RND.pick(game.noodles);
+            game.settings.recipeTopping = Phaser.Math.RND.pick(game.toppings);
+            this.gotOrder = true;
+            console.log('Order Recieved: ' + game.settings.recipeBroth + ' with ' + game.settings.recipeNoodle + ' and ' + game.settings.recipeTopping);
+        }
     }
 
     popUpImage(img,x,y){
         var popUpImag = new PopUp(this, x,y, img).setScale(0.5, 0.5).setOrigin(0, 0);
         
-        this.clock = this.time.delayedCall(500, () => {
+        this.timer1 = this.time.delayedCall(500, () => {
             popUpImag.destroy();
         }, null, this);
         /*
         var image = this.add.image(x, y, img).setOrigin(0, 0);
-        this.clock = this.time.delayedCall(500, () => {
+        this.timer = this.time.delayedCall(500, () => {
             image.destroy();
         }, null, this);
         */
@@ -590,7 +620,7 @@ class Play extends Phaser.Scene {
 
     popUpTxt(txt,x,y){
         var txt = this.add.text(x, y, txt).setOrigin(0, 0);
-        this.clock = this.time.delayedCall(500, () => {
+        this.timer2 = this.time.delayedCall(500, () => {
             txt.destroy();
         }, null, this);
     }
