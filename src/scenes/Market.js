@@ -7,10 +7,10 @@ class Market extends Phaser.Scene {
 
     create(){
         console.log();
-        if(game.cash < 5){
+        if(game.cash < game.settings.repairPrice){
             this.scene.start("creditsScene");
         }else{
-            game.cash -= 5;
+            game.cash -= game.settings.repairPrice;
         }
         //menu display
         let menuConfig = {

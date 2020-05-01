@@ -58,9 +58,8 @@ class Play extends Phaser.Scene {
         this.load.image('noodle3', '././assets/noodle3.png');
 
         //load ui
-        this.load.image('meter', '././assets/bar.png');
-        this.load.image('meterCompleted', '././assets/barCompleted.png');
         this.load.image('ingredientBox', '././assets/ingredientBox.png');
+        this.load.image('wallet', '././assets/wallet.png');
         this.load.image('uiBowl', '././assets/uiBowl.png');
         this.load.image('uiBowlDone', '././assets/uiBowlDone.png');
         this.load.image('uiBowlFull', '././assets/uiBowlFull.png');
@@ -76,15 +75,14 @@ class Play extends Phaser.Scene {
     }
 
     create(){
+        game.settings.maxHealth -= (game.level%3);
         // place tile sprite
         this.bg = this.add.tileSprite(0, -60, 3000, 1600, 'bg').setScale(0.5,0.5).setOrigin(0, 0);
-        this.meter = this.add.tileSprite(game.config.width/8, 0, 20, 10, 'meter').setOrigin(0, 0);
         this.customer = this.add.image(900,220, 'customer').setScale(0.5, 0.5).setOrigin(0, 0.5);
         //this.score = this.add.image(0, 0, 'score').setOrigin(0, 0);
         this.cartVechicle = this.add.image(-80,game.config.height-200, game.marketGoods.cosEq).setScale(0.5, 0.5).setOrigin(0, 0.5);
         this.cartDmg = this.add.image(-80,game.config.height-200, 'noDmg').setScale(0.5, 0.5).setOrigin(0, 0.5);
         this.cartDmg.setDepth(2);        // add objs
-        this.popUpImg = new PopUp(this, 100,100, 'meterCompleted').setScale(0.5, 0.5).setOrigin(0, 0);
         this.ingredient1 = new Ingredient(this, game.config.width * 1.2, game.config.height-400, 'ingredient1', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
         this.ingredient1.pos = 2;
         this.ingredient2 = new Ingredient(this, game.config.width * 1.3, game.config.height-280, 'ingredient2', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
@@ -130,10 +128,9 @@ class Play extends Phaser.Scene {
         let uiConfig = {
             fontFamily: 'Georgia',
             fontStyle: 'bold',
-            fontSize: '20px',
-            backgroundColor: '#ae1f1f',
+            fontSize: '25px',
             align: 'center',
-            color: '#cabbaa',
+            color: '#FFF',
             padding: {
                 right: 10,
                 left: 10,
@@ -161,8 +158,14 @@ class Play extends Phaser.Scene {
 
         this.instructionUI = this.add.text(game.config.width-130, 220, 'catch ' + game.maxProg + ' broth!' , uiConfig).setOrigin(0.5,0.5);
         this.ingredientUI = this.add.image(game.config.width-90, 70, game.settings.recipeBroth).setOrigin(1,0).setScale(0.75,0.75);
-        this.progUITxt = this.add.text(0, 0, 'Progress:', uiConfig);
-        this.cashUI = this.add.text(100, 54, 'cash: ¥'+ game.cash + '00', uiConfig).setOrigin(1,1);
+        this.wallet = this.add.image(200, 150, 'wallet').setOrigin(1);
+        this.cashUI = this.add.text(100, 80, '¥'+ game.cash + '00', uiConfig).setOrigin(1,1);
+        if(game.cash >= 10){
+            this.cashUI.text = '¥'+ game.cash/10 + 'k';
+
+        }else{
+            this.cashUI.text = '¥'+ game.cash + '00';
+        }
         this.chef = this.add.image((this.cartVechicle.width/3)+50,485,'chefMid').setScale(0.5, 0.5);
         this.calculatedCash = false;
         
@@ -367,7 +370,6 @@ class Play extends Phaser.Scene {
         });
         this.human.update();
         if(game.level>=2){this.bird.update();}
-        this.popUpImg.update();
         
     }
 
@@ -413,7 +415,6 @@ class Play extends Phaser.Scene {
         this.ingredientUI.setTexture(game.settings.recipeBroth);
         console.log('set texture to new broth');
         this.instructionUI.text = 'catch ' + game.maxProg + ' broth!';
-        this.meter.width = 20;
         game.settings.brothChance = 0.8;
         game.settings.noodleChance = 0.1;
         game.settings.toppingChance = 0.1;
@@ -439,10 +440,16 @@ class Play extends Phaser.Scene {
         this.ingredient2.alpha = 0;
         this.ingredient3.alpha = 0;
         this.payment = this.calcCash();
+
         if(this.payment>0){
             this.popUpTxt(200,20, '¥'+this.payment+'00');
         }
-        this.cashUI.text = 'cash: ¥'+ game.cash + '00';
+        if(game.cash >= 10){
+            this.cashUI.text = '¥'+ game.cash/10 + 'k';
+
+        }else{
+            this.cashUI.text = '¥'+ game.cash + '00';
+        }
     }
 
 
@@ -516,6 +523,7 @@ class Play extends Phaser.Scene {
             //alter cart based on health
             if(game.cartHealth<=0){
                 //send to market of car is broken
+                this.playMusic.stop();
                 this.scene.start("marketScene");
             }else if(game.cartHealth < 2){
                 this.cartDmg.setTexture('highDmg');
@@ -554,8 +562,6 @@ class Play extends Phaser.Scene {
                         console.log('forced progression');
                         this.phaseProgress();
                         this.instructionUI.text = 'catch noodles!';
-                        this.popUpImg = new PopUp(this, 100,100, 'meterCompleted').setScale(0.5, 0.5).setOrigin(0, 0);
-                        this.meter.width = 20;
                     }
                     if(obj.alpa != 0){
                         game.extras++;
@@ -586,9 +592,6 @@ class Play extends Phaser.Scene {
                         console.log('forced progression');
                         this.naturalProg = false;
                         this.phaseProgress();
-                        
-                        this.popUpImage('meterCompleted',100,100);
-                        this.meter.width = 20;
                     }
                     if(obj.alpa != 0){
                         game.extras++;
@@ -619,8 +622,6 @@ class Play extends Phaser.Scene {
                         this.naturalProg = false;
                         this.phaseProgress();
                         this.instructionUI.text = '^ keep moving up to deliver the ramen! ^';
-                        this.popUpImage('meterCompleted',100,100);
-                        this.meter.width = 20;
                     }
                     if(obj.alpa != 0){
                         game.extras++;
@@ -672,18 +673,17 @@ class Play extends Phaser.Scene {
 
     calcCash(){
         if(!this.calculatedCash){
-            console.log('calculation cash: ' + game.cash);
             var totalProg = game.brothProg + game.noodleProg + game.toppingProg;
-            var payment = 5;
-            if(totalProg < 3){
+            var payment = game.settings.ramenPrice;
+            if(totalProg < maxProg){
                 payment = 0;
-            } else if(totalProg < 5){
-                payment = 2;
+            } else if(totalProg < maxProg*2){
+                payment = game.settings.ramenPrice*0.5;
             } else if(game.extras>0){
-                payment++;
+                payment += game.settings.ramenPrice*2;
             }
             if(game.extras>3){
-                payment + 2;
+                payment += game.settings.ramenPrice*2;
             }
             game.cash += payment;
             this.calculatedCash = true;

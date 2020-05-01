@@ -8,7 +8,7 @@ let config = {
 let game = new Phaser.Game(config);
 // define game settings
 game.level = 0;
-game.cash = 1;
+game.cash = 10;
 game.score = 0;
 game.cartHealth;
 game.broths = ['broth1','broth2','broth3'];
@@ -26,8 +26,10 @@ game.mistakes = 0;
 game.extras = 0;
 
 game.settings = {
+    repairPrice: 1,
+    ramenPrice: 5,
     audio: false,
-    maxHealth: 1,
+    maxHealth: 5,
     timer: 10000, 
     panSpeed: 8,
     brothChance: .8,

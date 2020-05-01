@@ -11,8 +11,8 @@ class Credits extends Phaser.Scene {
         //buttons
         this.load.image('audioOff', '././assets/audioOff.png');
         this.load.image('audioOn', '././assets/audioOn.png');
-        this.load.image('playButton', '././assets/replayButton.png');
-        this.load.image('playButtonHover', '././assets/replayButtonHover.png');
+        this.load.image('replayButton', '././assets/replayButton.png');
+        this.load.image('replayButtonHover', '././assets/replayButtonHover.png');
         this.load.image('menuButton', '././assets/menuButton.png');
         this.load.image('menuButtonHover', '././assets/menuButtonHover.png');
 
@@ -23,8 +23,6 @@ class Credits extends Phaser.Scene {
 
     create(){
         this.bg = this.add.tileSprite(0, -60, 3000, 1600, 'bg').setScale(0.5,0.5).setOrigin(0, 0);
-        var square = this.add.image(centerX,centerY,'square').setOrigin(0.5).setScale(5,1.75);
-        square.alpha = 0.75;
         //game.stage.backgroundColor = '#cabbaa';
         //menu display
         this.audio = this.add.image(100,game.config.height-100, 'audioOff').setScale(0.25,0.25);
@@ -61,6 +59,8 @@ class Credits extends Phaser.Scene {
         let centerX = game.config.width/2;
         let centerY = game.config.height/2;
         let textSpacer = 64;
+        var square = this.add.image(centerX,centerY,'square').setOrigin(0.5).setScale(4,1.75);
+        square.alpha = 0.75;
 
         //this.logo = this.add.image(centerX, centerY, 'logo').setOrigin(0.5,0.5).setScale(2,2);
         //this.logo.alpha = 0.5;
@@ -85,7 +85,7 @@ class Credits extends Phaser.Scene {
           fixedWidth: 150
       }*/
 
-      this.playButton = this.add.image(centerX,centerY+200, 'playButton').setScale(0.5,0.5).setOrigin(0.5,0.5);
+      this.playButton = this.add.image(centerX,centerY+200, 'replayButton').setScale(0.5,0.5).setOrigin(0.5,0.5);
       this.menuButton = this.add.image(centerX,centerY+300, 'menuButton').setScale(0.5,0.5).setOrigin(0.5,0.5);
       
       //=============================== set interactive ===========================================
@@ -121,16 +121,16 @@ class Credits extends Phaser.Scene {
       });
 
         this.playButton.on('pointerover', () => { 
-            this.playButton.setTexture('playButtonHover');
+            this.playButton.setTexture('replayButtonHover');
         });
         this.playButton.on('pointerout', () => { 
-            this.playButton.setTexture('playButton');
+            this.playButton.setTexture('replayButton');
         });
         this.menuButton.on('pointerover', () => { 
-            this.playButton.setTexture('menuButtonHover');
+            this.menuButton.setTexture('menuButtonHover');
         });
-        this.playButton.on('pointerout', () => { 
-            this.playButton.setTexture('menuButton');
+        this.menuButton.on('pointerout', () => { 
+            this.menuButton.setTexture('menuButton');
         });
       
 
