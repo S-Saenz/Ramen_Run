@@ -675,9 +675,9 @@ class Play extends Phaser.Scene {
         if(!this.calculatedCash){
             var totalProg = game.brothProg + game.noodleProg + game.toppingProg;
             var payment = game.settings.ramenPrice;
-            if(totalProg < maxProg){
+            if(totalProg < game.maxProg){
                 payment = 0;
-            } else if(totalProg < maxProg*2){
+            } else if(totalProg < game.maxProg*2){
                 payment = game.settings.ramenPrice*0.5;
             } else if(game.extras>0){
                 payment += game.settings.ramenPrice*2;
