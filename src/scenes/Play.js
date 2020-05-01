@@ -11,10 +11,9 @@ class Play extends Phaser.Scene {
         this.load.image('bg', '././assets/Ramen_background.png');
         this.load.image('score', '././assets/stars.png');
 
-        //animations
-        
-        this.load.atlas('birdSheet','././assets/birdSheet.png','././assets/bird.json');
 
+        //animations
+        this.load.atlas('birdSheet','././assets/birdSheet.png','././assets/birdSheet.json');
 
         //load sprites
         //========== cosmetics ==========
@@ -81,7 +80,17 @@ class Play extends Phaser.Scene {
 
     create(){
         //texture atlas
-        this.birdAnim = this.add.sprite(203,138,'birdSheet');
+        this.birdy = this.add.sprite(200,200,'birdSheet','bird1');
+        this.anims.create({
+            key:'flying',
+            frames: [
+                {frame: 'bird1'},
+                {frame: 'bird2'}
+            ],
+            defaultTextureKey: 'birdSheet',
+            repeat: -1
+        });
+        this.birdy.anims.play('flying');
 
         // place tile sprite
         this.bg = this.add.tileSprite(0, -60, 3000, 1600, 'bg').setScale(0.5,0.5).setOrigin(0, 0);

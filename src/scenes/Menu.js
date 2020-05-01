@@ -3,6 +3,7 @@ class Menu extends Phaser.Scene {
         super("menuScene");
     }
     preload() {
+
         // load audio
         this.load.audio('MenuMusic', '././assets/RR_Menu.wav');
         this.load.image('bg', '././assets/Ramen_background.png');
