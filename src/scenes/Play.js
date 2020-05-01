@@ -37,9 +37,12 @@ class Play extends Phaser.Scene {
         this.load.image('blood','././assets/blood.png');
 
         //the player images
+        this.load.image('chefDeliver', '././assets/chefDelivery.png');
         this.load.image('chefHigh', '././assets/chefHigh.png');
         this.load.image('chefMid', '././assets/chefMid.png');
         this.load.image('chefLow', '././assets/chefLow.png');
+        
+        this.load.image('customer', '././assets/customer.png');
         
 
         this.load.image('topping1', '././assets/topping1.png');
@@ -76,6 +79,7 @@ class Play extends Phaser.Scene {
         // place tile sprite
         this.bg = this.add.tileSprite(0, -60, 3000, 1600, 'bg').setScale(0.5,0.5).setOrigin(0, 0);
         this.meter = this.add.tileSprite(game.config.width/8, 0, 20, 10, 'meter').setOrigin(0, 0);
+        this.customer = this.add.image(900,220, 'customer').setScale(0.5, 0.5).setOrigin(0, 0.5);
         //this.score = this.add.image(0, 0, 'score').setOrigin(0, 0);
         this.cartVechicle = this.add.image(-80,game.config.height-200, game.marketGoods.cosEq).setScale(0.5, 0.5).setOrigin(0, 0.5);
         this.cartDmg = this.add.image(-80,game.config.height-200, 'noDmg').setScale(0.5, 0.5).setOrigin(0, 0.5);
@@ -167,23 +171,23 @@ class Play extends Phaser.Scene {
         this.chefPos = 1;
         this.posAdd = 0;
         this.ingredientPhase = 0;
+        this.naturalProg = true;
 
         this.timer = this.time.addEvent({
             delay: game.settings.timer,
-            callback: this.phaseProgress(),
+            callback: this.phaseProgress,
             callbackScope: this,
             loop: true
         });
-
-
+        this.phaseProgress();
+/*
         this.timerConfig = {
             delay: game.settings.timer,
             callback: this.phaseProgress(),
             callbackScope: this,
             loop: true
         }
-
-        this.naturalProg = true;
+*/
 
         
 
@@ -264,7 +268,12 @@ class Play extends Phaser.Scene {
 
     update(){
         this.bg.tilePositionX += 7;
+        this.customer.x -= 3.5;
+
         // check collisions
+        if(this.customer.x <= 0){
+            this.customer.x = game.config.width-260;
+        }
 
 
         this.ingredients.forEach(element => {
@@ -299,23 +308,28 @@ class Play extends Phaser.Scene {
         }*/
 
         //stuff for the chef
-        
-        if(keyUP.isDown && this.chefPos < 2){
+        if(keyUP.isDown && this.chefPos == 2 && this.ingredientPhase == 4){
+            this.posAdd = 3;
+        } else if(keyUP.isDown && this.chefPos < 2){
             this.posAdd = 1;
         } else if(keyDOWN.isDown && this.chefPos > 0) {
             this.posAdd = -1;
         }
-        if(keyUP.isUp && keyDOWN.isUp){
+        if(keyUP.isUp && keyDOWN.isUp && this.posAdd<2){
             this.chefPos += this.posAdd;
             this.posAdd = 0;
         }
 
-        if(this.chefPos == 0){
+        if(this.posAdd == 3){
+            this.chef.y = 383;
+            this.chef.x = 500;
+            this.chef.setTexture('chefDeliver');
+        }else if(this.chefPos == 0){
             this.chef.setTexture('chefLow');
             this.chef.y = 480;
             this.chef.x = 460;
             this.cartVechicle.setDepth(0);
-            this.chef.setDepth(1);
+            this.chef.setDepth(2);
         }else if(this.chefPos == 1){
             this.chef.setTexture('chefMid');
             this.chef.y = 415;
@@ -325,6 +339,10 @@ class Play extends Phaser.Scene {
             this.chef.y = 383;
             this.chef.x = 500;
             this.chef.setTexture('chefHigh');
+        }
+
+        if(this.chef.texture.key == 'chefDeliver' && this.ingredientPhase == 4 ){
+            this.checkDeliver();
         }
 
 
@@ -352,6 +370,7 @@ class Play extends Phaser.Scene {
     }
 
     phaseProgress(){
+        console.log('phase progress');
         if(this.ingredientPhase == 0){
             this.startPhase0();
         } else if(this.ingredientPhase == 1){
@@ -361,11 +380,12 @@ class Play extends Phaser.Scene {
         } else if(this.ingredientPhase == 3){
             this.startPhase3();
         } else{
-
+            this.startPhase0();
             this.ingredientPhase = 0;
         }
         console.log('going to phase:' + this.ingredientPhase);
         this.ingredientPhase++;
+        console.log('natural progression: ' + this.naturalProg);
         if(this.timer != null && !this.naturalProg){
             console.log('The timer is not null: ' + this.timer);
             this.timer = this.timer.reset(this.timerConfig);
@@ -374,6 +394,7 @@ class Play extends Phaser.Scene {
     }
 
     startPhase0(){
+        this.customer.alpha = 0;
         console.log('phase 0');
         //reset bowls 
         this.bowlFull1.alpha = 0;
@@ -411,6 +432,7 @@ class Play extends Phaser.Scene {
     }
 
     startPhase3(){
+        this.customer.alpha = 1;
         this.ingredient1.alpha = 0;
         this.ingredient2.alpha = 0;
         this.ingredient3.alpha = 0;
@@ -451,6 +473,16 @@ class Play extends Phaser.Scene {
             }
         }
         
+    }
+
+    checkDeliver(){
+        console.log('customers x: ' + this.customer.x);
+        if(this.customer.x <= 500){
+            console.log('end phase');
+            this.chef.setTexture('chefHigh');
+            this.chefPos = 1;
+            this.phaseProgress();
+        }
     }
 
 
@@ -514,9 +546,10 @@ class Play extends Phaser.Scene {
                         obj.alpha = 0;
                     }
                 } else {
-                    if(this.ingredientPhase>0){
+                    if(this.ingredientPhase==1){
                         this.ingredientUI.setTexture(game.settings.recipeNoodle);
                         this.naturalProg = false;
+                        console.log('forced progression');
                         this.phaseProgress();
                         this.instructionUI.text = 'catch noodles!';
                         this.popUpImg = new PopUp(this, 100,100, 'meterCompleted').setScale(0.5, 0.5).setOrigin(0, 0);
@@ -545,7 +578,7 @@ class Play extends Phaser.Scene {
                     }
                 } else {
                     obj.alpha = 0;
-                    if(this.ingredientPhase>1){
+                    if(this.ingredientPhase==2){
                         this.ingredientUI.setTexture(game.settings.recipeTopping);
                         this.instructionUI.text = 'catch ' + game.maxProg +'toppings!';
                         console.log('forced progression');
@@ -579,11 +612,11 @@ class Play extends Phaser.Scene {
                 } else {
                     obj.alpha = 0;
                     
-                    if(this.ingredientPhase>2){
+                    if(this.ingredientPhase==3){
                         this.ingredientUI.alpha = 0;
                         this.naturalProg = false;
                         this.phaseProgress();
-                        this.instructionUI.text = 'wait for the ramen to be delivered';
+                        this.instructionUI.text = '^ keep moving up to deliver the ramen! ^';
                         this.popUpImage('meterCompleted',100,100);
                         this.meter.width = 20;
                     }
