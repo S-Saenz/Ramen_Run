@@ -109,6 +109,11 @@ class Play extends Phaser.Scene {
             this.bird = new Bird(this, game.config.width*2, game.config.height-400, 'bird', 0, 30).setScale(0.48, 0.48).setOrigin(0,0.5);
             this.bird.pos = 2;
         }
+        if(game.level>=4){
+            this.bird2 = new Bird(this, game.config.width*2, game.config.height-400, 'bird', 0, 30).setScale(0.48, 0.48).setOrigin(0,0.5);
+            this.bird2.pos = 2;
+        }
+
         //add cart
         this.cart = new Cart(this, 150,game.config.height-150, 'avatar').setScale(0.5, 0.5).setOrigin(0, 0);
         // define keys
@@ -291,8 +296,10 @@ class Play extends Phaser.Scene {
         }*/
         this.checkHit(this.cart,this.human);
         if(game.level>=2){
-            console.log('bird pos : ' + this.bird.pos);
             this.checkHit(this.cart,this.bird);
+        }
+        if(game.level>=4){
+            this.checkHit(this.cart,this.bird2);
         }
         this.ingredients.forEach(element => {
             if(element.x == game.config.width){
@@ -370,6 +377,7 @@ class Play extends Phaser.Scene {
         });
         this.human.update();
         if(game.level>=2){this.bird.update();}
+        if(game.level>=4){this.bird2.update();}
         
     }
 
