@@ -6,6 +6,12 @@ class Market extends Phaser.Scene {
     }
 
     create(){
+        console.log();
+        if(game.cash < 5){
+            this.scene.start("creditsScene");
+        }else{
+            game.cash -= 5;
+        }
         //menu display
         let menuConfig = {
             fontFamily: 'Georgia',

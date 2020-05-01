@@ -3,12 +3,12 @@ let config = {
     width: 1500,
     height: 700,
     backgroundColor: '#cabbaa',
-    scene: [ Menu, Play , Market ]
+    scene: [ Menu, Play , Market , Credits ]
 }
 let game = new Phaser.Game(config);
 // define game settings
 game.level = 0;
-game.cash = 100;
+game.cash = 1;
 game.score = 0;
 game.cartHealth;
 game.broths = ['broth1','broth2','broth3'];
@@ -27,7 +27,7 @@ game.extras = 0;
 
 game.settings = {
     audio: false,
-    maxHealth: 5,
+    maxHealth: 1,
     timer: 10000, 
     panSpeed: 8,
     brothChance: .8,

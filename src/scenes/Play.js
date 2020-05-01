@@ -83,7 +83,7 @@ class Play extends Phaser.Scene {
         //this.score = this.add.image(0, 0, 'score').setOrigin(0, 0);
         this.cartVechicle = this.add.image(-80,game.config.height-200, game.marketGoods.cosEq).setScale(0.5, 0.5).setOrigin(0, 0.5);
         this.cartDmg = this.add.image(-80,game.config.height-200, 'noDmg').setScale(0.5, 0.5).setOrigin(0, 0.5);
-        this.cartDmg.setDepth(3);        // add objs
+        this.cartDmg.setDepth(2);        // add objs
         this.popUpImg = new PopUp(this, 100,100, 'meterCompleted').setScale(0.5, 0.5).setOrigin(0, 0);
         this.ingredient1 = new Ingredient(this, game.config.width * 1.2, game.config.height-400, 'ingredient1', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
         this.ingredient1.pos = 2;
@@ -272,7 +272,7 @@ class Play extends Phaser.Scene {
 
         // check collisions
         if(this.customer.x <= 0){
-            this.customer.x = game.config.width-260;
+            this.customer.x = game.config.width-259;
         }
 
 
@@ -329,16 +329,18 @@ class Play extends Phaser.Scene {
             this.chef.y = 480;
             this.chef.x = 460;
             this.cartVechicle.setDepth(0);
-            this.chef.setDepth(2);
+            this.chef.setDepth(3);
         }else if(this.chefPos == 1){
             this.chef.setTexture('chefMid');
-            this.chef.y = 415;
+            this.chef.y = 410;
             this.chef.x = 488;
-            this.cartVechicle.setDepth(2);
+            this.cartVechicle.setDepth(1);
+            this.chef.setDepth(0);
         } else {
             this.chef.y = 383;
             this.chef.x = 500;
             this.chef.setTexture('chefHigh');
+            this.chef.setDepth(0);
         }
 
         if(this.chef.texture.key == 'chefDeliver' && this.ingredientPhase == 4 ){
