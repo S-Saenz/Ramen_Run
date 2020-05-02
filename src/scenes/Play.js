@@ -5,11 +5,28 @@ class Play extends Phaser.Scene {
 
     preload() {
         game.level++;
+
+        //load audio
         this.load.audio('PlayMusic', '././assets/RR_Play.wav');
+        this.load.audio('brothSound', '././assets/RR_broth.wav');
+        this.load.audio('noodleSound', '././assets/RR_noodle.wav');
+        this.load.audio('toppingSound', '././assets/RR_topping.wav');
+        this.load.audio('deliverySound', '././assets/RR_delivery.mp3');
+        this.load.audio('hitSound', '././assets/RR_hit.mp3');
+        this.load.audio('selectSound', '././assets/RR_select.mp3');
+        
+        this.soundConfig = {
+            mute: false,
+            volume: 0.5,
+            rate: 1,
+            detune: 0,
+            seek: 0,
+            loop: false,
+            delay: 0
+          }
 
         //load tilemaps
         this.load.image('bg', '././assets/Ramen_background.png');
-        this.load.image('score', '././assets/stars.png');
 
 
         //animations
@@ -32,10 +49,6 @@ class Play extends Phaser.Scene {
 
 
         this.load.image('merchant', '././assets/merchant.png');
-        this.load.image('cartMed', '././assets/cartMed.png');
-        this.load.image('cartLow', '././assets/cartLow.png');
-        this.load.image('cart', '././assets/cartFull.png');
-        this.load.image('avatar', '././assets/hand.png');
         this.load.image('bird', '././assets/bird.png');
         this.load.image('human', '././assets/human.png');
         this.load.image('blood','././assets/blood.png');
@@ -67,7 +80,6 @@ class Play extends Phaser.Scene {
         this.load.image('ingredientBox', '././assets/ingredientBox.png');
         this.load.image('wallet', '././assets/wallet.png');
         this.load.image('uiBowl', '././assets/uiBowl.png');
-        this.load.image('uiBowlDone', '././assets/uiBowlDone.png');
         this.load.image('uiBowlFull', '././assets/uiBowlFull.png');
 
         
@@ -82,6 +94,16 @@ class Play extends Phaser.Scene {
 
     create(){
         game.hasPlayed = true;
+
+        //add audio
+        
+        this.brothSound = this.sound.add('brothSound');
+        this.noodleSound = this.sound.add('noodleSound');
+        this.toppingSound = this.sound.add('toppingSound');
+        this.selectSound = this.sound.add('selectSound');
+        this.hitSound = this.sound.add('hitSound');
+        this.deliverySound = this.sound.add('deliverySound');
+
 
         //texture atlas
         
@@ -569,6 +591,7 @@ class Play extends Phaser.Scene {
 
     checkDeliver(){
         if(this.customer.x <= 500){
+            this.brothSound.play(this.soundConfig);
             this.chef.setTexture('chefHigh');
             this.chefPos = 1;
             this.phaseProgress();
@@ -580,6 +603,8 @@ class Play extends Phaser.Scene {
         if (this.chefPos != human.pos && human.x <= this.catchZone){
             this.popUpImage(300,100,'merchant');
             if(human.alpha !=0){
+                this.cameras.main.shake(20,.005);
+                this.hitSound.play(this.soundConfig);
                 //particle emmiter    
                 var bloodyMess = this.particles.createEmitter({
                     x: this.catchZone,
@@ -598,7 +623,6 @@ class Play extends Phaser.Scene {
                 }, null, this);
 
                 game.cartHealth--;
-                this.cameras.main.shake(20,.005);
             }
             human.alpha = 0;
             //alter cart based on health
@@ -628,6 +652,7 @@ class Play extends Phaser.Scene {
                 if(game.brothProg < game.maxProg){
                     this.instructionUI.text = 'catch ' + (game.maxProg-game.brothProg) + ' more broth!';
                     if(obj.alpha !=0){
+                        this.brothSound.play(this.soundConfig);
                         game.brothProg++;
                         if(this.bowlFull1.alpha == 0){
                             this.bowlFull1.alpha = 1;
@@ -656,6 +681,7 @@ class Play extends Phaser.Scene {
                         this.instructionUI.text = 'catch 1 more noodle!';
                     }
                     if(obj.alpha !=0){
+                        this.noodleSound.play(this.soundConfig);
                         game.noodleProg++;
                         if(this.bowlFull2.alpha == 0){
                             this.bowlFull2.alpha = 1;
@@ -685,6 +711,7 @@ class Play extends Phaser.Scene {
                         this.instructionUI.text = 'catch 1 more topping!';
                     }
                     if(obj.alpha !=0){
+                        this.toppingSound.play(this.soundConfig);
                         game.toppingProg++;
                         if(this.bowlFull3.alpha == 0){
                             this.bowlFull3.alpha = 1;
