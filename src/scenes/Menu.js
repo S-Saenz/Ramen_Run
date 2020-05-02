@@ -14,6 +14,8 @@ class Menu extends Phaser.Scene {
         this.load.image('audioOn', '././assets/audioOn.png');
         this.load.image('playButton', '././assets/playButton.png');
         this.load.image('playButtonHover', '././assets/playButtonHover.png');
+        this.load.image('credits', '././assets/credits.png');
+        this.load.image('creditsHover', '././assets/creditsHover.png');
 
     }
 
@@ -56,7 +58,7 @@ class Menu extends Phaser.Scene {
         let centerY = game.config.height/2;
         let textSpacer = 64;
 
-        this.logo = this.add.image(centerX, 300, 'logo').setOrigin(0.6,0.5).setScale(0.5);
+        this.logo = this.add.image(centerX, 250, 'logo').setOrigin(0.6,0.5).setScale(0.5);
         //this.add.text(centerX, 60,"RAMEN RUN", menuConfig).setOrigin(0.5);
 
         // =============================== add buttons ===============================
@@ -76,18 +78,25 @@ class Menu extends Phaser.Scene {
           fixedWidth: 150
       }*/
 
-      this.playButton = this.add.image(centerX,centerY+250, 'playButton').setScale(0.25,0.25).setOrigin(0.5,0.5);
+      this.playButton = this.add.image(centerX,centerY+190, 'playButton').setScale(0.25,0.25).setOrigin(0.5,0.5);
+      this.creditsButton = this.add.image(centerX,centerY+280, 'credits').setScale(0.25,0.25).setOrigin(0.5,0.5);
       
       //=============================== set interactive ===========================================
 
       this.playButton.setInteractive();
       this.audio.setInteractive();
+      this.creditsButton.setInteractive();
 
       //================================ functionality =================================
 
       this.playButton.on('pointerdown', () => { 
           // easy mode
           this.scene.start("playScene");
+          this.menuMusic.stop();
+      });
+      this.creditsButton.on('pointerdown', () => { 
+          // easy mode
+          this.scene.start("creditsScene");
           this.menuMusic.stop();
       });
       this.audio.on('pointerdown', () => { 
@@ -109,6 +118,12 @@ class Menu extends Phaser.Scene {
       });
       this.playButton.on('pointerout', () => { 
           this.playButton.setTexture('playButton');
+      });
+      this.creditsButton.on('pointerover', () => { 
+          this.creditsButton.setTexture('creditsHover');
+      });
+      this.creditsButton.on('pointerout', () => { 
+          this.creditsButton.setTexture('credits');
       });
       
 

@@ -7,6 +7,7 @@ let config = {
 }
 let game = new Phaser.Game(config);
 // define game settings
+game.hasPlayed = false;
 game.level = 0;
 game.cash = 10;
 game.score = 0;

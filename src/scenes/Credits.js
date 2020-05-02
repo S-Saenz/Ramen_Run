@@ -27,7 +27,7 @@ class Credits extends Phaser.Scene {
         //menu display
         this.audio = this.add.image(100,game.config.height-100, 'audioOff').setScale(0.25,0.25);
         let menuConfig = {
-            fontFamily: 'Georgia',
+            fontFamily: 'Nikumaru',
             fontStyle: 'bold',
             fontSize: '40px',
             color: '#000',
@@ -84,9 +84,13 @@ class Credits extends Phaser.Scene {
           },
           fixedWidth: 150
       }*/
+      this.playTxt = 'playButton'
+      if(game.hasPlayed){
+          this.playTxt = 'replayButton'
+      }
 
-      this.playButton = this.add.image(centerX,centerY+200, 'replayButton').setScale(0.5,0.5).setOrigin(0.5,0.5);
-      this.menuButton = this.add.image(centerX,centerY+300, 'menuButton').setScale(0.5,0.5).setOrigin(0.5,0.5);
+      this.playButton = this.add.image(centerX,centerY+200, this.playTxt).setScale(0.25).setOrigin(0.5,0.5);
+      this.menuButton = this.add.image(centerX,centerY+300, 'menuButton').setScale(0.25).setOrigin(0.5,0.5);
       
       //=============================== set interactive ===========================================
 
@@ -121,10 +125,10 @@ class Credits extends Phaser.Scene {
       });
 
         this.playButton.on('pointerover', () => { 
-            this.playButton.setTexture('replayButtonHover');
+            this.playButton.setTexture(this.playTxt+ 'Hover');
         });
         this.playButton.on('pointerout', () => { 
-            this.playButton.setTexture('replayButton');
+            this.playButton.setTexture(this.playTxt);
         });
         this.menuButton.on('pointerover', () => { 
             this.menuButton.setTexture('menuButtonHover');

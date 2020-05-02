@@ -81,7 +81,7 @@ class Play extends Phaser.Scene {
     }
 
     create(){
-
+        game.hasPlayed = true;
 
 
 
