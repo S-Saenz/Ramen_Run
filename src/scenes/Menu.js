@@ -56,7 +56,7 @@ class Menu extends Phaser.Scene {
         let centerY = game.config.height/2;
         let textSpacer = 64;
 
-        this.logo = this.add.image(centerX, 200, 'logo').setOrigin(0.5,0.5);
+        this.logo = this.add.image(centerX, 300, 'logo').setOrigin(0.6,0.5).setScale(0.5);
         //this.add.text(centerX, 60,"RAMEN RUN", menuConfig).setOrigin(0.5);
 
         // =============================== add buttons ===============================
@@ -76,7 +76,7 @@ class Menu extends Phaser.Scene {
           fixedWidth: 150
       }*/
 
-      this.playButton = this.add.image(centerX,centerY+150, 'playButton').setScale(0.75,0.75).setOrigin(0.5,0.5);
+      this.playButton = this.add.image(centerX,centerY+250, 'playButton').setScale(0.25,0.25).setOrigin(0.5,0.5);
       
       //=============================== set interactive ===========================================
 
@@ -87,7 +87,7 @@ class Menu extends Phaser.Scene {
 
       this.playButton.on('pointerdown', () => { 
           // easy mode
-          this.scene.start("playScene");
+          this.scene.start("tutorialScene");
           this.menuMusic.stop();
       });
       this.audio.on('pointerdown', () => { 

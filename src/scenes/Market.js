@@ -6,7 +6,10 @@ class Market extends Phaser.Scene {
     }
 
     create(){
-        game.settings.maxHealth -= (game.level%3);
+        if(game.level == 3 || 6 || 9){
+            game.settings.maxHealth--;
+        }
+        console.log('max cart health: ' + game.settings.maxHealth);
         if(game.cash < game.settings.repairPrice){
             this.scene.start("creditsScene");
         }else{

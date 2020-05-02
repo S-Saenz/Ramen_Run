@@ -80,21 +80,23 @@ class Play extends Phaser.Scene {
 
     create(){
         //texture atlas
-        this.birdy = this.add.sprite(200,200,'birdSheet','bird1');
+        /*this.birdy = this.add.sprite(200,200,'birdSheet','bird1');
+
         this.anims.create({
             key:'flying',
             frames: [
                 {frame: 'bird1'},
                 {frame: 'bird2'}
             ],
-            defaultTextureKey: 'birdSheet',
+            defaultTextureKey: 'birdSheet',    
             repeat: -1
         });
-        this.birdy.anims.play('flying');
+
+        this.birdy.anims.play('flying');*/
 
         // place tile sprite
         this.bg = this.add.tileSprite(0, -60, 3000, 1600, 'bg').setScale(0.5,0.5).setOrigin(0, 0);
-        this.customer = this.add.image(900,220, 'customer').setScale(0.5, 0.5).setOrigin(0, 0.5);
+        this.customer = this.add.image(925,237, 'customer').setScale(0.5, 0.5).setOrigin(0, 0.5);
         //this.score = this.add.image(0, 0, 'score').setOrigin(0, 0);
         this.cartVechicle = this.add.image(-80,game.config.height-200, game.marketGoods.cosEq).setScale(0.5, 0.5).setOrigin(0, 0.5);
         this.cartDmg = this.add.image(-80,game.config.height-200, 'noDmg').setScale(0.5, 0.5).setOrigin(0, 0.5);
@@ -546,8 +548,10 @@ class Play extends Phaser.Scene {
                 this.cameras.main.shake(20,.005);
             }
             human.alpha = 0;
+            console.log('cart health: ' + game.cartHealth);
             //alter cart based on health
             if(game.cartHealth<=0){
+                console.log('cart health: ' + game.cartHealth);
                 //send to market of car is broken
                 this.playMusic.stop();
                 this.scene.start("marketScene");
