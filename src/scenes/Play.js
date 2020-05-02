@@ -63,6 +63,7 @@ class Play extends Phaser.Scene {
 
         //load ui
         this.load.image('tutorial', '././assets/tutorial.png');
+        this.load.image('ingredientFacade', '././assets/ingredientFacade.png');
         this.load.image('ingredientBox', '././assets/ingredientBox.png');
         this.load.image('wallet', '././assets/wallet.png');
         this.load.image('uiBowl', '././assets/uiBowl.png');
@@ -99,21 +100,23 @@ class Play extends Phaser.Scene {
 
         this.birdy.anims.play('flying');*/
 
-        // place tile sprite
+        // place background stuff
         this.bg = this.add.tileSprite(0, -60, 3000, 1600, 'bg').setScale(0.5,0.5).setOrigin(0, 0);
         this.customer = this.add.image(925,237, 'customer').setScale(0.5, 0.5).setOrigin(0, 0.5);
-        //this.score = this.add.image(0, 0, 'score').setOrigin(0, 0);
+
+        //cart stuff
         this.cartVechicle = this.add.image(-80,game.config.height-200, game.marketGoods.cosEq).setScale(0.5, 0.5).setOrigin(0, 0.5);
         this.cartDmg = this.add.image(-80,game.config.height-200, 'noDmg').setScale(0.5, 0.5).setOrigin(0, 0.5);
-        this.cartDmg.setDepth(2);        // add objs
+        this.cartDmg.setDepth(2);        
+        
+        // add ingredients
         this.ingredient1 = new Ingredient(this, game.config.width * 1.2, game.config.height-400, 'ingredient1', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
         this.ingredient1.pos = 2;
         this.ingredient2 = new Ingredient(this, game.config.width * 1.3, game.config.height-280, 'ingredient2', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
         this.ingredient2.pos = 1;
         this.ingredient3 = new Ingredient(this, game.config.width * 1.6, game.config.height-150, 'ingredient3', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
         this.ingredient3.pos = 0;
-        //batch 2 of ingredients
-        
+            //batch 2 of ingredients
         this.ingredient4 = new Ingredient(this, game.config.width * 1.8, game.config.height-400, 'ingredient1', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
         this.ingredient4.pos = 2;
         this.ingredient5 = new Ingredient(this, game.config.width * 1.9, game.config.height-280, 'ingredient2', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
@@ -121,11 +124,14 @@ class Play extends Phaser.Scene {
         this.ingredient6 = new Ingredient(this, game.config.width * 1.95, game.config.height-150, 'ingredient3', 0, 30).setScale(0.5, 0.5).setOrigin(0,0);
         this.ingredient6.pos = 0;
 
+            //set up ingredient array
         this.ingredients = [this.ingredient1,this.ingredient2,this.ingredient3,this.ingredient4,this.ingredient5,this.ingredient6];
+            //initialize ingredient type
         this.ingredients.forEach(element => {
             this.changeTexture(element);
         });
-        //add human
+
+        //add obstacles acording to level
         this.human = new Human(this, game.config.width, game.config.height-140, 'human', 0, 30).setScale(0.48, 0.48).setOrigin(0,0.5);
         this.human.pos = 0;
         if(game.level>=2){
@@ -139,8 +145,6 @@ class Play extends Phaser.Scene {
             this.bird.dist = 3;
         }
 
-        //add cart
-        this.cart = new Cart(this, 150,game.config.height-150, 'avatar').setScale(0.5, 0.5).setOrigin(0, 0);
         // define keys
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
@@ -156,9 +160,9 @@ class Play extends Phaser.Scene {
         
         //========================== ui display =========================
         let uiConfig = {
-            fontFamily: 'Georgia',
+            fontFamily: 'Nikumaru',
             fontStyle: 'bold',
-            fontSize: '25px',
+            fontSize: '35px',
             align: 'center',
             color: '#FFF',
             padding: {
@@ -168,19 +172,22 @@ class Play extends Phaser.Scene {
                 bottom: 5,
             },
         }
-        this.ingredientBox = this.add.image(game.config.width, 0, 'ingredientBox').setOrigin(1,0).setScale(1,0.75);
+        this.ingredientBox = this.add.image(game.config.width, 0, 'ingredientBox').setOrigin(1,0).setScale(0.4);
         //================== ui bowls ==================
 
+        this.bowlPadding = 8.5;
+        this.bowlWidth = 240*0.4;
+        this.bowlHeight = 150*0.4;
 
-        this.bowl1 = this.add.image(game.config.width-190, 20, 'uiBowl').setOrigin(1,0);
-        this.bowl2 = this.add.image(game.config.width-120, 20, 'uiBowl').setOrigin(1,0);
-        this.bowl3 = this.add.image(game.config.width-50, 20, 'uiBowl').setOrigin(1,0);
+        this.bowl1 = this.add.image(game.config.width-(this.bowlWidth*2 + this.bowlPadding), 16, 'uiBowl').setOrigin(1,0).setScale(0.4);
+        this.bowl2 = this.add.image(game.config.width-(this.bowlWidth + this.bowlPadding), 16, 'uiBowl').setOrigin(1,0).setScale(0.4);
+        this.bowl3 = this.add.image(game.config.width - this.bowlPadding, 16, 'uiBowl').setOrigin(1,0).setScale(0.4);
 
         this.bowlProg = this.bowl1.width/game.maxProg;
 
-        this.bowlFull1 = this.add.tileSprite(game.config.width-253, 20, this.bowlProg ,37, 'uiBowlFull').setOrigin(0,0);
-        this.bowlFull2 = this.add.tileSprite(game.config.width-183, 20, this.bowlProg, 37, 'uiBowlFull').setOrigin(0,0);
-        this.bowlFull3 = this.add.tileSprite(game.config.width-113, 20, this.bowlProg, 37, 'uiBowlFull').setOrigin(0,0);
+        this.bowlFull1 = this.add.tileSprite(game.config.width-(this.bowlWidth*3 + this.bowlPadding), 16, this.bowlProg , 150, 'uiBowlFull').setOrigin(0,0).setScale(0.4);
+        this.bowlFull2 = this.add.tileSprite(game.config.width-(this.bowlWidth*2 + this.bowlPadding), 16, this.bowlProg, 150, 'uiBowlFull').setOrigin(0,0).setScale(0.4);
+        this.bowlFull3 = this.add.tileSprite(game.config.width-(this.bowlWidth + this.bowlPadding), 16, this.bowlProg, 150, 'uiBowlFull').setOrigin(0,0).setScale(0.4);
         //set invisible
         this.bowlFull1.alpha = 0;
         this.bowlFull2.alpha = 0;
@@ -188,8 +195,8 @@ class Play extends Phaser.Scene {
 
         this.instructionUI = this.add.text(game.config.width-130, 220, 'catch ' + game.maxProg + ' broth!' , uiConfig).setOrigin(0.5,0.5);
         this.ingredientUI = this.add.image(game.config.width-90, 70, game.settings.recipeBroth).setOrigin(1,0).setScale(0.75,0.75);
-        this.wallet = this.add.image(200, 150, 'wallet').setOrigin(1);
-        this.cashUI = this.add.text(100, 80, '¥'+ game.cash + '00', uiConfig).setOrigin(1,1);
+        this.wallet = this.add.image(0, 0, 'wallet').setOrigin(0).setScale(0.4);
+        this.cashUI = this.add.text(130, 120, '¥'+ game.cash + '00', uiConfig).setOrigin(1,1);
         if(game.cash >= 10){
             this.cashUI.text = '¥'+ game.cash/10 + 'k';
 
@@ -302,6 +309,8 @@ class Play extends Phaser.Scene {
         let centerX = game.config.width/2;
         let centerY = game.config.height/2;
         this.bgFacade = this.add.tileSprite(0, -60, 3000, 1600, 'bg').setScale(0.5,0.5).setOrigin(0, 0);
+        this.ingredientFacade = this.add.image(game.config.width+920, 0, 'ingredientFacade').setOrigin(1,0).setScale(0.4);
+        this.walletFacade = this.add.image(-920, 0, 'wallet').setOrigin(0).setScale(0.4);
         this.cartFacade = this.add.image(-1000,game.config.height-200, 'none').setScale(0.5, 0.5).setOrigin(0, 0.5);
         this.tutorial = this.add.image(centerX,centerY,'tutorial').setOrigin(0.5).setScale(0.4);
 
@@ -342,10 +351,14 @@ class Play extends Phaser.Scene {
 
         this.bgFacade.tilePositionX += 3;
         if(this.hitPlay){
-            this.tutorial.y += 10;
+            this.tutorial.y -= 10;
+            this.walletFacade.x+=10;
             this.cartFacade.x +=10;
+            this.ingredientFacade.x -= 10;
         }
-        if(this.cartFacade.x >= -80){
+        if(this.cartFacade.x >= -70){
+            this.walletFacade.alpha = 0;
+            this.ingredientFacade.alpha = 0;
             this.cartFacade.alpha = 0;
             this.bgFacade.alpha = 0;
             this.startPlay = true;
@@ -365,14 +378,14 @@ class Play extends Phaser.Scene {
                 this.customer.x = game.config.width-259;
             }
             this.ingredients.forEach(element => {
-                this.checkCatch(this.cart,element);
+                this.checkCatch(element);
             });
-            this.checkHit(this.cart,this.human);
+            this.checkHit(this.human);
             if(game.level>=2){
-                this.checkHit(this.cart,this.bird);
+                this.checkHit(this.bird);
             }
             if(game.level>=4){
-                this.checkHit(this.cart,this.bird2);
+                this.checkHit(this.bird2);
             }
             if(this.chef.texture.key == 'chefDeliver' && this.ingredientPhase == 4 ){
                 this.checkDeliver();
@@ -410,7 +423,7 @@ class Play extends Phaser.Scene {
                 this.chef.setDepth(3);
             }else if(this.chefPos == 1){
                 this.chef.setTexture('chefMid');
-                this.chef.y = 410;
+                this.chef.y = 440;
                 this.chef.x = 488;
                 this.cartVechicle.setDepth(1);
                 this.chef.setDepth(0);
@@ -422,7 +435,6 @@ class Play extends Phaser.Scene {
             }
     
     
-            this.cart.update();
             this.ingredients.forEach(element => {
                 element.update();
             });
@@ -556,8 +568,8 @@ class Play extends Phaser.Scene {
     }
 
 
-    checkHit(cart,human){
-        if (cart.pos != human.pos && human.x <= this.catchZone){
+    checkHit(human){
+        if (this.chefPos != human.pos && human.x <= this.catchZone){
             this.popUpImage(300,100,'merchant');
             if(human.alpha !=0){
                 //particle emmiter    
@@ -603,9 +615,9 @@ class Play extends Phaser.Scene {
         }
     }
 
-    checkCatch(cart, obj) {
+    checkCatch( obj) {
         // simple AABB checking
-        if (cart.pos == obj.pos && obj.x <= this.catchZone && obj.x >= this.catchZone-50 ) {
+        if (this.chefPos == obj.pos && obj.x <= this.catchZone && obj.x >= this.catchZone-50 ) {
             if(obj.texture.key == game.settings.recipeBroth){
                 if(game.brothProg < game.maxProg){
                     this.instructionUI.text = 'catch ' + (game.maxProg-game.brothProg) + ' more broth!';

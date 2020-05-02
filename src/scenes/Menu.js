@@ -23,7 +23,7 @@ class Menu extends Phaser.Scene {
         //menu display
         this.audio = this.add.image(100,game.config.height-100, 'audioOff').setScale(0.25,0.25);
         let menuConfig = {
-            fontFamily: 'Georgia',
+            fontFamily: 'Nikumaru',
             fontStyle: 'bold',
             fontSize: '60px',
             color: '#cabbaa',

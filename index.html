@@ -3,9 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ramen Run</title>
+	<title>Ramen Run</title>
+	<style>
+		@font-face {
+    		font-family: Nikumaru;
+    		src: url('assets/nikumaruFont.ttf');
+    		font-weight: 400;
+    		font-weight: normal;
+		}
+	</style>
 </head>
 <body>
+	<div style="font-family:Nikumaru; position: absolute; left:-1000px; visibility:hidden;">.</div>
 	<script src="lib/phaser.js"></script>
 	<script src="prefabs/Bird.js"></script>
 	<script src="prefabs/PopUp.js"></script>

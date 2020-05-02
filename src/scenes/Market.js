@@ -17,7 +17,7 @@ class Market extends Phaser.Scene {
         }
         //menu display
         let menuConfig = {
-            fontFamily: 'Georgia',
+            fontFamily: 'Nikumaru',
             fontStyle: 'bold',
             fontSize: '40px',
             backgroundColor: '#ae1f1f',
@@ -41,7 +41,7 @@ class Market extends Phaser.Scene {
 
         // =============================== add buttons ===============================
         let buttonConfig = {
-          fontFamily: 'Georgia',
+          fontFamily: 'Nikumaru',
           fontStyle: 'bold',
           fontSize: '30px',
           backgroundColor: '#ae1f1f',
