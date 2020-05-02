@@ -25,7 +25,6 @@ class Credits extends Phaser.Scene {
         this.bg = this.add.tileSprite(0, -60, 3000, 1600, 'bg').setScale(0.5,0.5).setOrigin(0, 0);
         //game.stage.backgroundColor = '#cabbaa';
         //menu display
-        this.audio = this.add.image(100,game.config.height-100, 'audioOff').setScale(0.25,0.25);
         let menuConfig = {
             fontFamily: 'Nikumaru',
             fontStyle: 'bold',
@@ -59,14 +58,15 @@ class Credits extends Phaser.Scene {
         let centerX = game.config.width/2;
         let centerY = game.config.height/2;
         let textSpacer = 64;
-        var square = this.add.image(centerX,centerY,'square').setOrigin(0.5).setScale(4,1.75);
+        var square = this.add.image(centerX,centerY,'square').setOrigin(0.5).setScale(3);
         square.alpha = 0.75;
+        this.audio = this.add.image(100,game.config.height-100, 'audioOff').setScale(0.25);
 
         //this.logo = this.add.image(centerX, centerY, 'logo').setOrigin(0.5,0.5).setScale(2,2);
         //this.logo.alpha = 0.5;
         this.add.text(centerX, centerY-200,"Lead Artist - Joann Long", menuConfig).setOrigin(0.5);
         this.add.text(centerX, centerY-100,"Sound and Design - Ryan Timothy Marcus", menuConfig).setOrigin(0.5);
-        this.add.text(centerX, centerY,"Programmer - Saenz", menuConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY,"Programmer & King - Saenz", menuConfig).setOrigin(0.5);
 
         // =============================== add buttons ===============================
         /*let buttonConfig = {
@@ -89,8 +89,8 @@ class Credits extends Phaser.Scene {
           this.playTxt = 'replayButton'
       }
 
-      this.playButton = this.add.image(centerX,centerY+200, this.playTxt).setScale(0.25).setOrigin(0.5,0.5);
-      this.menuButton = this.add.image(centerX,centerY+300, 'menuButton').setScale(0.25).setOrigin(0.5,0.5);
+      this.playButton = this.add.image(centerX,centerY+190, this.playTxt).setScale(0.25).setOrigin(0.5,0.5);
+      this.menuButton = this.add.image(centerX,centerY+280, 'menuButton').setScale(0.25).setOrigin(0.5,0.5);
       
       //=============================== set interactive ===========================================
 

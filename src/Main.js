@@ -1,3 +1,23 @@
+/*===================================================== RAMEN RUN ================================================================
+DETAILED CREDITS:
+--------Ryan Timothy Marcus--------
+
+title: sound and design lead
+
+-------------Joann Long------------
+
+title: art lead
+
+---------------Saenz---------------
+
+title: programmer
+
+
+date completed: 3 May 2020
+creative tilt justification
+
+
+===================================================================================================================================*/
 let config = {
     type: Phaser.AUTO,
     width: 1500,
@@ -44,7 +64,7 @@ game.cartHealth = game.settings.maxHealth;
 
 game.marketGoods = {
     //cosmetics HAVE to be ordered by price, 0 being cheapest and 4 being most expensive!!!
-    cosmetics: ['goth','pride','cyber','ita','wave'],
+    cosmetics: ['goth','pride','wave','cyber','ita'],
     cosPrices:[10,20,30,40,50],
     cosEq: 'none',
     power: ['power1','power2','power3','power4'],

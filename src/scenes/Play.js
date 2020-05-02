@@ -83,10 +83,22 @@ class Play extends Phaser.Scene {
     create(){
         game.hasPlayed = true;
 
-
-
         //texture atlas
-        /*this.birdy = this.add.sprite(200,200,'birdSheet','bird1');
+        
+        /*this.fly = this.add.sprite(game.config.width/2 + 150, game.config.height/2, 'birdSheet', 'bird1').setScale(0.5);
+        this.anims.create({
+            key: 'flyflap',
+            frames: [
+                { frame: 'bird1' },
+                { frame: 'bird2'}
+            ],
+            defaultTextureKey: 'birdSheet',
+            repeat: -1
+        });
+        // go ahead and start the flapping animation since the fly is non-interactive
+        this.fly.anims.play('flyflap');*/
+        /*
+        this.birdy = this.add.sprite(200,200,'birdSheet','bird1');
 
         this.anims.create({
             key:'flying',
@@ -171,6 +183,7 @@ class Play extends Phaser.Scene {
                 top: 5,
                 bottom: 5,
             },
+            wordWrap: { width: 310, useAdvancedWrap: true }
         }
         this.ingredientBox = this.add.image(game.config.width, 0, 'ingredientBox').setOrigin(1,0).setScale(0.4);
         //================== ui bowls ==================
@@ -193,7 +206,7 @@ class Play extends Phaser.Scene {
         this.bowlFull2.alpha = 0;
         this.bowlFull3.alpha = 0;
 
-        this.instructionUI = this.add.text(game.config.width-130, 220, 'catch ' + game.maxProg + ' broth!' , uiConfig).setOrigin(0.5,0.5);
+        this.instructionUI = this.add.text(game.config.width-150, 220, 'catch ' + game.maxProg + ' broth!' , uiConfig).setOrigin(0.5,0.5);
         this.ingredientUI = this.add.image(game.config.width-90, 70, game.settings.recipeBroth).setOrigin(1,0).setScale(0.75,0.75);
         this.wallet = this.add.image(0, 0, 'wallet').setOrigin(0).setScale(0.4);
         this.cashUI = this.add.text(130, 120, '¥'+ game.cash + '00', uiConfig).setOrigin(1,1);
@@ -242,7 +255,6 @@ class Play extends Phaser.Scene {
         }, null, this);
         this.timer = this.time.delayedCall(game.settings.timer, () => {
             this.phaseProgress();
-            console.log('timer has been set');
         }, null, this);
         
         this.timer = this.time.addEvent({
@@ -282,7 +294,6 @@ class Play extends Phaser.Scene {
         
         this.audio.on('pointerdown', () => { 
             // easy mode
-            console.log('click for audio');
             this.playMusic.setMute(!this.playMusic.mute);
             if(!this.playMusic.mute){
                 game.settings.audio = false;
@@ -355,12 +366,14 @@ class Play extends Phaser.Scene {
             this.walletFacade.x+=10;
             this.cartFacade.x +=10;
             this.ingredientFacade.x -= 10;
+            this.playButton.x+=10;
         }
         if(this.cartFacade.x >= -70){
             this.walletFacade.alpha = 0;
             this.ingredientFacade.alpha = 0;
             this.cartFacade.alpha = 0;
             this.bgFacade.alpha = 0;
+            this.playButton.alpha = 0;
             this.startPlay = true;
         }
 
@@ -369,6 +382,15 @@ class Play extends Phaser.Scene {
 
 
         if(this.startPlay){
+
+            //============================== update ingredient ui saftey measure ==============================
+            if(game.brothProg >= game.maxProg){
+                this.ingredientUI.setTexture(game.settings.recipeNoodle);
+            }
+            if(game.noodleProg >= game.maxProg){
+                this.ingredientUI.setTexture(game.settings.recipeTopping);
+            }
+
             //background movements
             this.bg.tilePositionX += 7;
             this.customer.x -= 3.5;
@@ -447,7 +469,6 @@ class Play extends Phaser.Scene {
     }
 
     phaseProgress(){
-        console.log('phase progress');
         if(this.ingredientPhase == 0){
             this.startPhase0();
         } else if(this.ingredientPhase == 1){
@@ -460,19 +481,16 @@ class Play extends Phaser.Scene {
             this.startPhase0();
             this.ingredientPhase = 0;
         }
-        console.log('going to phase:' + this.ingredientPhase);
         this.ingredientPhase++;
-        console.log('natural progression: ' + this.naturalProg);
         if(this.timer != null && !this.naturalProg){
-            console.log('The timer is not null: ' + this.timer);
             this.timer = this.timer.reset(this.timerConfig);
         }
         this.naturalProg = true;
     }
 
     startPhase0(){
+        this.instructionUI.y = 220;
         this.customer.alpha = 0;
-        console.log('phase 0');
         //reset bowls 
         this.bowlFull1.alpha = 0;
         this.bowlFull1.width = this.bowlProg;
@@ -486,7 +504,6 @@ class Play extends Phaser.Scene {
         this.getNewOrder();
         this.ingredientUI.alpha = 1;
         this.ingredientUI.setTexture(game.settings.recipeBroth);
-        console.log('set texture to new broth');
         this.instructionUI.text = 'catch ' + game.maxProg + ' broth!';
         game.settings.brothChance = 0.8;
         game.settings.noodleChance = 0.1;
@@ -494,7 +511,6 @@ class Play extends Phaser.Scene {
     }
 
     startPhase1(){
-        console.log('phase 1');
         game.settings.brothChance = 0.1;
         game.settings.noodleChance = 0.8;
         game.settings.toppingChance = 0.1;
@@ -526,12 +542,6 @@ class Play extends Phaser.Scene {
     }
 
 
-    spawnIngredient(){
-        console.log('spawn');
-
-    }
-
-
     changeTexture(ingredient){
         //generate random real number from 0 to 1
         this.num = (Phaser.Math.Between(0,10))/10;
@@ -558,9 +568,7 @@ class Play extends Phaser.Scene {
     }
 
     checkDeliver(){
-        console.log('customers x: ' + this.customer.x);
         if(this.customer.x <= 500){
-            console.log('end phase');
             this.chef.setTexture('chefHigh');
             this.chefPos = 1;
             this.phaseProgress();
@@ -593,10 +601,8 @@ class Play extends Phaser.Scene {
                 this.cameras.main.shake(20,.005);
             }
             human.alpha = 0;
-            console.log('cart health: ' + game.cartHealth);
             //alter cart based on health
             if(game.cartHealth<=0){
-                console.log('cart health: ' + game.cartHealth);
                 //send to market of car is broken
                 this.playMusic.stop();
                 this.scene.start("marketScene");
@@ -634,7 +640,6 @@ class Play extends Phaser.Scene {
                     if(this.ingredientPhase==1){
                         this.ingredientUI.setTexture(game.settings.recipeNoodle);
                         this.naturalProg = false;
-                        console.log('forced progression');
                         this.phaseProgress();
                         this.instructionUI.text = 'catch noodles!';
                     }
@@ -663,8 +668,7 @@ class Play extends Phaser.Scene {
                     obj.alpha = 0;
                     if(this.ingredientPhase==2){
                         this.ingredientUI.setTexture(game.settings.recipeTopping);
-                        this.instructionUI.text = 'catch ' + game.maxProg +'toppings!';
-                        console.log('forced progression');
+                        this.instructionUI.text = 'catch ' + game.maxProg +' toppings!';
                         this.naturalProg = false;
                         this.phaseProgress();
                     }
@@ -697,6 +701,7 @@ class Play extends Phaser.Scene {
                         this.naturalProg = false;
                         this.phaseProgress();
                         this.instructionUI.text = '^ keep moving up to deliver the ramen! ^';
+                        this.instructionUI.y = 180;
                     }
                     if(obj.alpa != 0){
                         game.extras++;
