@@ -62,6 +62,7 @@ class Play extends Phaser.Scene {
         this.load.image('noodle3', '././assets/noodle3.png');
 
         //load ui
+        this.load.image('tutorial', '././assets/tutorial.png');
         this.load.image('ingredientBox', '././assets/ingredientBox.png');
         this.load.image('wallet', '././assets/wallet.png');
         this.load.image('uiBowl', '././assets/uiBowl.png');
@@ -79,6 +80,10 @@ class Play extends Phaser.Scene {
     }
 
     create(){
+
+
+
+
         //texture atlas
         /*this.birdy = this.add.sprite(200,200,'birdSheet','bird1');
 
@@ -287,6 +292,44 @@ class Play extends Phaser.Scene {
             this.audio.setTexture('audioOn');
         }
 
+
+
+
+        
+        //===================================================== TUTORIAL =====================================================
+        this.startPlay = false;
+        this.hitPlay = false;
+        let centerX = game.config.width/2;
+        let centerY = game.config.height/2;
+        this.bgFacade = this.add.tileSprite(0, -60, 3000, 1600, 'bg').setScale(0.5,0.5).setOrigin(0, 0);
+        this.cartFacade = this.add.image(-1000,game.config.height-200, 'none').setScale(0.5, 0.5).setOrigin(0, 0.5);
+        this.tutorial = this.add.image(centerX,centerY,'tutorial').setOrigin(0.5).setScale(0.4);
+
+        
+
+        // ==================== add buttons ============
+        this.playButton = this.add.image(game.config.width-150,centerY+250, 'playButton').setScale(0.25,0.25).setOrigin(0.5,0.5);
+      
+        //============== set interactive ==================
+
+        this.playButton.setInteractive();
+
+        //=========== functionality ============
+
+        this.playButton.on('pointerdown', () => { 
+            // easy mode
+            this.hitPlay = true;
+        });
+
+        this.playButton.on('pointerover', () => { 
+            this.playButton.setTexture('playButtonHover');
+        });
+        this.playButton.on('pointerout', () => { 
+            this.playButton.setTexture('playButton');
+        });
+      
+        //==========================================================================================================
+
         
     }
 
@@ -295,109 +338,99 @@ class Play extends Phaser.Scene {
     }
 
     update(){
-        this.bg.tilePositionX += 7;
-        this.customer.x -= 3.5;
+        //===================================================== TUTORIAL =====================================================
 
-        // check collisions
-        if(this.customer.x <= 0){
-            this.customer.x = game.config.width-259;
+        this.bgFacade.tilePositionX += 3;
+        if(this.hitPlay){
+            this.tutorial.y += 10;
+            this.cartFacade.x +=10;
+        }
+        if(this.cartFacade.x >= -80){
+            this.cartFacade.alpha = 0;
+            this.bgFacade.alpha = 0;
+            this.startPlay = true;
         }
 
 
-        this.ingredients.forEach(element => {
-            this.checkCatch(this.cart,element);
-        });
-        /*
-        if(this.checkCatch(this.cart, this.ingredient1)) {
-        }
-        if(this.checkCatch(this.cart, this.ingredient2)) {
-        }
-        if(this.checkCatch(this.cart, this.ingredient3)) {
-        }*/
-        this.checkHit(this.cart,this.human);
-        if(game.level>=2){
-            this.checkHit(this.cart,this.bird);
-        }
-        if(game.level>=4){
-            this.checkHit(this.cart,this.bird2);
-        }
-        this.ingredients.forEach(element => {
-            if(element.x == game.config.width){
-                this.changeTexture(element);
+        //==========================================================================================================
+
+
+        if(this.startPlay){
+            //background movements
+            this.bg.tilePositionX += 7;
+            this.customer.x -= 3.5;
+    
+            // check collisions and catches
+            if(this.customer.x <= 0){
+                this.customer.x = game.config.width-259;
             }
-        });
-        /*
-        if(this.ingredient1.x == game.config.width){
-            this.changeTexture(this.ingredient1);
-        }
-        if(this.ingredient2.x == game.config.width){
-            this.changeTexture(this.ingredient2);
-        }
-        if(this.ingredient3.x == game.config.width){
-            this.changeTexture(this.ingredient3);
-        }*/
+            this.ingredients.forEach(element => {
+                this.checkCatch(this.cart,element);
+            });
+            this.checkHit(this.cart,this.human);
+            if(game.level>=2){
+                this.checkHit(this.cart,this.bird);
+            }
+            if(game.level>=4){
+                this.checkHit(this.cart,this.bird2);
+            }
+            if(this.chef.texture.key == 'chefDeliver' && this.ingredientPhase == 4 ){
+                this.checkDeliver();
+            }
 
-        //stuff for the chef
-        if(keyUP.isDown && this.chefPos == 2 && this.ingredientPhase == 4){
-            this.posAdd = 3;
-        } else if(keyUP.isDown && this.chefPos < 2){
-            this.posAdd = 1;
-        } else if(keyDOWN.isDown && this.chefPos > 0) {
-            this.posAdd = -1;
+            //change ingredient when it respawns
+            this.ingredients.forEach(element => {
+                if(element.x == game.config.width){
+                    this.changeTexture(element);
+                }
+            });
+    
+            //chef/player movement -- key input
+            if(keyUP.isDown && this.chefPos == 2 && this.ingredientPhase == 4){
+                this.posAdd = 3;
+            } else if(keyUP.isDown && this.chefPos < 2){
+                this.posAdd = 1;
+            } else if(keyDOWN.isDown && this.chefPos > 0) {
+                this.posAdd = -1;
+            }
+            if(keyUP.isUp && keyDOWN.isUp && this.posAdd<2){
+                this.chefPos += this.posAdd;
+                this.posAdd = 0;
+            }
+                //setting position and image for chef/player depending on where it is
+            if(this.posAdd == 3){
+                this.chef.y = 383;
+                this.chef.x = 500;
+                this.chef.setTexture('chefDeliver');
+            }else if(this.chefPos == 0){
+                this.chef.setTexture('chefLow');
+                this.chef.y = 480;
+                this.chef.x = 460;
+                this.cartVechicle.setDepth(0);
+                this.chef.setDepth(3);
+            }else if(this.chefPos == 1){
+                this.chef.setTexture('chefMid');
+                this.chef.y = 410;
+                this.chef.x = 488;
+                this.cartVechicle.setDepth(1);
+                this.chef.setDepth(0);
+            } else {
+                this.chef.y = 383;
+                this.chef.x = 500;
+                this.chef.setTexture('chefHigh');
+                this.chef.setDepth(0);
+            }
+    
+    
+            this.cart.update();
+            this.ingredients.forEach(element => {
+                element.update();
+            });
+            this.human.update();
+            if(game.level>=2){this.bird.update();}
+            if(game.level>=4){this.bird2.update();}
+
         }
-        if(keyUP.isUp && keyDOWN.isUp && this.posAdd<2){
-            this.chefPos += this.posAdd;
-            this.posAdd = 0;
-        }
-
-        if(this.posAdd == 3){
-            this.chef.y = 383;
-            this.chef.x = 500;
-            this.chef.setTexture('chefDeliver');
-        }else if(this.chefPos == 0){
-            this.chef.setTexture('chefLow');
-            this.chef.y = 480;
-            this.chef.x = 460;
-            this.cartVechicle.setDepth(0);
-            this.chef.setDepth(3);
-        }else if(this.chefPos == 1){
-            this.chef.setTexture('chefMid');
-            this.chef.y = 410;
-            this.chef.x = 488;
-            this.cartVechicle.setDepth(1);
-            this.chef.setDepth(0);
-        } else {
-            this.chef.y = 383;
-            this.chef.x = 500;
-            this.chef.setTexture('chefHigh');
-            this.chef.setDepth(0);
-        }
-
-        if(this.chef.texture.key == 'chefDeliver' && this.ingredientPhase == 4 ){
-            this.checkDeliver();
-        }
-
-
-
-
-        /*
-        if (this.checkCollision(this.p1Rocket, this.ship01)) {
-            this.p1Rocket.reset();
-            this.p1Rocket.visible = false;
-            this.shipExplode(this.ship01);
-        }
-        if (!this.gameOver) {               
-            this.p1Rocket.update();         // update rocket sprite
-            this.ship01.update();           // update spaceships (x2)
-            this.ship02.update();
-        } */
-        this.cart.update();
-        this.ingredients.forEach(element => {
-            element.update();
-        });
-        this.human.update();
-        if(game.level>=2){this.bird.update();}
-        if(game.level>=4){this.bird2.update();}
         
     }
 
