@@ -4,6 +4,8 @@ class Credits extends Phaser.Scene {
     }
     preload() {
         // load audio
+        this.load.audio('kusoga', '././assets/kusoga.wav');
+        this.load.audio('kusogaShort', '././assets/kusogaShort.wav');
         this.load.audio('MenuMusic', '././assets/RR_Menu.wav');
         this.load.image('bg', '././assets/Ramen_background.png');
         this.load.image('logo', '././assets/logo.png');
@@ -84,7 +86,7 @@ class Credits extends Phaser.Scene {
         this.add.text(centerX, centerY-250,"GAME OVER", overConfig).setOrigin(0.5);
         this.add.text(centerX, centerY-130,"Lead Artist - Joann Long", menuConfig).setOrigin(0.5);
         this.add.text(centerX, centerY-30,"Sound and Design - Ryan Timothy Marcus", menuConfig).setOrigin(0.5);
-        this.add.text(centerX, centerY+80,"Programmer & King - Saenz", menuConfig).setOrigin(0.5);
+        this.king = this.add.text(centerX, centerY+80,"Programmer & King - Saenz", menuConfig).setOrigin(0.5);
 
         // =============================== add buttons ===============================
         /*let buttonConfig = {
@@ -115,21 +117,29 @@ class Credits extends Phaser.Scene {
       this.playButton.setInteractive();
       this.menuButton.setInteractive();
       this.audio.setInteractive();
+      this.king.setInteractive();
 
       //================================ functionality =================================
 
+      this.king.on('pointerdown', () => { 
+        this.sound.play('kusoga');
+        this.timer = this.time.delayedCall(1500, () => {
+            this.sound.play('kusogaShort');
+        }, null, this);
+        
+    });
       this.playButton.on('pointerdown', () => { 
-        // easy mode
+        
         this.scene.start("playScene");
         this.menuMusic.stop();
     });
     this.menuButton.on('pointerdown', () => { 
-        // easy mode
+        
         this.scene.start("menuScene");
         this.menuMusic.stop();
     });
       this.audio.on('pointerdown', () => { 
-          // easy mode
+          
           this.menuMusic.setMute(!this.menuMusic.mute);
           if(!this.menuMusic.mute){
             game.settings.audio = false;

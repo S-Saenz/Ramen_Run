@@ -91,7 +91,7 @@ class Menu extends Phaser.Scene {
 
       this.playButton.on('pointerdown', () => { 
           // easy mode
-          this.scene.start("playScene");
+          this.scene.start("marketScene");
           this.menuMusic.stop();
       });
       this.creditsButton.on('pointerdown', () => { 

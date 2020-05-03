@@ -10,6 +10,11 @@ class Market extends Phaser.Scene {
         this.load.image('speechBubble', '././assets/speechBubble.png');
         this.load.image('merchant', '././assets/merchant.png');
 
+        this.load.image('yenContainer', '././assets/buttonBlank.png');
+
+        this.load.image('continue', '././assets/continue.png');
+        this.load.image('continueHover', '././assets/continueHover.png');
+
         this.load.image('itaButton', '././assets/ita.png');
         this.load.image('itaHover', '././assets/itaHover.png');
         this.load.image('ita2', '././assets/ita2.png');
@@ -53,8 +58,8 @@ class Market extends Phaser.Scene {
         let menuConfig = {
             fontFamily: 'Nikumaru',
             fontStyle: 'bold',
-            fontSize: '40px',
-            color: '#000',
+            fontSize: '30px',
+            color: '#4C2E2F',
             align: 'center',
             padding: {
                 right: 10,
@@ -63,9 +68,9 @@ class Market extends Phaser.Scene {
                 bottom: 5,
             },
             fixedWidth: 0,
-            wordWrap: { width: 600, useAdvancedWrap: true }
+            wordWrap: { width: 400, useAdvancedWrap: true }
         }
-        this.add.image(250, centerY-250, 'speechBubble').setScale(2,0.75).setOrigin(0);
+        this.add.image(centerX-120, centerY-50, 'speechBubble').setScale(1).setOrigin(0.5);
         this.merchantLines = ['Goth, huh?  You got black makeup to go with that?',
             'Pride, huh?  Gotta love that colorful aesthetic!',
             'Wave, huh?  A classic design!',
@@ -74,7 +79,7 @@ class Market extends Phaser.Scene {
             'Jeez, someone did a number on your car!  I could fix it for you, buuuut… pay up first.',
             'Yo, I knew you were gonna come in today!  How much money are you givin’ me this time?',
             'C’mon kid I ain’t got all day, make up your mind!'];
-        this.merchantLine = this.add.text(300, centerY-150, this.merchantLines[5], menuConfig).setOrigin(0);
+        this.merchantLine = this.add.text(centerX-125, centerY-90, this.merchantLines[5], menuConfig).setOrigin(0.5);
         if(game.level>=3){
             this.merchantLine.text = this.merchantLines[6];
         }
@@ -143,7 +148,8 @@ class Market extends Phaser.Scene {
 
         //show menu text
 
-        this.cashUI = this.add.text(0, 0, '¥'+ game.cash + '00', buttonConfig).setOrigin(0);
+        this.add.image(0, 0, 'yenContainer').setOrigin(0).setScale(0.25);
+        this.cashUI = this.add.text(5, 5, '¥'+ game.cash + '00', menuConfig).setOrigin(0);
         if(game.cash >= 10){
             this.cashUI.text = '¥'+ game.cash/10 + 'k';
 
@@ -153,7 +159,7 @@ class Market extends Phaser.Scene {
 
         // =============================== add buttons ===============================
         this.add.image(centerX+400,centerY+30, 'merchant').setScale(0.75);
-        this.playButton = this.add.text(game.config.width, 0, 'Continue', buttonConfig).setOrigin(1,0);
+        this.playButton = this.add.image(game.config.width, 0, 'continue').setOrigin(1,0).setScale(0.4);
         //================ cosmetic buttons ================
         this.cosArr = game.marketGoods.cosmetics;
         this.randCosArr = this.chooseThreeDiff();
@@ -205,10 +211,10 @@ class Market extends Phaser.Scene {
 
       //================================ on hover ================================
         this.playButton.on('pointerover', () => { 
-            this.playButton.setStyle({ fill: '#fff2d8'});
+            this.playButton.setTexture('continueHover');
         });
         this.playButton.on('pointerout', () => { 
-            this.playButton.setStyle({ fill: '#161515'});
+            this.playButton.setTexture('continue');
         });
 
             //======================= cosmetic buttons =====================
@@ -312,7 +318,7 @@ class Market extends Phaser.Scene {
     onClick(button, num){
         this.mindChanges++;
         this.merchantLine.text = this.merchantLines[this.cosArr.indexOf(this.randCosArr[num])];
-        if(this.mindChanges >= 3){
+        if(this.mindChanges > 3){
             this.merchantLine.text = this.merchantLines[7];
         }
         this.resetAllCos();
