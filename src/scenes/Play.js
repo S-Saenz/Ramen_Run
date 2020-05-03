@@ -29,6 +29,7 @@ class Play extends Phaser.Scene {
         this.load.audio('deliverySound3', '././assets/RR_delivery3.wav');
 
         this.load.audio('hitSound', '././assets/RR_hit.wav');
+        this.load.audio('birdHitSound', '././assets/RR_hit2.mp3');
         this.load.audio('selectSound', '././assets/RR_select.mp3');
 
         //load voice lines
@@ -144,6 +145,7 @@ class Play extends Phaser.Scene {
 
         this.selectSound = this.sound.add('selectSound');
         this.hitSound = this.sound.add('hitSound');
+        this.birdHitSound = this.sound.add('birdHitSound');
 
         //add voice lines
         this.push1 = this.sound.add('push1');
@@ -727,6 +729,14 @@ class Play extends Phaser.Scene {
         if (this.chefPos != human.pos && human.x <= this.catchZone){
             if(human.alpha !=0){
                 this.cameras.main.shake(20,.005);
+                if(type == 'human'){
+                    this.hitSound.play(this.soundConfig);
+                    this.subtitles.text = 'squish';
+                    this.subtitles.alpha = 1;
+                }else{
+                    this.birdHitSound.play(this.soundConfig);
+                    this.birdPush.play(this.soundConfig);
+                }
                 this.hitSound.play(this.soundConfig);
                 //particle emmiter    
                 var bloodyMess = this.particles.createEmitter({
