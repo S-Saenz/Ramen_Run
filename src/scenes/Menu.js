@@ -42,7 +42,7 @@ class Menu extends Phaser.Scene {
         
         this.menuMusic = this.sound.add('MenuMusic');
 
-        var musicConfig = {
+        this.musicConfig = {
           mute: true,
           volume: 1,
           rate: 1,
@@ -52,7 +52,7 @@ class Menu extends Phaser.Scene {
           delay: 1
         }
 
-        this.menuMusic.play(musicConfig);
+        this.menuMusic.play(this.musicConfig);
         //show menu text
         let centerX = game.config.width/2;
         let centerY = game.config.height/2;
