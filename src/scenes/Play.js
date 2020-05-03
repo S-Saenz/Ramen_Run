@@ -6,7 +6,7 @@ class Play extends Phaser.Scene {
     preload() {
         game.level++;
 
-        //load audio
+        //load audio -basic-
         this.load.audio('PlayMusic', '././assets/RR_Play.wav');
         this.load.audio('brothSound', '././assets/RR_broth.wav');
         this.load.audio('noodleSound', '././assets/RR_noodle.wav');
@@ -14,6 +14,15 @@ class Play extends Phaser.Scene {
         this.load.audio('deliverySound', '././assets/RR_delivery.mp3');
         this.load.audio('hitSound', '././assets/RR_hit.wav');
         this.load.audio('selectSound', '././assets/RR_select.mp3');
+
+        //load voice lines
+        this.load.audio('push1', '././assets/RR_humanPush1.wav');
+        this.load.audio('push2', '././assets/RR_humanPush2.wav');
+        this.load.audio('push3', '././assets/RR_humanPush3.wav');
+        this.load.audio('push4', '././assets/RR_humanPush4.wav');
+        this.load.audio('push5', '././assets/RR_humanPush5.wav');
+        this.load.audio('push6', '././assets/RR_humanPush6.wav');
+        
         
 
         //load tilemaps
@@ -30,7 +39,7 @@ class Play extends Phaser.Scene {
         this.load.image('cyber', '././assets/cartFull_Cyber.png');
         this.load.image('goth', '././assets/cartFull_Goth.png');
         this.load.image('pride', '././assets/cartFull_Pride.png');
-        this.load.image('ita', '././assets/cartFull_Pride.png');
+        this.load.image('ita', '././assets/cartFull_Ita.png');
 
         //Damage Sprites
         this.load.image('noDmg', '././assets/noDmg.png');
@@ -94,6 +103,15 @@ class Play extends Phaser.Scene {
         this.hitSound = this.sound.add('hitSound');
         this.deliverySound = this.sound.add('deliverySound');
 
+        //add voice lines
+        this.push1 = this.sound.add('push1');
+        this.push2 = this.sound.add('push2');
+        this.push3 = this.sound.add('push3');
+        this.push4 = this.sound.add('push4');
+        this.push5 = this.sound.add('push5');
+        this.push6 = this.sound.add('push6');
+        this.pushSounds = [this.push1,this.push2,this.push3,this.push4,this.push5,this.push6];
+
         this.soundConfig = {
             mute: true,
             volume: 0.5,
@@ -103,6 +121,16 @@ class Play extends Phaser.Scene {
             loop: false,
             delay: 0
           }
+
+          this.voiceConfig = {
+              mute: true,
+              volume: 0.2,
+              rate: 1,
+              detune: 0,
+              seek: 0,
+              loop: false,
+              delay: 0
+            }
 
         //texture atlas
         
@@ -317,6 +345,7 @@ class Play extends Phaser.Scene {
             // easy mode
             this.playMusic.setMute(!this.playMusic.mute);
             this.soundConfig.mute = !this.soundConfig.mute;
+            this.voiceConfig.mute = !this.voiceConfig.mute;
             if(!this.playMusic.mute){
                 game.settings.audio = false;
                 this.audio.setTexture('audioOff');
@@ -612,7 +641,6 @@ class Play extends Phaser.Scene {
 
     checkHit(human){
         if (this.chefPos != human.pos && human.x <= this.catchZone){
-            this.popUpImage(300,100,'merchant');
             if(human.alpha !=0){
                 this.cameras.main.shake(20,.005);
                 this.hitSound.play(this.soundConfig);
@@ -652,6 +680,10 @@ class Play extends Phaser.Scene {
                 this.cartDmg.setTexture('noDmg');
             }
         } else if(human.x <= this.catchZone){
+            if(human.alpha != 0){
+                this.soundChoice = Phaser.Math.Between(0,5);
+                this.pushSounds[this.soundChoice].play(this.voiceConfig);
+            }
             human.alpha = 0;
         }
     }

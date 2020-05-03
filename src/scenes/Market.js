@@ -3,6 +3,8 @@ class Market extends Phaser.Scene {
         super("marketScene");
     }
     preload() {
+        this.load.image('marketOverhang', '././assets/marketOverhang.png');
+        this.load.image('merchant', '././assets/merchant.png');
 
         this.load.image('itaButton', '././assets/ita.png');
         this.load.image('itaHover', '././assets/itaHover.png');
@@ -58,8 +60,13 @@ class Market extends Phaser.Scene {
         let centerX = game.config.width/2;
         let centerY = game.config.height/2;
 
-        this.add.text(centerX, 0,"MARKET", menuConfig).setOrigin(0.5,0);
-        this.cashUI = this.add.text(0, 0, 'cash: $'+ game.cash + '.00', menuConfig);
+        this.cashUI = this.add.text(70, 70, '¥'+ game.cash + '00', menuConfig).setOrigin(0);
+        if(game.cash >= 10){
+            this.cashUI.text = '¥'+ game.cash/10 + 'k';
+
+        }else{
+            this.cashUI.text = '¥'+ game.cash + '00';
+        }
 
         // =============================== add buttons ===============================
         let buttonConfig = {
@@ -77,17 +84,18 @@ class Market extends Phaser.Scene {
           },
           fixedWidth: 200
         }
-        
-        this.playButton = this.add.text(550, 0, 'Continue', buttonConfig);
+        this.add.image(centerX,centerY+30, 'merchant').setScale(0.75);
+        this.add.image(centerX, 0, 'marketOverhang').setScale(0.5).setOrigin(0.5,0);
+        this.playButton = this.add.text(game.config.width, 0, 'Continue', buttonConfig).setOrigin(1,0);
         //================ cosmetic buttons ================
         this.cosArr = game.marketGoods.cosmetics;
         this.randCosArr = this.chooseThreeDiff();
         var buttonX = 400;
         var cosPad = 20;
-        this.cos1Button = this.add.image(buttonX, centerY,(this.randCosArr[0]+'Button')).setScale(0.5);
-        this.cos2Button = this.add.image(cosPad*2+buttonX+(this.cos1Button.width*0.5), centerY,(this.randCosArr[1]+'Button')).setScale(0.5);
+        this.cos1Button = this.add.image(buttonX, centerY+200,(this.randCosArr[0]+'Button')).setScale(0.5);
+        this.cos2Button = this.add.image(cosPad*2+buttonX+(this.cos1Button.width*0.5), centerY+200,(this.randCosArr[1]+'Button')).setScale(0.5);
         console.log(this.randCosArr);
-        this.cos3Button = this.add.image(cosPad*3+buttonX+(this.cos1Button.width), centerY,(this.randCosArr[2]+'Button')).setScale(0.5);
+        this.cos3Button = this.add.image(cosPad*3+buttonX+(this.cos1Button.width), centerY+200,(this.randCosArr[2]+'Button')).setScale(0.5);
         this.cosButtons = [this.cos1Button,this.cos2Button,this.cos3Button];
        
 
@@ -109,24 +117,13 @@ class Market extends Phaser.Scene {
 
         if(game.cash >=game.marketGoods.cosPrices[this.cosArr.indexOf(this.randCosArr[0])]){
             this.cos1Button.on('pointerdown', () => {
-                this.resetAllCos();
-                this.cos1Button.setTexture(this.randCosArr[0]+'2');
-                game.marketGoods.cosEq =this.randCosArr[0];
-                game.cash -=game.marketGoods.cosPrices[this.cosArr.indexOf(this.randCosArr[0])];
-                this.cos1Button.disableInteractive();
-                this.cos1Button.input.enabled = false;
+                this.onClick(this.cos1Button,0)
             });
         }
 
         if(game.cash >=game.marketGoods.cosPrices[this.cosArr.indexOf(this.randCosArr[1])]){
             this.cos2Button.on('pointerdown', () => {
-                this.resetAllCos();
-                game.marketGoods.cosEq =this.randCosArr[1];
-                game.cash -=game.marketGoods.cosPrices[this.cosArr.indexOf(this.randCosArr[1])];
-                this.cos2Button.disableInteractive();
-                this.cos2Button.input.enabled = false;
-                this.cos2Button.setTexture(this.randCosArr[1]+'2');
-
+                this.onClick(this.cos2Button,1)
             });
         }
 
@@ -149,27 +146,39 @@ class Market extends Phaser.Scene {
             //======================= cosmetic buttons =====================
 
         this.cos1Button.on('pointerover', () => { 
-            this.cos1Button.setTexture(this.randCosArr[0]+'Hover');
+            if(this.cos1Button.input.enabled){
+                this.cos1Button.setTexture(this.randCosArr[0]+'Hover');
+            }
         });
         this.cos1Button.on('pointerout', () => { 
-            this.cos1Button.setTexture(this.randCosArr[0]+'Button');
+            if(this.cos1Button.input.enabled){
+                this.cos1Button.setTexture(this.randCosArr[0]+'Button');
+            }
         });
 
 
         this.cos2Button.on('pointerover', () => { 
-            this.cos2Button.setTexture(this.randCosArr[1]+'Hover');
+            if(this.cos2Button.input.enabled){
+                this.cos2Button.setTexture(this.randCosArr[1]+'Hover');
+            }
         });
         this.cos2Button.on('pointerout', () => { 
-            this.cos2Button.setTexture(this.randCosArr[1]+'Button');
+            if(this.cos2Button.input.enabled){
+                this.cos2Button.setTexture(this.randCosArr[1]+'Button');
+            }
         });
 
-/*
+
         this.cos3Button.on('pointerover', () => { 
-            this.cos3Button.setTexture(this.randCosArr[2]+'Hover');
+            if(this.cos3Button.input.enabled){
+                this.cos3Button.setTexture(this.randCosArr[2]+'Hover');
+            }
         });
         this.cos3Button.on('pointerout', () => { 
-            this.cos3Button.setTexture(this.randCosArr[2]+'Button');
-        });*/
+            if(this.cos3Button.input.enabled){
+                this.cos3Button.setTexture(this.randCosArr[2]+'Button');
+            }
+        });
 
 
  
@@ -206,31 +215,17 @@ class Market extends Phaser.Scene {
         var num = 0 ;
         this.cosButtons.forEach(element => {
                 var cosName = this.randCosArr[num];
-                game.cash +=game.marketGoods.cosPrices[this.cosArr.indexOf(game.marketGoods.cosEq)];
+                if(!element.input.enabled){
+                    game.cash +=game.marketGoods.cosPrices[this.cosArr.indexOf(game.marketGoods.cosEq)];
+                    console.log(game.marketGoods.cosPrices[this.cosArr.indexOf(game.marketGoods.cosEq)] + game.marketGoods.cosEq);
+                }
                 element.input.enabled = true;
                 element.setInteractive();
                 element.setTexture(cosName+'Button');
-                game.marketGoods.cosEq = 'none';
                 
-                if(game.cash >=this.cosArr.indexOf(cosName)){
-                    element.on('pointerdown', () => {
-                        this.resetAllCos();
-                        element.setTexture(cosName+'2');
-                        game.marketGoods.cosEq =cosName;
-                        game.cash -=game.marketGoods.cosPrices[this.cosArr.indexOf(cosName)];
-                        element.disableInteractive();
-                    });
-                }
-                element.on('pointerover', () => { 
-                    this.cos3Button.setTexture(cosName+'Hover');
-                });
-                element.on('pointerout', () => { 
-                    element.setTexture(cosName+'Button');
-                });
                 num++;
-            
-            
         });
+        game.marketGoods.cosEq = 'none';
     }
 
     onClick(button, num){
