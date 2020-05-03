@@ -346,12 +346,14 @@ class Play extends Phaser.Scene {
         this.audio.on('pointerdown', () => { 
             // easy mode
             this.playMusic.setMute(!this.playMusic.mute);
-            this.soundConfig.mute = !this.soundConfig.mute;
-            this.voiceConfig.mute = !this.voiceConfig.mute;
             if(!this.playMusic.mute){
+                this.soundConfig.mute = true;
+                this.voiceConfig.mute = true;
                 game.settings.audio = false;
                 this.audio.setTexture('audioOff');
             } else{
+                this.soundConfig.mute = false;
+                this.voiceConfig.mute = false;
                 game.settings.audio = true;
                 this.audio.setTexture('audioOn');
             }
@@ -684,6 +686,7 @@ class Play extends Phaser.Scene {
         } else if(human.x <= this.catchZone){
             if(human.alpha != 0){
                 if(type == 'human'){
+                    console.log('play human sound');
                     this.soundChoice = Phaser.Math.Between(0,5);
                     this.pushSounds[this.soundChoice].play(this.voiceConfig);
                 }else{
