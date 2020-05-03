@@ -7,7 +7,7 @@ class Play extends Phaser.Scene {
         game.level++;
 
         //load audio -basic-
-        this.load.audio('PlayMusic', '././assets/RR_Play.wav');
+        this.load.audio('PlayMusic', '././assets/RR_Market.wav');
         this.load.audio('birdPush', '././assets/RR_birdPush.wav');
         this.load.audio('brothSound', '././assets/RR_broth.wav');
         this.load.audio('noodleSound', '././assets/RR_noodle.wav');
@@ -198,12 +198,12 @@ class Play extends Phaser.Scene {
         this.human = new Human(this, game.config.width, game.config.height-140, 'human', 0, 30).setScale(0.48, 0.48).setOrigin(0,0.5);
         this.human.pos = 0;
         if(game.level>=2){
-            this.bird = new Bird(this, game.config.width*2, game.config.height-400, 'bird', 0, 30).setScale(0.48, 0.48).setOrigin(0,0.5);
+            this.bird = new Bird(this, game.config.width*2, game.config.height-350, 'bird', 0, 30).setScale(0.48, 0.48).setOrigin(0,0.5);
             this.bird.pos = 2;
             this.bird.dist = 2;
         }
         if(game.level>=4){
-            this.bird2 = new Bird(this, game.config.width*3, game.config.height-400, 'bird', 0, 30).setScale(0.48, 0.48).setOrigin(0,0.5);
+            this.bird2 = new Bird(this, game.config.width*3, game.config.height-350, 'bird', 0, 30).setScale(0.48, 0.48).setOrigin(0,0.5);
             this.bird2.pos = 2;
             this.bird.dist = 3;
         }
@@ -410,6 +410,11 @@ class Play extends Phaser.Scene {
             this.cartFacade.x = -70;
         }
         game.hasPlayed = true;
+
+        //add subtitles
+        
+        this.subtitles = this.add.text(100, centerY, ' subtitles' , uiConfig).setOrigin(0.5,0.5);
+        
     }
 
     start(){
