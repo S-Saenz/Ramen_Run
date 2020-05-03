@@ -165,7 +165,7 @@ class Play extends Phaser.Scene {
 
         this.soundConfig = {
             mute: true,
-            volume: 0.5,
+            volume: 0.6,
             rate: 1,
             detune: 0,
             seek: 0,
@@ -175,7 +175,7 @@ class Play extends Phaser.Scene {
 
           this.voiceConfig = {
               mute: true,
-              volume: 0.2,
+              volume: 0.3,
               rate: 1,
               detune: 0,
               seek: 0,
