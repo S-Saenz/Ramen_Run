@@ -3,14 +3,38 @@ DETAILED CREDITS:
 --------Ryan Timothy Marcus--------
 
 title: sound and design lead
+contributions:
+-Storyboard
+-designed mechanics
+-theme research
+-Music
+-SFX
+-refined the game idea
 
 -------------Joann Long------------
 
 title: art lead
+contributions: 
+-ui assets
+-chef/player and damage assets
+-background art
+-ita and goth cart cosmetics
+-cosmetic finalizations
+-obstacle assets
+-merchant asset
+-tutorial
+-had the game idea
+
 
 ---------------Saenz---------------
 
-title: programmer
+title: sole programmer
+contributions: 
+-the programming
+-background concept art
+-cart cosmetics(cyber,wave,pride)
+-ui concept and design
+-
 
 
 date completed: 3 May 2020
@@ -50,7 +74,7 @@ game.settings = {
     repairPrice: 1,
     ramenPrice: 5,
     audio: false,
-    maxHealth: 3,
+    maxHealth: 1,
     timer: 10000, 
     panSpeed: 8,
     brothChance: .8,

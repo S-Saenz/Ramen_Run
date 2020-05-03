@@ -12,18 +12,9 @@ class Play extends Phaser.Scene {
         this.load.audio('noodleSound', '././assets/RR_noodle.wav');
         this.load.audio('toppingSound', '././assets/RR_topping.wav');
         this.load.audio('deliverySound', '././assets/RR_delivery.mp3');
-        this.load.audio('hitSound', '././assets/RR_hit.mp3');
+        this.load.audio('hitSound', '././assets/RR_hit.wav');
         this.load.audio('selectSound', '././assets/RR_select.mp3');
         
-        this.soundConfig = {
-            mute: false,
-            volume: 0.5,
-            rate: 1,
-            detune: 0,
-            seek: 0,
-            loop: false,
-            delay: 0
-          }
 
         //load tilemaps
         this.load.image('bg', '././assets/Ramen_background.png');
@@ -93,7 +84,6 @@ class Play extends Phaser.Scene {
     }
 
     create(){
-        game.hasPlayed = true;
 
         //add audio
         
@@ -104,6 +94,15 @@ class Play extends Phaser.Scene {
         this.hitSound = this.sound.add('hitSound');
         this.deliverySound = this.sound.add('deliverySound');
 
+        this.soundConfig = {
+            mute: true,
+            volume: 0.5,
+            rate: 1,
+            detune: 0,
+            seek: 0,
+            loop: false,
+            delay: 0
+          }
 
         //texture atlas
         
@@ -231,7 +230,7 @@ class Play extends Phaser.Scene {
         this.instructionUI = this.add.text(game.config.width-150, 220, 'catch ' + game.maxProg + ' broth!' , uiConfig).setOrigin(0.5,0.5);
         this.ingredientUI = this.add.image(game.config.width-90, 70, game.settings.recipeBroth).setOrigin(1,0).setScale(0.75,0.75);
         this.wallet = this.add.image(0, 0, 'wallet').setOrigin(0).setScale(0.4);
-        this.cashUI = this.add.text(130, 120, '¥'+ game.cash + '00', uiConfig).setOrigin(1,1);
+        this.cashUI = this.add.text(70, 70, '¥'+ game.cash + '00', uiConfig).setOrigin(0);
         if(game.cash >= 10){
             this.cashUI.text = '¥'+ game.cash/10 + 'k';
 
@@ -317,6 +316,7 @@ class Play extends Phaser.Scene {
         this.audio.on('pointerdown', () => { 
             // easy mode
             this.playMusic.setMute(!this.playMusic.mute);
+            this.soundConfig.mute = !this.soundConfig.mute;
             if(!this.playMusic.mute){
                 game.settings.audio = false;
                 this.audio.setTexture('audioOff');
@@ -373,6 +373,10 @@ class Play extends Phaser.Scene {
         //==========================================================================================================
 
         
+        if(game.hasPlayed){
+            this.cartFacade.x = -70;
+        }
+        game.hasPlayed = true;
     }
 
     start(){
@@ -392,6 +396,7 @@ class Play extends Phaser.Scene {
         }
         if(this.cartFacade.x >= -70){
             this.walletFacade.alpha = 0;
+            this.tutorial.y = -500;
             this.ingredientFacade.alpha = 0;
             this.cartFacade.alpha = 0;
             this.bgFacade.alpha = 0;
@@ -546,6 +551,12 @@ class Play extends Phaser.Scene {
     }
 
     startPhase3(){
+        this.instructionUI.text = '^ keep moving up to deliver the ramen! ^';
+        if((game.brothProg + game.noodleProg + game.toppingProg) <= 3){
+            this.instructionUI.text = '^ keep moving up to deliver the "ramen" ^';
+        }
+        this.instructionUI.y = 180;
+        this.ingredientUI.alpha = 0;
         this.customer.alpha = 1;
         this.ingredient1.alpha = 0;
         this.ingredient2.alpha = 0;
@@ -724,11 +735,8 @@ class Play extends Phaser.Scene {
                     obj.alpha = 0;
                     
                     if(this.ingredientPhase==3){
-                        this.ingredientUI.alpha = 0;
                         this.naturalProg = false;
                         this.phaseProgress();
-                        this.instructionUI.text = '^ keep moving up to deliver the ramen! ^';
-                        this.instructionUI.y = 180;
                     }
                     if(obj.alpa != 0){
                         game.extras++;

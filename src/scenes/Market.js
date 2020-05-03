@@ -3,11 +3,28 @@ class Market extends Phaser.Scene {
         super("marketScene");
     }
     preload() {
+
+        this.load.image('ita', '././assets/ita.png');
+        this.load.image('ita2', '././assets/ita2.png');
+        
+        this.load.image('wave', '././assets/wave.png');
+        this.load.image('wave2', '././assets/wave2.png');
+        
+        this.load.image('pride', '././assets/pride.png');
+        this.load.image('pride2', '././assets/pride2.png');
+        
+        this.load.image('cyber', '././assets/cyber.png');
+        this.load.image('cyber2', '././assets/cyber2.png');
+        
+        this.load.image('goth', '././assets/goth.png');
+        this.load.image('goth2', '././assets/goth2.png');
+
     }
 
     create(){
-        if(game.level == 3 || 6 || 9){
+        if( (game.level % 3) == 0){
             game.settings.maxHealth--;
+            game.maxProg++;
         }
         console.log('max cart health: ' + game.settings.maxHealth);
         if(game.cash < game.settings.repairPrice){
@@ -61,10 +78,11 @@ class Market extends Phaser.Scene {
         this.cosArr = game.marketGoods.cosmetics;
         this.randCosArr = this.chooseThreeDiff();
         var buttonX = 400;
-        var cosPad =20;
+        var cosPad = 20;
         this.cos1Button = this.add.text(buttonX, centerY,this.randCosArr[0], buttonConfig);
         this.add.text(buttonX, centerY+5,' price: ' + game.marketGoods.cosPrices[this.cosArr.indexOf(this.randCosArr[0])],buttonConfig);
-        this.cos2Button = this.add.text(cosPad+buttonX+(buttonConfig.fixedWidth), centerY,this.randCosArr[1], buttonConfig);
+        this.cos2Button = this.add.image(100,100,this.randCosArr[1]);
+        console.log(this.randCosArr[1]);
         this.cos3Button = this.add.text(cosPad*2+buttonX+(buttonConfig.fixedWidth*2), centerY,this.randCosArr[2], buttonConfig);
         this.cosButtons = [this.cos1Button,this.cos2Button,this.cos3Button];
         //power up buttons
