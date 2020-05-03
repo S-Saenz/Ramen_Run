@@ -109,32 +109,30 @@ class Market extends Phaser.Scene {
 
         if(game.cash >=game.marketGoods.cosPrices[this.cosArr.indexOf(this.randCosArr[0])]){
             this.cos1Button.on('pointerdown', () => {
-                this.cos1Button.disableInteractive();
                 this.resetAllCos();
                 this.cos1Button.setTexture(this.randCosArr[0]+'2');
                 game.marketGoods.cosEq =this.randCosArr[0];
                 game.cash -=game.marketGoods.cosPrices[this.cosArr.indexOf(this.randCosArr[0])];
+                this.cos1Button.disableInteractive();
+                this.cos1Button.input.enabled = false;
             });
         }
 
         if(game.cash >=game.marketGoods.cosPrices[this.cosArr.indexOf(this.randCosArr[1])]){
             this.cos2Button.on('pointerdown', () => {
-                this.cos2Button.disableInteractive();
                 this.resetAllCos();
-                this.cos2Button.setTexture(this.randCosArr[1]+'2');
                 game.marketGoods.cosEq =this.randCosArr[1];
                 game.cash -=game.marketGoods.cosPrices[this.cosArr.indexOf(this.randCosArr[1])];
+                this.cos2Button.disableInteractive();
+                this.cos2Button.input.enabled = false;
+                this.cos2Button.setTexture(this.randCosArr[1]+'2');
 
             });
         }
 
         if(game.cash >=game.marketGoods.cosPrices[this.cosArr.indexOf(this.randCosArr[2])]){
             this.cos3Button.on('pointerdown', () => {
-                this.cos3Button.disableInteractive();
-                this.resetAllCos();
-                this.cos3Button.setTexture(this.randCosArr[2]+'2');
-                game.marketGoods.cosEq =this.randCosArr[2];
-                game.cash -=game.marketGoods.cosPrices[this.cosArr.indexOf(this.randCosArr[2])];
+                this.onClick(this.cos3Button,2)
 
             });
         }
@@ -165,13 +163,13 @@ class Market extends Phaser.Scene {
             this.cos2Button.setTexture(this.randCosArr[1]+'Button');
         });
 
-
+/*
         this.cos3Button.on('pointerover', () => { 
             this.cos3Button.setTexture(this.randCosArr[2]+'Hover');
         });
         this.cos3Button.on('pointerout', () => { 
             this.cos3Button.setTexture(this.randCosArr[2]+'Button');
-        });
+        });*/
 
 
  
@@ -224,10 +222,10 @@ class Market extends Phaser.Scene {
                     });
                 }
                 element.on('pointerover', () => { 
+                    this.cos3Button.setTexture(cosName+'Hover');
                 });
                 element.on('pointerout', () => { 
                     element.setTexture(cosName+'Button');
-                    console.log(cosName + num);
                 });
                 num++;
             
@@ -235,10 +233,13 @@ class Market extends Phaser.Scene {
         });
     }
 
-    buttonFade(button){
+    onClick(button, num){
+        this.resetAllCos();
+        button.setTexture(this.randCosArr[num]+'2');
+        game.marketGoods.cosEq =this.randCosArr[num];
+        game.cash -=game.marketGoods.cosPrices[this.cosArr.indexOf(this.randCosArr[num])];
         button.disableInteractive();
-        button.setStyle({fill: '#FF4421'});
-        button.setStyle({backgroundColor: '#FACADE'});
+        button.input.enabled = false;
     }
 }
         
