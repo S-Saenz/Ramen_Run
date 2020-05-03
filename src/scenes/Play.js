@@ -486,7 +486,7 @@ class Play extends Phaser.Scene {
 
     update(){
         
-        if(!this.playMusic.mute){
+        if(game.settings.audio){
             this.soundConfig.mute = false;
             this.voiceConfig.mute = false;
         } else{
@@ -753,9 +753,9 @@ class Play extends Phaser.Scene {
                 //send to market of car is broken
                 this.playMusic.stop();
                 this.scene.start("marketScene");
-            }else if(game.cartHealth < game.settings.maxHealth/3){
+            }else if(game.cartHealth <= game.settings.maxHealth/3){
                 this.cartDmg.setTexture('highDmg');
-            }else if(game.cartHealth < game.settings.maxHealth/2){
+            }else if(game.cartHealth <= game.settings.maxHealth/2){
                 this.cartDmg.setTexture('medDmg');
             }else if(game.cartHealth < game.settings.maxHealth){
                 this.cartDmg.setTexture('lowDmg');

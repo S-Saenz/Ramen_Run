@@ -30,7 +30,9 @@ class Market extends Phaser.Scene {
 
     create(){
         if( (game.level % 3) == 0){
-            game.settings.maxHealth--;
+            if(game.settings.health >= 3){
+                game.settings.maxHealth--;
+            }
             game.maxProg++;
         }
         console.log('max cart health: ' + game.settings.maxHealth);
@@ -187,6 +189,14 @@ class Market extends Phaser.Scene {
     }
     
     update() {
+        /*
+        if(game.settings.audio){
+            this.soundConfig.mute = false;
+            this.voiceConfig.mute = false;
+        } else{
+            this.soundConfig.mute = true;
+            this.voiceConfig.mute = true;
+        }*/
         this.cashUI.text = '¥'+ game.cash + '00';
         if(game.cash >= 10){
             this.cashUI.text = '¥'+ game.cash/10 + 'k';

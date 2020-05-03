@@ -47,7 +47,7 @@ let config = {
     width: 1500,
     height: 700,
     backgroundColor: '#cabbaa',
-    scene: [ Menu, Play , Market , Credits , Tutorial ]
+    scene: [ Menu, Play , Market , Credits ]
 }
 let game = new Phaser.Game(config);
 // define game settings
@@ -74,7 +74,7 @@ game.settings = {
     repairPrice: 1,
     ramenPrice: 5,
     audio: false,
-    maxHealth: 3,
+    maxHealth: 4,
     timer: 10000, 
     panSpeed: 8,
     brothChance: .8,
