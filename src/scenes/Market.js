@@ -4,19 +4,19 @@ class Market extends Phaser.Scene {
     }
     preload() {
 
-        this.load.image('ita', '././assets/ita.png');
+        this.load.image('itaButton', '././assets/ita.png');
         this.load.image('ita2', '././assets/ita2.png');
         
-        this.load.image('wave', '././assets/wave.png');
+        this.load.image('waveButton', '././assets/wave.png');
         this.load.image('wave2', '././assets/wave2.png');
         
-        this.load.image('pride', '././assets/pride.png');
+        this.load.image('prideButton', '././assets/pride.png');
         this.load.image('pride2', '././assets/pride2.png');
         
-        this.load.image('cyber', '././assets/cyber.png');
+        this.load.image('cyberButton', '././assets/cyber.png');
         this.load.image('cyber2', '././assets/cyber2.png');
         
-        this.load.image('goth', '././assets/goth.png');
+        this.load.image('gothButton', '././assets/goth.png');
         this.load.image('goth2', '././assets/goth2.png');
 
     }
@@ -81,7 +81,7 @@ class Market extends Phaser.Scene {
         var cosPad = 20;
         this.cos1Button = this.add.text(buttonX, centerY,this.randCosArr[0], buttonConfig);
         this.add.text(buttonX, centerY+5,' price: ' + game.marketGoods.cosPrices[this.cosArr.indexOf(this.randCosArr[0])],buttonConfig);
-        this.cos2Button = this.add.image(100,100,this.randCosArr[1]);
+        this.cos2Button = this.add.image(100,100,(this.randCosArr[1]+'Button'));
         console.log(this.randCosArr[1]);
         this.cos3Button = this.add.text(cosPad*2+buttonX+(buttonConfig.fixedWidth*2), centerY,this.randCosArr[2], buttonConfig);
         this.cosButtons = [this.cos1Button,this.cos2Button,this.cos3Button];
