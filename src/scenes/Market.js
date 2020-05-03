@@ -5,18 +5,23 @@ class Market extends Phaser.Scene {
     preload() {
 
         this.load.image('itaButton', '././assets/ita.png');
+        this.load.image('itaHover', '././assets/itaHover.png');
         this.load.image('ita2', '././assets/ita2.png');
         
         this.load.image('waveButton', '././assets/wave.png');
+        this.load.image('waveHover', '././assets/waveHover.png');
         this.load.image('wave2', '././assets/wave2.png');
         
         this.load.image('prideButton', '././assets/pride.png');
+        this.load.image('prideHover', '././assets/prideHover.png');
         this.load.image('pride2', '././assets/pride2.png');
         
         this.load.image('cyberButton', '././assets/cyber.png');
+        this.load.image('cyberHover', '././assets/cyberHover.png');
         this.load.image('cyber2', '././assets/cyber2.png');
         
         this.load.image('gothButton', '././assets/goth.png');
+        this.load.image('gothHover', '././assets/gothHover.png');
         this.load.image('goth2', '././assets/goth2.png');
 
     }
@@ -102,31 +107,34 @@ class Market extends Phaser.Scene {
             this.scene.start("playScene");
         });
 
-        if(game.cash >=game.marketGoods.cosPrices[this.cosArr.indexOf(this.cos1Button.text)]){
+        if(game.cash >=game.marketGoods.cosPrices[this.cosArr.indexOf(this.randCosArr[0])]){
             this.cos1Button.on('pointerdown', () => {
+                this.cos1Button.disableInteractive();
                 this.resetAllCos();
                 this.cos1Button.setTexture(this.randCosArr[0]+'2');
                 game.marketGoods.cosEq =this.randCosArr[0];
-                game.cash -=game.marketGoods.cosPrices[this.cosArr.indexOf(this.cos1Button.text)];
+                game.cash -=game.marketGoods.cosPrices[this.cosArr.indexOf(this.randCosArr[0])];
             });
         }
 
-        if(game.cash >=game.marketGoods.cosPrices[this.cosArr.indexOf(this.cos2Button.text)]){
+        if(game.cash >=game.marketGoods.cosPrices[this.cosArr.indexOf(this.randCosArr[1])]){
             this.cos2Button.on('pointerdown', () => {
+                this.cos2Button.disableInteractive();
                 this.resetAllCos();
                 this.cos2Button.setTexture(this.randCosArr[1]+'2');
                 game.marketGoods.cosEq =this.randCosArr[1];
-                game.cash -=game.marketGoods.cosPrices[this.cosArr.indexOf(this.cos2Button.text)];
+                game.cash -=game.marketGoods.cosPrices[this.cosArr.indexOf(this.randCosArr[1])];
 
             });
         }
 
-        if(game.cash >=game.marketGoods.cosPrices[this.cosArr.indexOf(this.cos3Button.text)]){
+        if(game.cash >=game.marketGoods.cosPrices[this.cosArr.indexOf(this.randCosArr[2])]){
             this.cos3Button.on('pointerdown', () => {
+                this.cos3Button.disableInteractive();
                 this.resetAllCos();
                 this.cos3Button.setTexture(this.randCosArr[2]+'2');
                 game.marketGoods.cosEq =this.randCosArr[2];
-                game.cash -=game.marketGoods.cosPrices[this.cosArr.indexOf(this.cos3Button.text)];
+                game.cash -=game.marketGoods.cosPrices[this.cosArr.indexOf(this.randCosArr[2])];
 
             });
         }
@@ -143,6 +151,7 @@ class Market extends Phaser.Scene {
             //======================= cosmetic buttons =====================
 
         this.cos1Button.on('pointerover', () => { 
+            this.cos1Button.setTexture(this.randCosArr[0]+'Hover');
         });
         this.cos1Button.on('pointerout', () => { 
             this.cos1Button.setTexture(this.randCosArr[0]+'Button');
@@ -150,6 +159,7 @@ class Market extends Phaser.Scene {
 
 
         this.cos2Button.on('pointerover', () => { 
+            this.cos2Button.setTexture(this.randCosArr[1]+'Hover');
         });
         this.cos2Button.on('pointerout', () => { 
             this.cos2Button.setTexture(this.randCosArr[1]+'Button');
@@ -157,6 +167,7 @@ class Market extends Phaser.Scene {
 
 
         this.cos3Button.on('pointerover', () => { 
+            this.cos3Button.setTexture(this.randCosArr[2]+'Hover');
         });
         this.cos3Button.on('pointerout', () => { 
             this.cos3Button.setTexture(this.randCosArr[2]+'Button');
@@ -196,28 +207,31 @@ class Market extends Phaser.Scene {
     resetAllCos(){
         var num = 0 ;
         this.cosButtons.forEach(element => {
-            if(!element.input.enabled){
+                var cosName = this.randCosArr[num];
                 game.cash +=game.marketGoods.cosPrices[this.cosArr.indexOf(game.marketGoods.cosEq)];
                 element.input.enabled = true;
-                element.setInteractive;
-                this.element.setTexture(this.randCosArr[num]+'Button');
+                element.setInteractive();
+                element.setTexture(cosName+'Button');
                 game.marketGoods.cosEq = 'none';
                 
-                if(game.cash >=this.cosArr.indexOf(this.randCosArr[num])){
+                if(game.cash >=this.cosArr.indexOf(cosName)){
                     element.on('pointerdown', () => {
                         this.resetAllCos();
-                        this.buttonFade(element);
-                        game.marketGoods.cosEq = element.text;
-                        game.cash -=game.marketGoods.cosPrices[this.cosArr.indexOf(element.text)];
-                        num++;
+                        element.setTexture(cosName+'2');
+                        game.marketGoods.cosEq =cosName;
+                        game.cash -=game.marketGoods.cosPrices[this.cosArr.indexOf(cosName)];
+                        element.disableInteractive();
                     });
                 }
                 element.on('pointerover', () => { 
                 });
                 element.on('pointerout', () => { 
-                    this.cos1Button.setTexture(this.randCosArr[0]+'Button');
+                    element.setTexture(cosName+'Button');
+                    console.log(cosName + num);
                 });
-            }
+                num++;
+            
+            
         });
     }
 
