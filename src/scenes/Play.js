@@ -155,7 +155,7 @@ class Play extends Phaser.Scene {
         this.push5 = this.sound.add('push5');
         this.push6 = this.sound.add('push6');
         this.pushSounds = [this.push1,this.push2,this.push3,this.push4,this.push5,this.push6];
-        this.pushTranslations = ['You Fuck!','OW (bitch accent)', 'Stop you fuck!','You scat bastard!','whats wrong','nooo, my burrrgeerr'];
+        this.pushTranslations = ['You Fuck!','OW (bitch accent)', 'Stop you fuck!','You scat bastard!','whats wrong with you!','nooo, my burrrgeerr'];
         /*
         boku no hanbagaaa = my hamburger!
         doushitano = what's wrong?
