@@ -39,11 +39,25 @@ class Credits extends Phaser.Scene {
             },
             fixedWidth: 0
         }
+        let overConfig = {
+            fontFamily: 'Nikumaru',
+            fontStyle: 'bold',
+            fontSize: '60px',
+            color: '#000',
+            align: 'right',
+            padding: {
+                right: 10,
+                left: 10,
+                top: 10,
+                bottom: 10,
+            },
+            fixedWidth: 0
+        }
         
         
         this.menuMusic = this.sound.add('MenuMusic');
 
-        var musicConfig = {
+        this.musicConfig = {
           mute: true,
           volume: 1,
           rate: 1,
@@ -53,7 +67,7 @@ class Credits extends Phaser.Scene {
           delay: 1
         }
 
-        this.menuMusic.play(musicConfig);
+        this.menuMusic.play(this.musicConfig);
         //show menu text
         let centerX = game.config.width/2;
         let centerY = game.config.height/2;
@@ -64,9 +78,13 @@ class Credits extends Phaser.Scene {
 
         //this.logo = this.add.image(centerX, centerY, 'logo').setOrigin(0.5,0.5).setScale(2,2);
         //this.logo.alpha = 0.5;
-        this.add.text(centerX, centerY-200,"Lead Artist - Joann Long", menuConfig).setOrigin(0.5);
-        this.add.text(centerX, centerY-100,"Sound and Design - Ryan Timothy Marcus", menuConfig).setOrigin(0.5);
-        this.add.text(centerX, centerY,"Programmer & King - Saenz", menuConfig).setOrigin(0.5);
+        
+        overConfig.stroke = '#FFF';
+        overConfig.strokeThickness = 6;
+        this.add.text(centerX, centerY-250,"GAME OVER", overConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY-130,"Lead Artist - Joann Long", menuConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY-30,"Sound and Design - Ryan Timothy Marcus", menuConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY+80,"Programmer & King - Saenz", menuConfig).setOrigin(0.5);
 
         // =============================== add buttons ===============================
         /*let buttonConfig = {
@@ -149,8 +167,10 @@ class Credits extends Phaser.Scene {
     
     update() {
         if(game.settings.audio){
+            this.audio.setTexture('audioOn');
             this.musicConfig.mute = false;
         } else{
+            this.audio.setTexture('audioOff');
             this.musicConfig.mute = true;
         }
         this.bg.tilePositionX += 3;

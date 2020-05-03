@@ -155,7 +155,7 @@ class Play extends Phaser.Scene {
         this.push5 = this.sound.add('push5');
         this.push6 = this.sound.add('push6');
         this.pushSounds = [this.push1,this.push2,this.push3,this.push4,this.push5,this.push6];
-        this.pushTranslations = ['Please stop driving on the sidewalk it is very dangerous and inappropriate.','OW (bitch accent)', 'Stop you fuck!','You scat bastard!','whats wrong','nooo, my burrrgeerr'];
+        this.pushTranslations = ['You Fuck!','OW (bitch accent)', 'Stop you fuck!','You scat bastard!','whats wrong','nooo, my burrrgeerr'];
         /*
         boku no hanbagaaa = my hamburger!
         doushitano = what's wrong?
@@ -675,17 +675,6 @@ class Play extends Phaser.Scene {
         this.ingredient1.alpha = 0;
         this.ingredient2.alpha = 0;
         this.ingredient3.alpha = 0;
-        this.payment = this.calcCash();
-
-        if(this.payment>0){
-            this.popUpTxt(200,20, '¥'+this.payment+'00');
-        }
-        if(game.cash >= 10){
-            this.cashUI.text = '¥'+ game.cash/10 + 'k';
-
-        }else{
-            this.cashUI.text = '¥'+ game.cash + '00';
-        }
     }
 
 
@@ -718,6 +707,14 @@ class Play extends Phaser.Scene {
         if(this.customer.x <= 500){
             this.soundChoice = Phaser.Math.Between(0,2);
             this.deliverySounds[this.soundChoice].play(this.soundConfig);
+            this.payment = this.calcCash();
+    
+            if(game.cash >= 10){
+                this.cashUI.text = '¥'+ game.cash/10 + 'k';
+    
+            }else{
+                this.cashUI.text = '¥'+ game.cash + '00';
+            }
             this.chef.setTexture('chefHigh');
             this.chefPos = 1;
             this.phaseProgress();
@@ -737,7 +734,6 @@ class Play extends Phaser.Scene {
                     this.birdHitSound.play(this.soundConfig);
                     this.birdPush.play(this.soundConfig);
                 }
-                this.hitSound.play(this.soundConfig);
                 //particle emmiter    
                 var bloodyMess = this.particles.createEmitter({
                     x: this.catchZone,
@@ -780,6 +776,9 @@ class Play extends Phaser.Scene {
                     this.soundChoice = Phaser.Math.Between(0,5);
                     this.pushSounds[this.soundChoice].play(this.voiceConfig);
                     this.subtitles.text = this.pushTranslations[this.soundChoice];
+                    if(this.pushTranslations[this.soundChoice] == 'You Fuck!' && Phaser.Math.Between(0,8) == 8){
+                        this.subtitles.text = 'Please stop driving on the sidewalk it is very dangerous and inappropriate.';
+                    }
                     this.subtitles.alpha = 1;
                 }else{
                     this.birdPush.play(this.soundConfig);

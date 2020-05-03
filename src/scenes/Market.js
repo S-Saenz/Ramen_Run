@@ -3,6 +3,9 @@ class Market extends Phaser.Scene {
         super("marketScene");
     }
     preload() {
+        
+        this.load.audio('MarketMusic', '././assets/RR_Menu.wav');
+
         this.load.image('marketOverhang', '././assets/marketOverhang.png');
         this.load.image('merchant', '././assets/merchant.png');
 
@@ -29,6 +32,8 @@ class Market extends Phaser.Scene {
     }
 
     create(){
+        let centerX = game.config.width/2;
+        let centerY = game.config.height/2;
         if( (game.level % 3) == 0){
             if(game.settings.health >= 3){
                 game.settings.maxHealth--;
@@ -46,8 +51,7 @@ class Market extends Phaser.Scene {
             fontFamily: 'Nikumaru',
             fontStyle: 'bold',
             fontSize: '40px',
-            backgroundColor: '#ae1f1f',
-            color: '#cabbaa',
+            color: '#000',
             align: 'center',
             padding: {
                 right: 10,
@@ -55,12 +59,43 @@ class Market extends Phaser.Scene {
                 top: 5,
                 bottom: 5,
             },
-            fixedWidth: 0
+            fixedWidth: 0,
+            wordWrap: { width: 600, useAdvancedWrap: true }
+        }
+        this.merchantLine = this.add.text(300, centerY-150, 'Jeez, someone did a number on your car!  I could fix it for you, buuuut… pay up first.', menuConfig).setOrigin(0);
+        /*merchant lines:
+        Yo, I knew you were gonna come in today!  How much money are you givin’ me this time?
+
+        Jeez, someone did a number on your car!  I could fix it for you, buuuut… pay up first.
+
+        How’d you want your car lookin’ today? I think that expensive one looks really good on you!
+
+        (name of cosmetic), huh? Aight, hand over the cash!
+
+        Come back soon!
+        */
+        this.lineTimer = this.time.delayedCall(4000, () => {
+            if(this.merchantLine.text == 'Jeez, someone did a number on your car!  I could fix it for you, buuuut… pay up first.'){
+                this.merchantLine.text = 'How’d you want your car lookin’ today? I think that expensive one looks really good on you!';
+            }
+        }, null, this);
+
+        
+        this.marketMusic = this.sound.add('MarketMusic');
+
+        this.musicConfig = {
+          mute: false,
+          volume: 1,
+          rate: 1,
+          detune: 0,
+          seek: 0,
+          loop: true,
+          delay: 1
         }
 
+        this.marketMusic.play(this.musicConfig);
+
         //show menu text
-        let centerX = game.config.width/2;
-        let centerY = game.config.height/2;
 
         this.cashUI = this.add.text(70, 70, '¥'+ game.cash + '00', menuConfig).setOrigin(0);
         if(game.cash >= 10){
@@ -86,8 +121,7 @@ class Market extends Phaser.Scene {
           },
           fixedWidth: 200
         }
-        this.add.image(centerX,centerY+30, 'merchant').setScale(0.75);
-        this.add.image(centerX, 0, 'marketOverhang').setScale(0.5).setOrigin(0.5,0);
+        this.add.image(centerX+400,centerY+30, 'merchant').setScale(0.75);
         this.playButton = this.add.text(game.config.width, 0, 'Continue', buttonConfig).setOrigin(1,0);
         //================ cosmetic buttons ================
         this.cosArr = game.marketGoods.cosmetics;
@@ -114,6 +148,7 @@ class Market extends Phaser.Scene {
 
         this.playButton.on('pointerdown', () => { 
             // easy mode
+            this.marketMusic.stop();
             this.scene.start("playScene");
         });
 
@@ -189,14 +224,13 @@ class Market extends Phaser.Scene {
     }
     
     update() {
-        /*
         if(game.settings.audio){
-            this.soundConfig.mute = false;
-            this.voiceConfig.mute = false;
+            this.marketMusic.setMute(false);
+            this.musicConfig.mute = false;
         } else{
-            this.soundConfig.mute = true;
-            this.voiceConfig.mute = true;
-        }*/
+            this.marketMusic.setMute(true);
+            this.musicConfig.mute = true;
+        }
         this.cashUI.text = '¥'+ game.cash + '00';
         if(game.cash >= 10){
             this.cashUI.text = '¥'+ game.cash/10 + 'k';
@@ -245,6 +279,7 @@ class Market extends Phaser.Scene {
     }
 
     onClick(button, num){
+        this.merchantLine.text = this.randCosArr[num] + ', huh? Aight, hand over the cash!';
         this.resetAllCos();
         button.setTexture(this.randCosArr[num]+'2');
         game.marketGoods.cosEq =this.randCosArr[num];
