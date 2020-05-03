@@ -10,7 +10,7 @@ class Market extends Phaser.Scene {
         this.load.image('speechBubble', '././assets/speechBubble.png');
         this.load.image('merchant', '././assets/merchant.png');
 
-        this.load.image('yenContainer', '././assets/buttonBlank.png');
+        this.load.image('yenContainer', '././assets/wallet.png');
 
         this.load.image('continue', '././assets/continue.png');
         this.load.image('continueHover', '././assets/continueHover.png');
@@ -149,7 +149,7 @@ class Market extends Phaser.Scene {
         //show menu text
 
         this.add.image(0, 0, 'yenContainer').setOrigin(0).setScale(0.25);
-        this.cashUI = this.add.text(5, 5, '¥'+ game.cash + '00', menuConfig).setOrigin(0);
+        this.cashUI = this.add.text(20, 40, '¥'+ game.cash + '00', menuConfig).setOrigin(0);
         if(game.cash >= 10){
             this.cashUI.text = '¥'+ game.cash/10 + 'k';
 

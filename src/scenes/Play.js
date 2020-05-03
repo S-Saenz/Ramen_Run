@@ -278,7 +278,7 @@ class Play extends Phaser.Scene {
             fontStyle: 'bold',
             fontSize: '35px',
             align: 'center',
-            color: '#FFF',
+            color: '#4C2E2F',
             padding: {
                 right: 10,
                 left: 10,
@@ -325,7 +325,7 @@ class Play extends Phaser.Scene {
         this.instructionUI = this.add.text(game.config.width-150, 220, 'catch ' + game.maxProg + ' broth!' , uiConfig).setOrigin(0.5,0.5);
         this.ingredientUI = this.add.image(game.config.width-90, 70, game.settings.recipeBroth).setOrigin(1,0).setScale(0.75,0.75);
         this.wallet = this.add.image(0, 0, 'wallet').setOrigin(0).setScale(0.4);
-        this.cashUI = this.add.text(70, 70, '¥'+ game.cash + '00', uiConfig).setOrigin(0);
+        this.cashUI = this.add.text(30, 70, '¥'+ game.cash + '00', uiConfig).setOrigin(0);
         if(game.cash >= 10){
             this.cashUI.text = '¥'+ game.cash/10 + 'k';
 
@@ -705,6 +705,8 @@ class Play extends Phaser.Scene {
 
     checkDeliver(){
         if(this.customer.x <= 500){
+            this.chef.setTexture('chefHigh');
+            this.chefPos = 1;
             this.soundChoice = Phaser.Math.Between(0,2);
             this.deliverySounds[this.soundChoice].play(this.soundConfig);
             this.payment = this.calcCash();
@@ -715,8 +717,6 @@ class Play extends Phaser.Scene {
             }else{
                 this.cashUI.text = '¥'+ game.cash + '00';
             }
-            this.chef.setTexture('chefHigh');
-            this.chefPos = 1;
             this.phaseProgress();
         }
     }
