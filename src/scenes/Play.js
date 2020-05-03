@@ -9,10 +9,25 @@ class Play extends Phaser.Scene {
         //load audio -basic-
         this.load.audio('PlayMusic', '././assets/RR_Market.wav');
         this.load.audio('birdPush', '././assets/RR_birdPush.wav');
-        this.load.audio('brothSound', '././assets/RR_broth.wav');
-        this.load.audio('noodleSound', '././assets/RR_noodle.wav');
-        this.load.audio('toppingSound', '././assets/RR_topping.wav');
-        this.load.audio('deliverySound', '././assets/RR_delivery.mp3');
+
+        this.load.audio('brothSound1', '././assets/RR_broth.wav');
+        this.load.audio('brothSound2', '././assets/RR_broth2.wav');
+        this.load.audio('brothSound3', '././assets/RR_broth3.wav');
+        this.load.audio('brothSound4', '././assets/RR_broth4.wav');
+
+        this.load.audio('noodleSound1', '././assets/RR_noodle.wav');
+        this.load.audio('noodleSound2', '././assets/RR_noodle2.wav');
+        this.load.audio('noodleSound3', '././assets/RR_noodle3.wav');
+        this.load.audio('noodleSound4', '././assets/RR_noodle4.wav');
+
+        this.load.audio('toppingSound1', '././assets/RR_topping.wav');
+        this.load.audio('toppingSound2', '././assets/RR_topping2.wav');
+        this.load.audio('toppingSound3', '././assets/RR_topping3.wav');
+
+        this.load.audio('deliverySound1', '././assets/RR_delivery.wav');
+        this.load.audio('deliverySound2', '././assets/RR_delivery2.wav');
+        this.load.audio('deliverySound3', '././assets/RR_delivery3.wav');
+
         this.load.audio('hitSound', '././assets/RR_hit.wav');
         this.load.audio('selectSound', '././assets/RR_select.mp3');
 
@@ -100,12 +115,35 @@ class Play extends Phaser.Scene {
         //add audio
         
         this.birdPush = this.sound.add('birdPush');
-        this.brothSound = this.sound.add('brothSound');
-        this.noodleSound = this.sound.add('noodleSound');
-        this.toppingSound = this.sound.add('toppingSound');
+
+        this.brothSound = this.sound.add('brothSound1');
+        this.brothSound2 = this.sound.add('brothSound2');
+        this.brothSound3 = this.sound.add('brothSound3');
+        this.brothSound4 = this.sound.add('brothSound4');
+
+        this.brothSounds = [this.brothSound,this.brothSound2,this.brothSound3,this.brothSound4];
+
+        this.noodleSound = this.sound.add('noodleSound1');
+        this.noodleSound2 = this.sound.add('noodleSound2');
+        this.noodleSound3 = this.sound.add('noodleSound3');
+        this.noodleSound4 = this.sound.add('noodleSound4');
+
+        this.noodleSounds = [this.noodleSound,this.noodleSound2,this.noodleSound3,this.noodleSound4];
+
+        this.toppingSound = this.sound.add('toppingSound1');
+        this.toppingSound2 = this.sound.add('toppingSound2');
+        this.toppingSound3 = this.sound.add('toppingSound3');
+
+        this.toppingSounds = [this.toppingSound,this.toppingSound2,this.toppingSound3];
+
+        this.deliverySound = this.sound.add('deliverySound1');
+        this.deliverySound2 = this.sound.add('deliverySound2');
+        this.deliverySound3 = this.sound.add('deliverySound3');
+
+        this.deliverySounds = [this.deliverySound,this.deliverySound2,this.deliverySound3];
+
         this.selectSound = this.sound.add('selectSound');
         this.hitSound = this.sound.add('hitSound');
-        this.deliverySound = this.sound.add('deliverySound');
 
         //add voice lines
         this.push1 = this.sound.add('push1');
@@ -447,6 +485,15 @@ class Play extends Phaser.Scene {
     }
 
     update(){
+        
+        if(!this.playMusic.mute){
+            this.soundConfig.mute = false;
+            this.voiceConfig.mute = false;
+        } else{
+            this.soundConfig.mute = true;
+            this.voiceConfig.mute = true;
+        }
+
         //===================================================== TUTORIAL =====================================================
 
         this.bgFacade.tilePositionX += 3;
@@ -667,7 +714,8 @@ class Play extends Phaser.Scene {
 
     checkDeliver(){
         if(this.customer.x <= 500){
-            this.brothSound.play(this.soundConfig);
+            this.soundChoice = Phaser.Math.Between(0,2);
+            this.deliverySounds[this.soundChoice].play(this.soundConfig);
             this.chef.setTexture('chefHigh');
             this.chefPos = 1;
             this.phaseProgress();
@@ -738,7 +786,8 @@ class Play extends Phaser.Scene {
                 if(game.brothProg < game.maxProg){
                     this.instructionUI.text = 'catch ' + (game.maxProg-game.brothProg) + ' more broth!';
                     if(obj.alpha !=0){
-                        this.brothSound.play(this.soundConfig);
+                        this.soundChoice = Phaser.Math.Between(0,3);
+                        this.brothSounds[this.soundChoice].play(this.soundConfig);
                         game.brothProg++;
                         if(this.bowlFull1.alpha == 0){
                             this.bowlFull1.alpha = 1;
@@ -767,7 +816,8 @@ class Play extends Phaser.Scene {
                         this.instructionUI.text = 'catch 1 more noodle!';
                     }
                     if(obj.alpha !=0){
-                        this.noodleSound.play(this.soundConfig);
+                        this.soundChoice = Phaser.Math.Between(0,3);
+                        this.noodleSounds[this.soundChoice].play(this.soundConfig);
                         game.noodleProg++;
                         if(this.bowlFull2.alpha == 0){
                             this.bowlFull2.alpha = 1;
@@ -797,7 +847,8 @@ class Play extends Phaser.Scene {
                         this.instructionUI.text = 'catch 1 more topping!';
                     }
                     if(obj.alpha !=0){
-                        this.toppingSound.play(this.soundConfig);
+                        this.soundChoice = Phaser.Math.Between(0,2);
+                        this.toppingSounds[this.soundChoice].play(this.soundConfig);
                         game.toppingProg++;
                         if(this.bowlFull3.alpha == 0){
                             this.bowlFull3.alpha = 1;
