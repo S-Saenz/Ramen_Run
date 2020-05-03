@@ -187,7 +187,13 @@ class Market extends Phaser.Scene {
     }
     
     update() {
-        this.cashUI.text = ('cash: $'+ game.cash + '.00');
+        this.cashUI.text = '¥'+ game.cash + '00';
+        if(game.cash >= 10){
+            this.cashUI.text = '¥'+ game.cash/10 + 'k';
+
+        }else{
+            this.cashUI.text = '¥'+ game.cash + '00';
+        }
         game.cartHealth = game.settings.maxHealth;
         game.brothProg = 0;
         game.noodleProg = 0;

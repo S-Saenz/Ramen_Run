@@ -8,6 +8,7 @@ class Play extends Phaser.Scene {
 
         //load audio -basic-
         this.load.audio('PlayMusic', '././assets/RR_Play.wav');
+        this.load.audio('birdPush', '././assets/RR_birdPush.wav');
         this.load.audio('brothSound', '././assets/RR_broth.wav');
         this.load.audio('noodleSound', '././assets/RR_noodle.wav');
         this.load.audio('toppingSound', '././assets/RR_topping.wav');
@@ -96,6 +97,7 @@ class Play extends Phaser.Scene {
 
         //add audio
         
+        this.birdPush = this.sound.add('birdPush');
         this.brothSound = this.sound.add('brothSound');
         this.noodleSound = this.sound.add('noodleSound');
         this.toppingSound = this.sound.add('toppingSound');
@@ -458,12 +460,12 @@ class Play extends Phaser.Scene {
             this.ingredients.forEach(element => {
                 this.checkCatch(element);
             });
-            this.checkHit(this.human);
+            this.checkHit(this.human,'human');
             if(game.level>=2){
-                this.checkHit(this.bird);
+                this.checkHit(this.bird,'bird');
             }
             if(game.level>=4){
-                this.checkHit(this.bird2);
+                this.checkHit(this.bird2,'bird');
             }
             if(this.chef.texture.key == 'chefDeliver' && this.ingredientPhase == 4 ){
                 this.checkDeliver();
@@ -639,7 +641,7 @@ class Play extends Phaser.Scene {
     }
 
 
-    checkHit(human){
+    checkHit(human,type){
         if (this.chefPos != human.pos && human.x <= this.catchZone){
             if(human.alpha !=0){
                 this.cameras.main.shake(20,.005);
@@ -681,8 +683,12 @@ class Play extends Phaser.Scene {
             }
         } else if(human.x <= this.catchZone){
             if(human.alpha != 0){
-                this.soundChoice = Phaser.Math.Between(0,5);
-                this.pushSounds[this.soundChoice].play(this.voiceConfig);
+                if(type == 'human'){
+                    this.soundChoice = Phaser.Math.Between(0,5);
+                    this.pushSounds[this.soundChoice].play(this.voiceConfig);
+                }else{
+                    this.birdPush.play(this.soundConfig);
+                }
             }
             human.alpha = 0;
         }
