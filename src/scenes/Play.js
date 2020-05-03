@@ -94,6 +94,8 @@ class Play extends Phaser.Scene {
     }
 
     create(){
+        let centerX = game.config.width/2;
+        let centerY = game.config.height/2;
 
         //add audio
         
@@ -113,6 +115,15 @@ class Play extends Phaser.Scene {
         this.push5 = this.sound.add('push5');
         this.push6 = this.sound.add('push6');
         this.pushSounds = [this.push1,this.push2,this.push3,this.push4,this.push5,this.push6];
+        this.pushTranslations = ['Please stop driving on the sidewalk it is very dangerous and inappropriate.','OW (bitch accent)', 'Stop you fuck!','You scat bastard!','whats wrong','nooo, my burrrgeerr'];
+        /*
+        boku no hanbagaaa = my hamburger!
+        doushitano = what's wrong?
+        kuso ga = FUCKING/SHIT
+        fuzakennai = stop fucking around
+        itai = ouchie!
+        ita = owch 
+        */
 
         this.soundConfig = {
             mute: true,
@@ -235,6 +246,20 @@ class Play extends Phaser.Scene {
                 bottom: 5,
             },
             wordWrap: { width: 310, useAdvancedWrap: true }
+        }
+        let subtitleConfig = {
+            fontFamily: 'Nikumaru',
+            fontStyle: 'bold',
+            fontSize: '35px',
+            align: 'center',
+            color: '#FFF',
+            padding: {
+                right: 10,
+                left: 10,
+                top: 5,
+                bottom: 5,
+            },
+            wordWrap: { width: 1000, useAdvancedWrap: true }
         }
         this.ingredientBox = this.add.image(game.config.width, 0, 'ingredientBox').setOrigin(1,0).setScale(0.4);
         //================== ui bowls ==================
@@ -365,6 +390,11 @@ class Play extends Phaser.Scene {
             this.audio.setTexture('audioOn');
         }
 
+        //add subtitles
+        subtitleConfig.stroke = '#000';
+        subtitleConfig.strokeThickness = 6;
+        this.subtitles = this.add.text(centerX, 100, ' subtitles' , subtitleConfig).setOrigin(0.5,0.5);
+        this.subtitles.alpha = 0;
 
 
 
@@ -372,8 +402,6 @@ class Play extends Phaser.Scene {
         //===================================================== TUTORIAL =====================================================
         this.startPlay = false;
         this.hitPlay = false;
-        let centerX = game.config.width/2;
-        let centerY = game.config.height/2;
         this.bgFacade = this.add.tileSprite(0, -60, 3000, 1600, 'bg').setScale(0.5,0.5).setOrigin(0, 0);
         this.ingredientFacade = this.add.image(game.config.width+920, 0, 'ingredientFacade').setOrigin(1,0).setScale(0.4);
         this.walletFacade = this.add.image(-920, 0, 'wallet').setOrigin(0).setScale(0.4);
@@ -411,9 +439,6 @@ class Play extends Phaser.Scene {
         }
         game.hasPlayed = true;
 
-        //add subtitles
-        
-        this.subtitles = this.add.text(100, centerY, ' subtitles' , uiConfig).setOrigin(0.5,0.5);
         
     }
 
@@ -459,7 +484,9 @@ class Play extends Phaser.Scene {
             //background movements
             this.bg.tilePositionX += 7;
             this.customer.x -= 3.5;
-    
+            if(this.human.x <= 100){
+                this.subtitles.alpha = 0;
+            }
             // check collisions and catches
             if(this.customer.x <= 0){
                 this.customer.x = game.config.width-259;
@@ -694,6 +721,8 @@ class Play extends Phaser.Scene {
                     console.log('play human sound');
                     this.soundChoice = Phaser.Math.Between(0,5);
                     this.pushSounds[this.soundChoice].play(this.voiceConfig);
+                    this.subtitles.text = this.pushTranslations[this.soundChoice];
+                    this.subtitles.alpha = 1;
                 }else{
                     this.birdPush.play(this.soundConfig);
                 }
