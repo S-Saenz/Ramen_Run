@@ -6,7 +6,7 @@ class Credits extends Phaser.Scene {
         // load audio
         this.load.audio('kusoga', '././assets/kusoga.wav');
         this.load.audio('kusogaShort', '././assets/kusogaShort.wav');
-        this.load.audio('MenuMusic', '././assets/RR_Menu.wav');
+        this.load.audio('creditsMusic', '././assets/RR_Menu.wav');
         this.load.image('bg', '././assets/Ramen_background.png');
         this.load.image('logo', '././assets/logo.png');
 
@@ -57,7 +57,7 @@ class Credits extends Phaser.Scene {
         }
         
         
-        this.menuMusic = this.sound.add('MenuMusic');
+        this.creditsMusic = this.sound.add('creditsMusic');
 
         this.musicConfig = {
           mute: true,
@@ -69,7 +69,7 @@ class Credits extends Phaser.Scene {
           delay: 1
         }
 
-        this.menuMusic.play(this.musicConfig);
+        this.creditsMusic.play(this.musicConfig);
         //show menu text
         let centerX = game.config.width/2;
         let centerY = game.config.height/2;
@@ -129,28 +129,24 @@ class Credits extends Phaser.Scene {
         
     });
       this.playButton.on('pointerdown', () => { 
-        this.menuMusic.stop();
-        
+        this.creditsMusic.stop();
         this.scene.start("playScene");
     });
     this.menuButton.on('pointerdown', () => { 
-        this.menuMusic.stop();
-        
+        this.creditsMusic.stop();
         this.scene.start("menuScene");
     });
-      this.audio.on('pointerdown', () => { 
-          
-          this.menuMusic.setMute(!this.menuMusic.mute);
-          if(!this.menuMusic.mute){
-            game.settings.audio = false;
-              this.audio.setTexture('audioOff');
-          } else{
-            game.settings.audio = true;
-            this.audio.setTexture('audioOn');
-          }
-          console.log('game audio: '+ game.settings.audio);
-
-      });
+    
+        this.audio.on('pointerdown', () => { 
+            this.creditsMusic.setMute(!this.creditsMusic.mute);
+            if(!this.creditsMusic.mute){
+                game.settings.audio = false;
+                this.audio.setTexture('audioOff');
+            } else{
+                game.settings.audio = true;
+                this.audio.setTexture('audioOn');
+            }
+        });
 
         this.playButton.on('pointerover', () => { 
             this.playButton.setTexture(this.playTxt+ 'Hover');
@@ -178,10 +174,10 @@ class Credits extends Phaser.Scene {
     update() {
         if(game.settings.audio){
             this.audio.setTexture('audioOn');
-            this.musicConfig.mute = false;
+            this.creditsMusic.setMute(false);
         } else{
             this.audio.setTexture('audioOff');
-            this.musicConfig.mute = true;
+            this.creditsMusic.setMute(true);
         }
         this.bg.tilePositionX += 3;
         game.score = 0;
