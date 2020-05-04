@@ -813,7 +813,7 @@ class Play extends Phaser.Scene {
                         this.ingredientUI.setTexture(game.settings.recipeNoodle);
                         this.naturalProg = false;
                         this.phaseProgress();
-                        this.instructionUI.text = 'catch' + game.maxProg + 'noodles!';
+                        this.instructionUI.text = 'catch ' + game.maxProg + ' noodles!';
                     }
                     if(obj.alpa != 0){
                         game.extras++;
