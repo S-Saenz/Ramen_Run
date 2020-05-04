@@ -10,7 +10,6 @@ class Play extends Phaser.Scene {
         this.load.audio('PlayMusic', '././assets/RR_Market.wav');
         this.load.audio('birdPush', '././assets/RR_birdPush.wav');
 
-        this.load.audio('arigatou', '././assets/arigatou.wav');
 
         this.load.audio('brothSound1', '././assets/RR_broth.wav');
         this.load.audio('brothSound2', '././assets/RR_broth2.wav');
@@ -119,7 +118,6 @@ class Play extends Phaser.Scene {
         
         this.birdPush = this.sound.add('birdPush');
 
-        this.arigatou = this.sound.add('arigatou');
 
         this.brothSound = this.sound.add('brothSound1');
         this.brothSound2 = this.sound.add('brothSound2');
@@ -714,7 +712,6 @@ class Play extends Phaser.Scene {
             this.chefPos = 1;
             this.soundChoice = Phaser.Math.Between(0,2);
             this.deliverySounds[this.soundChoice].play(this.soundConfig);
-            this.arigatou.play(this.voiceConfig);
             this.payment = this.calcCash();
     
             if(game.cash >= 10){
