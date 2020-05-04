@@ -84,7 +84,11 @@ class Credits extends Phaser.Scene {
         
         overConfig.stroke = '#FFF';
         overConfig.strokeThickness = 6;
-        this.add.text(centerX, centerY-250,"GAME OVER", overConfig).setOrigin(0.5);
+        if(game.hasPlayed){
+            this.add.text(centerX, centerY-250,"GAME OVER", overConfig).setOrigin(0.5);
+        }else{
+            this.add.text(centerX, centerY-250,"CREDITS", overConfig).setOrigin(0.5);
+        }
         this.add.text(centerX, centerY-160,"Sound and Design - Ryan Timothy Marcus", menuConfig).setOrigin(0.5);
         this.charle = this.add.text(centerX, centerY-80,"Bird Owner - Charlie Chavez", menuConfig).setOrigin(0.5);
         this.add.text(centerX, centerY,"Lead Artist - Joann Long", menuConfig).setOrigin(0.5);
@@ -126,7 +130,7 @@ class Credits extends Phaser.Scene {
 
     this.king.on('pointerdown', () => { 
         this.sound.play('kusoga');
-        this.timer = this.time.delayedCall(1500, () => {
+        this.timer = this.time.delayedCall(1100, () => {
             this.sound.play('kusogaShort');
         }, null, this);
         
