@@ -4,6 +4,7 @@ class Credits extends Phaser.Scene {
     }
     preload() {
         // load audio
+        this.load.audio('birdChirp', '././assets/RR_birdPush.wav');
         this.load.audio('kusoga', '././assets/kusoga.wav');
         this.load.audio('kusogaShort', '././assets/kusogaShort.wav');
         this.load.audio('creditsMusic', '././assets/RR_Menu.wav');
@@ -84,8 +85,9 @@ class Credits extends Phaser.Scene {
         overConfig.stroke = '#FFF';
         overConfig.strokeThickness = 6;
         this.add.text(centerX, centerY-250,"GAME OVER", overConfig).setOrigin(0.5);
-        this.add.text(centerX, centerY-130,"Lead Artist - Joann Long", menuConfig).setOrigin(0.5);
-        this.add.text(centerX, centerY-30,"Sound and Design - Ryan Timothy Marcus", menuConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY-160,"Sound and Design - Ryan Timothy Marcus", menuConfig).setOrigin(0.5);
+        this.charle = this.add.text(centerX, centerY-80,"Bird Owner - Charlie Chavez", menuConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY,"Lead Artist - Joann Long", menuConfig).setOrigin(0.5);
         this.king = this.add.text(centerX, centerY+80,"Programmer & King - Saenz", menuConfig).setOrigin(0.5);
 
         // =============================== add buttons ===============================
@@ -117,17 +119,22 @@ class Credits extends Phaser.Scene {
       this.playButton.setInteractive();
       this.menuButton.setInteractive();
       this.audio.setInteractive();
+      this.charle.setInteractive();
       this.king.setInteractive();
 
       //================================ functionality =================================
 
-      this.king.on('pointerdown', () => { 
+    this.king.on('pointerdown', () => { 
         this.sound.play('kusoga');
         this.timer = this.time.delayedCall(1500, () => {
             this.sound.play('kusogaShort');
         }, null, this);
         
     });
+    this.charle.on('pointerdown', () => { 
+        this.sound.play('birdChirp');
+    });
+
       this.playButton.on('pointerdown', () => { 
         this.creditsMusic.stop();
         this.scene.start("playScene");
