@@ -19,7 +19,6 @@ contributions:
 -chef/player and damage assets
 -background art
 -ita and goth cart cosmetics
--cosmetic finalizations
 -obstacle assets
 -merchant asset
 -tutorial

@@ -72,7 +72,8 @@ class Market extends Phaser.Scene {
             'Ita, huh?  God why do I even have this...',
             'Jeez, someone did a number on your car!  I could fix it for you, buuuut… pay up first.',
             'Yo, I knew you were gonna come in today!  How much money are you givin’ me this time?',
-            'C’mon kid I ain’t got all day, make up your mind!'];
+            'C’mon kid I ain’t got all day, make up your mind!',
+            'You can’t afford it?  Don’t bother me unless you actually have money to give me.'];
         this.merchantLine = this.add.text(centerX-125, centerY-90, this.merchantLines[5], menuConfig).setOrigin(0.5);
         if(game.level>=3){
             this.merchantLine.text = this.merchantLines[6];
@@ -104,8 +105,8 @@ class Market extends Phaser.Scene {
 
         Come back soon!
         */
-        this.lineTimer = this.time.delayedCall(4000, () => {
-            if(this.merchantLine.text == this.merchantLines[5] || this.merchantLines[6]){
+        this.lineTimer = this.time.delayedCall(5500, () => {
+            if(this.merchantLine.text == this.merchantLines[5] || this.merchantLine.text == this.merchantLines[6]){
                 this.merchantLine.text = 'How’d you want your car lookin’ today? I think that expensive one looks really good on you!';
             }
         }, null, this);
@@ -138,12 +139,12 @@ class Market extends Phaser.Scene {
           delay: 1
         }
 
-        if(game.cash < game.settings.repairPrice){this.marketMusic.play(this.musicConfig);}
+        if(game.cash >= game.settings.repairPrice){this.marketMusic.play(this.musicConfig);}
 
         //show menu text
 
-        this.add.image(0, 0, 'yenContainer').setOrigin(0).setScale(0.25);
-        this.cashUI = this.add.text(20, 40, '¥'+ game.cash + '00', menuConfig).setOrigin(0);
+        this.add.image(0, 0, 'yenContainer').setOrigin(0).setScale(0.3);
+        this.cashUI = this.add.text(30, 55, '¥'+ game.cash + '00', menuConfig).setOrigin(0);
         if(game.cash >= 10){
             this.cashUI.text = '¥'+ game.cash/10 + 'k';
 
@@ -183,24 +184,32 @@ class Market extends Phaser.Scene {
             this.scene.start("playScene");
         });
 
-        if(game.cash >=game.marketGoods.cosPrices[this.cosArr.indexOf(this.randCosArr[0])]){
-            this.cos1Button.on('pointerdown', () => {
-                this.onClick(this.cos1Button,0)
-            });
-        }
+        this.cos1Button.on('pointerdown', () => {
+            if(game.cash >=game.marketGoods.cosPrices[this.cosArr.indexOf(this.randCosArr[0])]){
+                this.onClick(this.cos1Button,0);
+            }else{
+                this.merchantLine.text = this.merchantLines[8];
+            }
+        });
 
-        if(game.cash >=game.marketGoods.cosPrices[this.cosArr.indexOf(this.randCosArr[1])]){
-            this.cos2Button.on('pointerdown', () => {
-                this.onClick(this.cos2Button,1)
-            });
-        }
+        this.cos2Button.on('pointerdown', () => {
+            if(game.cash >=game.marketGoods.cosPrices[this.cosArr.indexOf(this.randCosArr[1])]){
+                this.onClick(this.cos2Button,1);
+            }else{
+                this.merchantLine.text = this.merchantLines[8];
+            }
+        });
 
-        if(game.cash >=game.marketGoods.cosPrices[this.cosArr.indexOf(this.randCosArr[2])]){
-            this.cos3Button.on('pointerdown', () => {
-                this.onClick(this.cos3Button,2)
 
-            });
-        }
+        
+        this.cos3Button.on('pointerdown', () => {
+            if(game.cash >=game.marketGoods.cosPrices[this.cosArr.indexOf(this.randCosArr[2])]){
+                this.onClick(this.cos3Button,2);
+            }else{
+                this.merchantLine.text = this.merchantLines[8];
+            }
+        });
+
 
 
       //================================ on hover ================================
@@ -316,6 +325,7 @@ class Market extends Phaser.Scene {
     }
 
     onClick(button, num){
+        
         this.mindChanges++;
         this.merchantLine.text = this.merchantLines[this.cosArr.indexOf(this.randCosArr[num])];
         if(this.mindChanges > 3){

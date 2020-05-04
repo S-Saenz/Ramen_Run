@@ -89,10 +89,10 @@ class Credits extends Phaser.Scene {
         }else{
             this.add.text(centerX, centerY-250,"CREDITS", overConfig).setOrigin(0.5);
         }
-        this.add.text(centerX, centerY-160,"Sound and Design - Ryan Timothy Marcus", menuConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY-160,"Writing, Sound & Design - Ryan Timothy Marcus", menuConfig).setOrigin(0.5);
         this.charle = this.add.text(centerX, centerY-80,"Bird Owner - Charlie Chavez", menuConfig).setOrigin(0.5);
-        this.add.text(centerX, centerY,"Lead Artist - Joann Long", menuConfig).setOrigin(0.5);
-        this.king = this.add.text(centerX, centerY+80,"Programmer & King - Saenz", menuConfig).setOrigin(0.5);
+        this.add.text(centerX, centerY,"Lead Artist & Producer - Joann Long", menuConfig).setOrigin(0.5);
+        this.king = this.add.text(centerX, centerY+80,"Programmer, Voice Actor & King - Saenz", menuConfig).setOrigin(0.5);
 
         // =============================== add buttons ===============================
         /*let buttonConfig = {

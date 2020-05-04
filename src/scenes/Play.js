@@ -323,7 +323,7 @@ class Play extends Phaser.Scene {
         this.bowlFull3.alpha = 0;
 
         this.instructionUI = this.add.text(game.config.width-150, 220, 'catch ' + game.maxProg + ' broth!' , uiConfig).setOrigin(0.5,0.5);
-        this.ingredientUI = this.add.image(game.config.width-90, 70, game.settings.recipeBroth).setOrigin(1,0).setScale(0.75,0.75);
+        this.ingredientUI = this.add.image(game.config.width-90, 80, game.settings.recipeBroth).setOrigin(1,0).setScale(0.7,0.7);
         this.wallet = this.add.image(0, 0, 'wallet').setOrigin(0).setScale(0.4);
         this.cashUI = this.add.text(30, 70, '¥'+ game.cash + '00', uiConfig).setOrigin(0);
         if(game.cash >= 10){
