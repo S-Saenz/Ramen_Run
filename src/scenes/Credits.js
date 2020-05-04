@@ -129,14 +129,14 @@ class Credits extends Phaser.Scene {
         
     });
       this.playButton.on('pointerdown', () => { 
+        this.menuMusic.stop();
         
         this.scene.start("playScene");
-        this.menuMusic.stop();
     });
     this.menuButton.on('pointerdown', () => { 
+        this.menuMusic.stop();
         
         this.scene.start("menuScene");
-        this.menuMusic.stop();
     });
       this.audio.on('pointerdown', () => { 
           
