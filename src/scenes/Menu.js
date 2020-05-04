@@ -21,6 +21,7 @@ class Menu extends Phaser.Scene {
     }
 
     create(){
+        game.hasPlayed = false;
         this.bg = this.add.tileSprite(0, -60, 3000, 1600, 'bg').setScale(0.5,0.5).setOrigin(0, 0);
         //game.stage.backgroundColor = '#cabbaa';
         //menu display
