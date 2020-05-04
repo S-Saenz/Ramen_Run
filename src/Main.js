@@ -75,7 +75,7 @@ game.settings = {
     audio: false,
     maxHealth: 4,
     timer: 10000, 
-    panSpeed: 8,
+    panSpeed: 4,
     brothChance: .8,
     noodleChance: .1,
     toppingChance: .1,
