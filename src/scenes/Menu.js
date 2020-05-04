@@ -139,9 +139,11 @@ class Menu extends Phaser.Scene {
     update() {
         if(game.settings.audio){
             this.audio.setTexture('audioOn');
+            this.menuMusic.setMute(false);
             this.musicConfig.mute = false;
         } else{
             this.audio.setTexture('audioOff');
+            this.menuMusic.setMute(true);
             this.musicConfig.mute = true;
         }
         this.bg.tilePositionX += 3;

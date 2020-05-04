@@ -53,7 +53,7 @@ let game = new Phaser.Game(config);
 // define game settings
 game.hasPlayed = false;
 game.level = 0;
-game.cash = 3;
+game.cash = 0;
 game.score = 0;
 game.cartHealth;
 game.broths = ['broth1','broth2','broth3'];

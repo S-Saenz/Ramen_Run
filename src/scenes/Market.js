@@ -48,12 +48,6 @@ class Market extends Phaser.Scene {
             }
             game.maxProg++;
         }
-        console.log('max cart health: ' + game.settings.maxHealth);
-        if(game.cash < game.settings.repairPrice){
-            this.scene.start("creditsScene");
-        }else{
-            game.cash -= game.settings.repairPrice;
-        }
         //menu display
         let menuConfig = {
             fontFamily: 'Nikumaru',
@@ -144,7 +138,7 @@ class Market extends Phaser.Scene {
           delay: 1
         }
 
-        this.marketMusic.play(this.musicConfig);
+        if(game.cash < game.settings.repairPrice){this.marketMusic.play(this.musicConfig);}
 
         //show menu text
 
@@ -253,6 +247,12 @@ class Market extends Phaser.Scene {
                 this.cos3Button.setTexture(this.randCosArr[2]+'Button');
             }
         });
+        if(game.cash < game.settings.repairPrice){
+            this.marketMusic.stop();
+            this.scene.start("creditsScene");
+        }else{
+            game.cash -= game.settings.repairPrice;
+        }
 
 
  
