@@ -136,7 +136,7 @@ class Credits extends Phaser.Scene {
         this.creditsMusic.stop();
         this.scene.start("menuScene");
     });
-    
+
         this.audio.on('pointerdown', () => { 
             this.creditsMusic.setMute(!this.creditsMusic.mute);
             if(!this.creditsMusic.mute){
@@ -181,6 +181,8 @@ class Credits extends Phaser.Scene {
         }
         this.bg.tilePositionX += 3;
         game.score = 0;
+        game.level = 0;
+        game.cartHealth = game.settings.maxHealth;
         
     }
 }

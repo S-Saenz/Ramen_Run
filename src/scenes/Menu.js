@@ -148,6 +148,7 @@ class Menu extends Phaser.Scene {
         }
         this.bg.tilePositionX += 3;
         game.score = 0;
+        game.level = 0;
         
     }
 }
