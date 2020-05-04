@@ -5,6 +5,7 @@ class Menu extends Phaser.Scene {
     preload() {
 
         // load audio
+        this.load.audio('select', '././assets/RR_delivery3.wav');
         this.load.audio('MenuMusic', '././assets/RR_Play.wav');
         this.load.image('bg', '././assets/Ramen_background.png');
         this.load.image('logo', '././assets/logo.png');
@@ -90,11 +91,13 @@ class Menu extends Phaser.Scene {
       //================================ functionality =================================
 
       this.playButton.on('pointerdown', () => { 
+        this.sound.play('select');
           // easy mode
           this.scene.start("playScene");
           this.menuMusic.stop();
       });
-      this.creditsButton.on('pointerdown', () => { 
+      this.creditsButton.on('pointerdown', () => {
+          this.sound.play('select'); 
           // easy mode
           this.scene.start("creditsScene");
           this.menuMusic.stop();

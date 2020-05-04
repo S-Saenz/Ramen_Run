@@ -4,6 +4,7 @@ class Credits extends Phaser.Scene {
     }
     preload() {
         // load audio
+        this.load.audio('select', '././assets/RR_delivery3.wav');
         this.load.audio('birdChirp', '././assets/RR_birdPush.wav');
         this.load.audio('kusoga', '././assets/kusoga.wav');
         this.load.audio('kusogaShort', '././assets/kusogaShort.wav');
@@ -140,10 +141,12 @@ class Credits extends Phaser.Scene {
     });
 
       this.playButton.on('pointerdown', () => { 
+        this.sound.play('select');
         this.creditsMusic.stop();
         this.scene.start("playScene");
     });
     this.menuButton.on('pointerdown', () => { 
+        this.sound.play('select');
         this.creditsMusic.stop();
         this.scene.start("menuScene");
     });

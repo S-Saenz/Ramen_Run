@@ -4,6 +4,7 @@ class Market extends Phaser.Scene {
     }
     preload() {
         
+        this.load.audio('select', '././assets/RR_delivery3.wav');
         this.load.audio('MarketMusic', '././assets/RR_Menu.wav');
 
         this.load.image('marketBG', '././assets/marketBG.png');
@@ -179,6 +180,7 @@ class Market extends Phaser.Scene {
         //================================ functionality =================================
 
         this.playButton.on('pointerdown', () => { 
+            this.sound.play('select');
             // easy mode
             this.marketMusic.stop();
             this.scene.start("playScene");
