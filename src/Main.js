@@ -1,4 +1,7 @@
 /*===================================================== RAMEN RUN ================================================================
+
+Saenz, Ryan Timothy Marcus, Joann Long
+
 DETAILED CREDITS:
 --------Ryan Timothy Marcus--------
 
@@ -33,11 +36,21 @@ contributions:
 -background concept art
 -cart cosmetics(cyber,wave,pride)
 -ui concept and design
--
 
 
 date completed: 3 May 2020
-creative tilt justification
+creative tilt justification:
+
+creative:
+The style is very specific and consistent. And the sound and music was almost entirely(except for the car hit sound) 
+made and edited by us, including the voice lines, sound effects and music. The recipe system used in the game adds 
+a new physics independent look at an infinite runner. 
+Also, adding a market scene which redifined the propper flow for our game by adding another phase to play.
+
+technical:
+Implementing a system that tracked what you caught in detail and effectively told you what you had to do was 
+fairly difficult. I am particularly proud of the slow scroll in after the tutorial. Oerall I think the most 
+impressive part of our game is not so much the big implementations but more so the polish.
 
 
 ===================================================================================================================================*/
